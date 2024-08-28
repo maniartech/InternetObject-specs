@@ -1,8 +1,24 @@
 ---
 description: Thin, schema-first and robust data-interchange object format for Internet
 cover: >-
-  https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?crop=entropy&cs=srgb&fm=jpg&ixid=M3wxOTcwMjR8MHwxfHNlYXJjaHw0fHxkYXRhfGVufDB8fHx8MTcyMTA2NzgwMHww&ixlib=rb-4.0.3&q=85
+  .gitbook/assets/DALL·E 2024-08-28 14.16.53 - A simple, clipart-like
+  representation of data flowing and streaming between systems. The image should
+  depict basic digital nodes or icons representing.webp
 coverY: 0
+layout:
+  cover:
+    visible: true
+    size: hero
+  title:
+    visible: true
+  description:
+    visible: true
+  tableOfContents:
+    visible: true
+  outline:
+    visible: true
+  pagination:
+    visible: true
 ---
 
 # Internet Object 1.0
@@ -11,7 +27,7 @@ This document aims to provide the Internet Object 1.0 specification and showcase
 
 | Field                 | Value                                                              |
 | --------------------- | ------------------------------------------------------------------ |
-| Author and Researcher | Mohamed Aamir Maniar at ManiarTech®️ Lab                            |
+| Author and Researcher | Mohamed Aamir Maniar at ManiarTech®️ Lab                           |
 | Contact               | aamir@internetobject.org                                           |
 | Version               | `1.0`                                                              |
 | Status                | `Work-in-Progress` `Draft`                                         |
