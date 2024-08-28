@@ -79,8 +79,6 @@
 
 ## Other
 
-***
-
 * [Best Practices](best-practices.md)
 * [FAQs](faqs-1.md)
 * [Contributors](contributors.md)
