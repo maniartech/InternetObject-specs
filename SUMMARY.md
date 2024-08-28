@@ -11,7 +11,7 @@
 
 ## The Structure
 
-* [Internet Object Document](the-structure/introduction/README.md)
+* [Internet Object Document Overview](the-structure/introduction/README.md)
   * [Header](the-structure/introduction/header.md)
   * [Data Sections](the-structure/introduction/data.md)
 * [Structural Characters and Literals](the-structure/structural-characters-n-keywords.md)
