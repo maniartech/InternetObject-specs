@@ -2,7 +2,7 @@
 
 The header section of an Internet Object document is located at the top of the document and is used to define the schema or definitions associated with the data. This section typically includes metadata that provides additional context and structure for the data contained in the document. For example, the header may define the data types and structures used in the data section, specify any variables or other parameters that need to be considered when processing the document, or provide other relevant details.
 
-![](https://documents.app.lucidchart.com/documents/076b4f9c-b79d-410c-8002-1ac23fdbb786/pages/GvgmgBMpLy15?a=21092\&x=974\&y=118\&w=733\&h=264\&store=1\&accept=image%2F\*\&auth=LCA%20b993f922026c9a527921fdf2e8d3825d2b5f3c88-ts%3D1609033954)
+[ Header Image Placeholder ]
 
 ### Schema
 
@@ -32,4 +32,3 @@ Definitions, in their most basic form, are collections of key-value pairs that c
 In the provided example, the definitions include key-value pairs that define the page size, current page, and record count, as well as more complex schemas for addresses and objects. The use of definitions can help to ensure that the data contained in the document is properly formatted and structured, and can aid in the processing and interpretation of the data by the recipient.
 
 For further information about [the Definitions](../../the-definitions/definitions.md) click the link.
-
