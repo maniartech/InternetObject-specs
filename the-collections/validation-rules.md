@@ -15,8 +15,6 @@ If the schema is not defined, the records in the collection can have a different
 ~ XYZ, 99, female, {X Street, New York, NY} # valid
 ```
 
-
-
 ```ruby
 # Parsing a collection when the schema is not defined
 ---
@@ -74,12 +72,12 @@ Here in the above code snippet `A` and `B` is null and `C` is optional thus send
 ~ $address: {street, city, state}
 ~ $schema: {
     A*, B?*: {
-              number, 
+              number,
               default: 1,
               optional: true,
-              null: true, 
+              null: true,
               max:100
-              }, 
+              },
     C?: $address,
   }
 ---
@@ -95,13 +93,13 @@ In the above example, `A` is null, `B` is null and optional and  `C` is optional
 
 ```ruby
 # Sending empty records
-~ $schema: { 
-             name: string, 
+~ $schema: {
+             name: string,
              age?*: {
-                      type: int, 
-                      default: 1, 
-                      optional: true, 
-                      null: true, 
+                      type: int,
+                      default: 1,
+                      optional: true,
+                      null: true,
                       max: 25
                      }
            }
@@ -109,7 +107,7 @@ In the above example, `A` is null, `B` is null and optional and  `C` is optional
 ~ John 25   #valid
 ~ William   #valid
 ~ Ronald    #valid
-~           #invalid as name is not optional or null 
+~           #invalid as name is not optional or null
 ~ George 20 #valid
 ```
 
@@ -122,7 +120,7 @@ The Collection enables the parser to parse the rest of the document even if the 
 If the record fails while parsing, that record state becomes invalid and it does not stop parsing the rest of the document.
 
 ```ruby
-# Error Handaling in Collections 
+# Error Handaling in Collections
 ~ $address: {street, city, state}
 ~ $schema: {
              name: string,
@@ -130,10 +128,9 @@ If the record fails while parsing, that record state becomes invalid and it does
              $address,
            }
 ---
-# collection enables paser to parse next record even if the 
+# collection enables paser to parse next record even if the
 # previous record fails to execute
 ~ James, 20, {X Street, New York, NY}                # valid
 ~ Alex, 30, {Z Street, Los Angeles, California}      # invalid
 ~ Bob, 20, {Melrose Street, San Fransisco, California} # valid
 ```
-
