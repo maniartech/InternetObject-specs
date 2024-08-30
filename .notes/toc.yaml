@@ -1,0 +1,105 @@
+- Internet Object:
+  - Abstract
+  - The Poetic Principles of Internet Object
+  - Objectives
+  - Introduction to Internet Object
+
+- Core Concepts:
+  - Document Oriented Nature
+  - Schema First
+
+- Structure and Syntax:
+  - Internet Object Document
+    - Header
+    - Data Sections
+  - Structural Elements
+    - Strauctural Characters and Separators
+    - Literals
+    - Whitespace and Indentations
+    - Other Special Characters
+  - Values Representations
+    - Objects
+    - Arrays
+    - Strings
+      - Open Strings
+      - Regular Strings
+      - Raw Strings
+    - Numeric Values
+      - Standard Number (# interger, floating point and exponential notations)
+      - BigInt
+      - Decimal
+      - Special Numeric Formats
+        - Hexadecimal
+        - Octal
+        - Binary
+      - NaN and Infinity
+    - Binary
+    - DateTime
+    - Boolean and Nulls
+  - Case Sensitivity Rules
+  - Comments
+  - Encoding
+  - Syntax Errors # Common syntax errors, Parser behavior for syntactic errors
+
+- Definitions:
+  - Structure and Syntax
+  - Variables Representation and Usage
+  - Schema Representation and References
+  - Error Handling in Definitions
+
+- Collections:
+  - The Structure
+  - Data Section and Schema Rules
+  - Other Rules and Error Handling
+  - Data Streaming
+
+- Schema Definition Language:
+  - The Structure
+  - Schema Data Types # Include TypeDef details and why it is important to understand types.
+    - Any
+    - String Types
+    - Numeric Types
+    - DateTime Types
+    - Binary
+    - Object
+    - Array
+    - Boolean
+  - Advanced Schema Concepts
+    - TypeDefs
+    - MemberDefs
+    - Open Schema
+    - References (Include Circular Referencing)
+    - Variables in Schema Values
+    - Is Object a MemberDef of a Schema?  # Start with problem example
+  - Schema Composition and Reuse
+  - Schema Validation and Error Hanling
+
+- Security Considerations:
+  - Potential Security Implications
+  - Best Practices for Secure Usage
+  - Built-in Security Features
+
+- Performance Considerations:
+  - Efficient Parsing and Serialization
+  - Handling Large Internet Object Documents
+  - Optimization Techniques
+
+- Interoperability:
+  - Working with Other Data Formats
+  - Conversion To/From JSON, XML, etc.
+
+- Tools and Ecosystem:
+  - Parsers and Validators
+  - Development Libraries
+  - Integration Tools
+
+- Best Practices and Guidelines
+
+- Appendices:
+  - Frequently Asked Questions (FAQs)
+  - Contributors
+  - License
+  - Version History
+  - Glossary of Terms
+
+- References and Further Reading
