@@ -1,10 +1,10 @@
-# Internet Object Document Overview
+# Internet Object Document
 
 The Internet Object format is a document-oriented format that emphasizes the separation of header and data. This structure is similar to that of HTML, and MIME, where the header is kept separate from the data or body.
 
 In a typical Internet Object document, the header is optional but can be used to define schemas and definitions. The header may be followed by a data section, which must be separated from the header by the data separator `---`. The following is a valid Internet Object structure.
 
-[ Internet Object Document Structure Diagram ]
+**\[ Internet Object Document Structure Diagram ]**
 
 ### Internet Object Document Examples
 
@@ -13,23 +13,26 @@ In a typical Internet Object document, the header is optional but can be used to
 If an Internet Object document includes both a header and a data section, they must be separated by the `---` operator. This requirement ensures that the header and data are clearly delineated and can be processed independently by the recipient of the document.
 
 ```ruby
+# Header
 name, age:int, address: {street, city, state}, active # Header
---- # Section Separator
-John Doe, 25, {Bond Street, New York, NY}, T # Data Section
+
+# Data Section
+---
+John Doe, 25, {Bond Street, New York, NY}, T
 ```
 
 #### Data-only Document
 
 When an Internet Object document contains only a data section, it may or may not include a data separator. In such cases, it is up to the sender and recipient to agree on how to handle the document. If the document does not include a data separator, the recipient should assume that the entire document is a data section.
 
-**With Seperator:**
+**With Separator:**
 
 ```ruby
 ---
 John Doe, 25, {Bond Street, New York, NY}, T # Data section
 ```
 
-**Without Seperator:**
+**Without Separator:**
 
 ```ruby
 ~ John Doe, 25, {Bond Street, New York, NY}, T
@@ -53,7 +56,7 @@ In many cases, a query-generating document may not yield any results. Overall, t
 
 #### Document with Multiple Data Sections
 
-Internet Object document can contain multiple data sections. This facility allows user to provide multiple types of data collection to be embedded in the single document.&#x20;
+Internet Object document can contain multiple data sections. This facility allows user to provide multiple types of data collection to be embedded in the single document.
 
 ```ruby
 # Schema section
