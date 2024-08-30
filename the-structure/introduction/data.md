@@ -8,7 +8,7 @@ The data sections of an Internet Object Document consists of values or collectio
 
 Values within the data section of an Internet Object document must fall into one of the following data types: `Object`, `Array`, `String`, `Number`, `Boolean`, and `Null`. The Internet Object format is designed to accommodate a wide range of data types and structures, making it a versatile and flexible tool for transmitting and processing data.
 
-Check out the[ Values](../../the-values/values.md) sections for more detail.
+Check out the [Values](../../the-values/values.md) sections for more detail.
 
 #### Objects
 
