@@ -1,12 +1,9 @@
 # Data Sections
-
-## 1. Introduction
-
 The Data Section in an Internet Object Document is where the actual data resides. An internet Object document can have one or more Data Section. It consists of one or more sections, each defined by a separator line (`---`) and optionally accompanied by a section name and schema. The data itself can be represented as either a single object or a collection of objects, allowing for a flexible and structured approach to data representation. Following diagram shows the structure of the Data Section.
 
 ![Internet Object Document Data Section Structure](../../.gitbook/assets/data-section-syntax.png)  <!-- Placeholder for new syntax diagram -->
 
-## 2. Section Separator
+## Section Separator
 
 ### Structure Overview
 
@@ -62,7 +59,7 @@ The separator line can take on various forms:
 ~ Jane Doe, 20, Male, {Duke Street, New York, NY]
 ```
 
-## 3. Data
+## Data
 
 ### Data Structure
 
@@ -122,7 +119,5 @@ City Central Library, "123 Library St, Bookville"
 ~ user123, John Doe, Standard, [{2345678901, d"2024-01-20"}]
 ~ user456, Jane Smith, Premium, []
 ```
-
-### Conclusion
 
 The Data Section, organized by separators and structured using objects and collections, provides a robust and flexible method for handling data within Internet Object Documents. By adhering to the outlined rules and examples, users can ensure their documents are clear, consistent, and effective for various applications.
