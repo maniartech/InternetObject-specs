@@ -2,7 +2,7 @@
 
 The Internet Object format is a document-oriented format that emphasizes the separation of header and data. This structure is similar to that of HTML, and MIME, where the header is kept separate from the data or body.
 
-In a typical Internet Object document, the header is optional but can be used to define schemas and definitions. The header may be followed by a data section, which must be separated from the header by the data separator `---`. The following is a valid Internet Object structure.
+In an Internet Object document, the header is optional but can be used to define schemas and definitions. The data section always starts with the `---` separator. This separator is the first element of the data section and is mandatory to distinguish it from the header.
 
 **\[ Internet Object Document Structure Diagram ]**
 
@@ -10,7 +10,7 @@ In a typical Internet Object document, the header is optional but can be used to
 
 #### Full Document
 
-If an Internet Object document includes both a header and a data section, they must be separated by the `---` operator. This requirement ensures that the header and data are clearly delineated and can be processed independently by the recipient of the document.
+If an Internet Object document includes both a header and a data section you can call it a full document.
 
 ```ruby
 # Header
@@ -23,7 +23,7 @@ John Doe, 25, {Bond Street, New York, NY}, T
 
 #### Data-only Document
 
-When an Internet Object document contains only a data section, it may or may not include a data separator. In such cases, it is up to the sender and recipient to agree on how to handle the document. If the document does not include a data separator, the recipient should assume that the entire document is a data section.
+When an Internet Object document contains only a data section, it is okay to omit the `---` separator. Such documents are sent to the server without any header because the schema is either not required or already known to the recipient.
 
 **With Separator:**
 
@@ -41,18 +41,19 @@ John Doe, 25, {Bond Street, New York, NY}, T # Data section
 
 #### Header-only Document
 
-If an Internet Object document contains only a header section, it is important to include a data separator at the end. Without the data separator, the parser may mistakenly interpret the header section as data, leading to potential errors or issues. By including the data separator, the parser can accurately identify the end of the header and the start of the data section.
+In many cases, a query-generating document may not yield any results. In such cases, you can use the header with result metadata to send the query and the results. However, it is important to include the `---` separator to mark the end of the header and the start of the data section.
 
 ```ruby
+# Header Record Metadata
 ~ reocordCount: 0
 ~ pageSize: 10
 ~ currentPage: 1
 ~ nexPage: N
 ~ prevPage: N
+
+# Empty Data Section
 ---
 ```
-
-In many cases, a query-generating document may not yield any results. Overall, the inclusion or omission of the data separator in data-only or header-only documents underscores the flexibility and adaptability of the Internet Object format.
 
 #### Document with Multiple Data Sections
 
@@ -73,3 +74,5 @@ Internet Object document can contain multiple data sections. This facility allow
 ~ Bond Street, New York, NY, 500001
 ~ Georeg Street, New York, NY, 500002
 ```
+
+Internet Object document structure is designed to be simple and flexible. The next section will discuss the Header and Data section in detail.
