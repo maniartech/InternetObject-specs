@@ -27,10 +27,10 @@ This document aims to provide the Internet Object 1.0 specification and showcase
 
 | Field                 | Value                                                              |
 | --------------------- | ------------------------------------------------------------------ |
-| Author and Researcher | Mohamed Aamir Maniar at ManiarTech®️ Lab                           |
+| Author and Researcher | Mohamed Aamir Maniar at ManiarTech®️ Lab                            |
 | Contact               | aamir@internetobject.org                                           |
 | Version               | `1.0`                                                              |
 | Status                | `Work-in-Progress` `Draft`                                         |
 | Website               | [https://internetobject.org](https://internetobject.org) (WIP)     |
 | Docs                  | [https://docs.internetobject.org](https://docs.internetobject.org) |
-| Last Updated          | 30th August 2024                                                   |
+| Last Updated          | 19th September 2024                                                |

@@ -1,18 +1,21 @@
 # Data Sections
+
 The Data Section in an Internet Object Document is where the actual data resides. An internet Object document can have one or more Data Section. It consists of one or more sections, each defined by a separator line (`---`) and optionally accompanied by a section name and schema. The data itself can be represented as either a single object or a collection of objects, allowing for a flexible and structured approach to data representation. Following diagram shows the structure of the Data Section.
 
 ![Internet Object Document Data Section Structure](../../.gitbook/assets/data-section-syntax.png)  <!-- Placeholder for new syntax diagram -->
 
-## Section Separator
+## Structure Overview
 
-### Structure Overview
+### Section Separator Line
 
 Each Data Section begins with a separator line (`---`), which organizes the document into distinct sections. The separator line can include optional elements:
 
 - **Section Name**: Identifies the section and its purpose.
 - **Schema Name**: Defines the structure or constraints of the data, prefixed with `$`.
 
-The separator line can take on various forms:
+> ℹ️ The separator line must end with a newline character (`\n`) or EoF (End of File).
+
+The separator line can take on various forms for different levels of detail, each ending with a newline character (`\n`) or EoF (End of File):
 
 - **Without Name and Schema**: The simplest form, just the separator (`---`).
 - **With Section Name**: The separator followed by a section name (`--- employee`).
@@ -29,13 +32,17 @@ The separator line can take on various forms:
 
 #### Separator Line without Name and Schema
 
+It is the simplest form of the separator line. It will use the default section name (data) and the default schema set for the document.
+
 ```ruby
 ---
 ~ John Doe, 25, Male, {Bond Street, New York, NY}, [agile, swift]
-~ Jane Doe, 20, Male, {Duke Street, New York, NY]
+~ Jane Doe, 20, Male, {Duke Street, New York, NY}
 ```
 
 #### Separator Line with Section Name (employee)
+
+Here the section name is `employee`. The schema will be the default schema set for the document.
 
 ```ruby
 --- employee
@@ -45,6 +52,8 @@ The separator line can take on various forms:
 
 #### Separator Line with Section Name and Applicable Schema
 
+Here the section name and schema are both are explicitly mentioned as `employee` and `$employee` respectively.
+
 ```ruby
 --- employee : $employee
 ~ John Doe, 25, Male, {Bond Street, New York, NY}, [agile, swift]
@@ -53,15 +62,15 @@ The separator line can take on various forms:
 
 #### Separator Line with Only Schema
 
+Here only the schema is mentioned. The section name will be derived from the schema name (employee). However, if the document the section name is already used, then it will be an error.
+
 ```ruby
 --- $employee
 ~ John Doe, 25, Male, {Bond Street, New York, NY}, [agile, swift]
-~ Jane Doe, 20, Male, {Duke Street, New York, NY]
+~ Jane Doe, 20, Male, {Duke Street, New York, NY}
 ```
 
-## Data
-
-### Data Structure
+### Data
 
 After the separator line, the data within a section is introduced. This data can either be a single object or a collection of objects. The flexibility in data representation allows the Internet Object Document format to handle various types of information efficiently.
 
@@ -77,10 +86,16 @@ Collections represent a list of objects, making it possible to include multiple 
 
 #### Single Object
 
-A single object can be represented after the separator:
+A single object can be represented after the separator.
 
 ```ruby
 ---
+John Doe, 25, Male, {Bond Street, New York, NY}, [agile, swift]
+```
+
+It is not necessary to have a section separator for a single section document if there is no header or schema. Hence, the above example can be written as:
+
+``` ruby
 John Doe, 25, Male, {Bond Street, New York, NY}, [agile, swift]
 ```
 
@@ -91,7 +106,7 @@ A collection is represented by listing objects, each prefixed with `~` on separa
 ```ruby
 ---
 ~ John Doe, 25, Male, {Bond Street, New York, NY}, [agile, swift]
-~ Jane Doe, 20, Male, {Duke Street, New York, NY]
+~ Jane Doe, 20, Male, {Duke Street, New York, NY}
 ```
 
 ### Empty Data Section
@@ -100,6 +115,11 @@ You can have an empty data section. An empty data section can be represented by 
 
 ```ruby
 ---
+```
+
+It is not necessary to have a section separator for an entirely empty document.
+
+```ruby
 ```
 
 ### Multi-Section Document Example
@@ -120,4 +140,4 @@ City Central Library, "123 Library St, Bookville"
 ~ user456, Jane Smith, Premium, []
 ```
 
-The Data Section, organized by separators and structured using objects and collections, provides a robust and flexible method for handling data within Internet Object Documents. By adhering to the outlined rules and examples, users can ensure their documents are clear, consistent, and effective for various applications.
+The Data Section, organized by separators and structured using objects and collections, offers a robust and flexible method for handling data within Internet Object Documents. This structure ensures that the documents are clear, consistent, and effective for a wide range of applications.
