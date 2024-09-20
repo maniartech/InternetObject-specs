@@ -12,13 +12,13 @@ Whitespaces surrounding the tokens, keys, and values are optional.
 
 The definition must start with a tidal symbol `(~ U+007E)` followed by a key-value pair. The key-value pair must be separated by a colon `(: U+003A)`.&#x20;
 
-| Element | Unicode         | Details                                                                    |
-| ------- | --------------- | -------------------------------------------------------------------------- |
-| `~`     | `U+007E`        | Tilde - Starts the definition                                              |
-| `:`     | `U+003A`        | Colon - Key and Value Separator                                            |
-| Key     | N/A             | The string key, as defined in the [String section](../the-values/string/). |
-| Value   | N/A             | The values as defined in the [Values section](../the-values/values.md).    |
-| WS      | WhiteSpace Char | 0 or more white-space character                                            |
+| Element | Unicode         | Details                                                                              |
+| ------- | --------------- | ------------------------------------------------------------------------------------ |
+| `~`     | `U+007E`        | Tilde - Starts the definition                                                        |
+| `:`     | `U+003A`        | Colon - Key and Value Separator                                                      |
+| Key     | N/A             | The string key, as defined in the [String section](../the-structure/values/string/). |
+| Value   | N/A             | The values as defined in the [Values section](../the-structure/values/).             |
+| WS      | WhiteSpace Char | 0 or more white-space character                                                      |
 
 ### A definition walkthrough
 
