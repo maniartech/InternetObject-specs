@@ -8,7 +8,7 @@ id, department, employeeId, address # The schema
 02, Marketing, 255, { X Street, New York, NY } # The object
 ```
 
-The Internet Object schema does not enforce schema designer to provide the type of the member. If not provided, such members are marked as `any` type. That means, they can be assigned any [values](../the-values/values.md). For more information see the [any ](data-types/any.md)datatype.
+The Internet Object schema does not enforce schema designer to provide the type of the member. If not provided, such members are marked as `any` type. That means, they can be assigned any [values](../the-structure/values/). For more information see the [any ](data-types/any.md)datatype.
 
 ### &#x20;Schema with Types
 
