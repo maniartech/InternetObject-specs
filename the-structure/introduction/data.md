@@ -2,7 +2,7 @@
 
 The Data Section in an Internet Object Document is where the actual data resides. An internet Object document can have one or more Data Section. It consists of one or more sections, each defined by a separator line (`---`) and optionally accompanied by a section name and schema. The data itself can be represented as either a single object or a collection of objects, allowing for a flexible and structured approach to data representation. Following diagram shows the structure of the Data Section.
 
-![Internet Object Document Data Section Structure](../../.gitbook/assets/data-section-syntax.png)  <!-- Placeholder for new syntax diagram -->
+![Internet Object Document Data Section Structure](../../.gitbook/assets/data-section-syntax.png)
 
 ## Structure Overview
 
@@ -10,23 +10,23 @@ The Data Section in an Internet Object Document is where the actual data resides
 
 Each Data Section begins with a separator line (`---`), which organizes the document into distinct sections. The separator line can include optional elements:
 
-- **Section Name**: Identifies the section and its purpose.
-- **Schema Name**: Defines the structure or constraints of the data, prefixed with `$`.
+* **Section Name**: Identifies the section and its purpose.
+* **Schema Name**: Defines the structure or constraints of the data, prefixed with `$`.
 
-> ℹ️ The separator line must end with a newline character (`\n`) or EoF (End of File).
+> ℹ️ The separator line must end with a newline character (`\n`) or `EoF` (End of File).
 
-The separator line can take on various forms for different levels of detail, each ending with a newline character (`\n`) or EoF (End of File):
+The separator line can take on various forms for different levels of detail, each ending with a newline character (`\n`) or `EoF` (End of File):
 
-- **Without Name and Schema**: The simplest form, just the separator (`---`).
-- **With Section Name**: The separator followed by a section name (`--- employee`).
-- **With Section Name and Schema**: The separator followed by a section name and a schema name, separated by a colon (`--- employee : $employee`).
-- **With Only Schema**: The separator followed by just the schema name (`--- $employee`).
+* **Without Name and Schema**: The simplest form, just the separator (`---`).
+* **With Section Name**: The separator followed by a section name (`--- employee`).
+* **With Section Name and Schema**: The separator followed by a section name and a schema name, separated by a colon (`--- employee : $employee`).
+* **With Only Schema**: The separator followed by just the schema name (`--- $employee`).
 
 ### Rules for Section Names and Schemas
 
-- **Omitting Section Name**: In a multi-section document, the section name can be omitted only once. When omitted, the section name will be derived from the associated schema (e.g., `--- $employee` implies that the section name is `employee`).
-- **Default Section Name and Schema**: If both the section name and schema are omitted, the section name will default to `data`, and a default schema will be used.
-- **Unique Section Names**: Each section in an Internet Object Document must have a unique section name. Duplicate section names are not allowed.
+* **Omitting Section Name**: In a multi-section document, the section name can be omitted only once. When omitted, the section name will be derived from the associated schema (e.g., `--- $employee` implies that the section name is `employee`).
+* **Default Section Name and Schema**: If both the section name and schema are omitted, the section name will default to `data`, and a default schema will be used.
+* **Unique Section Names**: Each section in an Internet Object Document must have a unique section name. Duplicate section names are not allowed.
 
 ### Examples of Section Separator
 
@@ -95,7 +95,7 @@ John Doe, 25, Male, {Bond Street, New York, NY}, [agile, swift]
 
 It is not necessary to have a section separator for a single section document if there is no header or schema. Hence, the above example can be written as:
 
-``` ruby
+```ruby
 John Doe, 25, Male, {Bond Street, New York, NY}, [agile, swift]
 ```
 

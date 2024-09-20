@@ -2,12 +2,11 @@
 
 The header of an Internet Object document is positioned at the beginning of the document and serves a crucial role in defining the schema or associated definitions for the data it contains. This section includes essential metadata, context, variables, and schema references for the document's content. It plays an important role in ensuring that the data is presented in a consistent format and provides the necessary information for accurate interpretation and processing.
 
-[ Header Image Placeholder ]
+\[ Header Image Placeholder ]
 
 ### Default Schema
 
-The schema is a fundamental component of the Internet Object format, defining the structure and semantics of the data within an Internet Object document. When the header contains only a schema, it is referred to as a "default schema." This schema is typically used to outline the structure of the data included in the document, separating the structure definition from the data itself. This separation makes the data more compact, readable, and easier to process. For more detailed information about schemas, refer to [the Schema](../../the-schema/untitled-1.md).
-
+The schema is a fundamental component of the Internet Object format, defining the structure and semantics of the data within an Internet Object document. When the header contains only a schema, it is referred to as a "default schema." This schema is typically used to outline the structure of the data included in the document, separating the structure definition from the data itself. This separation makes the data more compact, readable, and easier to process. For more detailed information about schemas, refer to [the Schema](../../schema-definition-language/untitled-1.md).
 
 ```ruby
 name, age:int, address, isActive?, remark
@@ -24,7 +23,7 @@ In this schema example, five keys are defined with additional details:
 
 This schema not only defines the structure but also includes type annotations and optionality, enhancing the clarity and robustness of the data model. By using this schema, the document can ensure consistent and accurate data representation, making it easier to process and interpret across different systems.
 
-See this page for more information about [the Schema](../../the-schema/untitled-1.md).
+See this page for more information about [the Schema](../../schema-definition-language/untitled-1.md).
 
 ### Definitions
 
