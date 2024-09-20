@@ -37,7 +37,7 @@
     - Binary
     - DateTime
     - Boolean and Nulls
-  - Case Sensitivity Rules
+  - Case Sensitivity Rules # Later
   - Comments
   - Encoding
   - Syntax Errors # Common syntax errors, Parser behavior for syntactic errors
