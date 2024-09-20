@@ -2,7 +2,7 @@
 description: Work in Progress!
 ---
 
-# Object
+# Objects
 
 Objects are a fundamental element in Internet Object documents, providing a clear and intuitive way to represent structured data.
 
@@ -12,13 +12,13 @@ An object is expressed as a sequence of values (and key/value pairs) separated b
 
 ### Open Object
 
-<figure><img src="../.gitbook/assets/image (2).png" alt=""><figcaption><p>Open Object Syntax</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (2).png" alt=""><figcaption><p>Open Object Syntax</p></figcaption></figure>
 
 
 
 ### Closed Object
 
-<figure><img src="../.gitbook/assets/image (8).png" alt=""><figcaption><p>Closed Object Syntax</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (8).png" alt=""><figcaption><p>Closed Object Syntax</p></figcaption></figure>
 
 ### **Object Structural Characters**
 
@@ -114,6 +114,6 @@ John Doe,,,,,
 ```
 
 {% hint style="info" %}
-Internet Object is a schema-first format. When a [schema](../the-schema/untitled-1.md) is applied, values can be accessed using their respective keys. Without the [schema](../the-schema/untitled-1.md), values without keys can be accessed using their respective index position; or through keys, if they are provided.
+Internet Object is a schema-first format. When a [schema](../../schema-definition-language/untitled-1.md) is applied, values can be accessed using their respective keys. Without the [schema](../../schema-definition-language/untitled-1.md), values without keys can be accessed using their respective index position; or through keys, if they are provided.
 {% endhint %}
 
