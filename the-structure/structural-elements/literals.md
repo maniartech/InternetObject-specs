@@ -9,6 +9,7 @@ Literals are specific values that can be used within an Internet Object document
 | `F`       | Boolean value False (short) |
 | `false`   | Boolean value False         |
 | `Inf`     | Number value Infinity       |
+| `-Inf`    | Number value Negative Infinity |
 | `NaN`     | Number value Not a Number   |
 | `N`       | Null value (short)          |
 | `null`    | Null value                  |
