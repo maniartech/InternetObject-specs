@@ -1,13 +1,11 @@
 # Encoding
 
-The Internet Object format requires that the text is encoded in the UTF-8 format by default. While other encoding formats such as UTF-16, UTF-32, or ASCII may be used, support for them is not guaranteed by all implementations. However, support for UTF-8 is required by all implementations, while support for other formats is preferred.
+The Internet Object format uses **UTF-8** as the default and mandatory encoding. This ensures that all implementations can reliably read and write text consistently. While you can use other encodings like UTF-16, UTF-32, or ASCII, keep in mind that not all systems might support them.
 
 {% hint style="info" %}
-In cases where UTF-8 is not suitable, the Internet Object serialized text must be exchanged using the best suitable encoding format to ensure 100% interoperability. External libraries or code can be used to convert to and from UTF-8 if the implementation does not support the desirable encoding.
+If UTF-8 doesn't work for your needs, choose the encoding that best fits your situation to maintain compatibility. You can use external libraries or tools to convert between UTF-8 and your preferred encoding if your implementation doesn't support it directly.
 {% endhint %}
 
-### Byte Order Mark
+### Byte Order Mark (BOM)
 
-Adding a Byte Order Mark (`U+FEFF`) at the beginning of the Internet Object text is not significant as the parser will ignore it since it is a whitespace character.
-
-###
+Adding a Byte Order Mark (`U+FEFF`) at the start of your Internet Object text won’t cause issues—the parser will simply treat it as a space. However, it's generally a good idea to omit the BOM unless you have a specific reason to include it.
