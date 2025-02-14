@@ -6,7 +6,7 @@ description: Work in Progress!
 
 Objects are a fundamental element in Internet Object documents, providing a clear and intuitive way to represent structured data.
 
-An object is expressed as a sequence of values (and key/value pairs) separated by commas (`,` `U+002C`). For simplicity, clarity, and ease of reading, Internet Object supports two modes for objects: Open and Closed. The Open mode does not require enclosing values in curly brackets and is only supported for top-level objects.
+An object is expressed as **a sequence of values (and key/value pairs) separated by commas** (`,` `U+002C`). For simplicity, clarity, and ease of reading, Internet Object supports two modes for objects: Open and Closed. The Open mode does not require enclosing values in curly brackets and is only supported for top-level objects.
 
 ## Syntax
 
@@ -89,7 +89,7 @@ As the object keys are valid Internet Object String values, any format of string
   address: {Bond Street, New York, NY},
   peamlrsonalities: [extrovert],
   "age": 25,                             # A key in regular string!
-  'isActive': T                          # A key wrapped in raw string!
+  'isActive': T                          # A key wrapped in single quotes
 }
 ```
 
