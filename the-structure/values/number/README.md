@@ -2,11 +2,28 @@
 description: Numbers in Internet Object
 ---
 
-# Number and BigInt
+# Numbers in Internet Object
 
-Internet Object numbers can be represented in various kinds of number representations. (a) Base 10 Decimal Numbers (b) Hexadecimal Integers (c) Octal Integers (d) Binary Integers (c) IEEE 754 number values such as NaN and Infinity.
+Internet Object accommodates three primary numeric data types: **Number**, **BigInt**, and **Decimal**. It supports a variety of number formats, allowing:
 
-![The Number Values](https://documents.app.lucidchart.com/documents/076b4f9c-b79d-410c-8002-1ac23fdbb786/pages/PWmmXH90OO-B?a=20895\&x=7558\&y=70\&w=927\&h=660\&store=1\&accept=image%2F\*\&auth=LCA%20caf75e156f213ad64ecd901e1a4c1a50a07d2535-ts%3D1608455099)
+- Integers to be expressed in decimal (base 10), binary, octal, or hexadecimal.
+- Floating-point numbers to be written using scientific notation.
+- IEEE 754 special values such as NaN and Infinity to be represented.
+
+**Data Type Details:**
+
+- **Number (64-bit floating-point):** Ideal for fractional or general floating-point values.
+- **BigInt:** Suited for very large integers that exceed the 64-bit limit.
+- **Decimal:** A fixed-precision type that stores exact numeric values with a set number of decimal places, making it critical for high-precision applications like financial calculations.
+
+{% hint style="info" %}
+Note: The term "decimal" is used in two contexts here:
+
+- Decimal (base‑10): Refers to the common numeral system.
+- Decimal (data type): A fixed-precision type (derived from RDBMS standards) used when exact precision is required, such as in financial calculations.
+{% endhint %}
+
+[The Number Values Diagram]
 
 
 
