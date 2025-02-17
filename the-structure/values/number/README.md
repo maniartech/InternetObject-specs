@@ -10,6 +10,8 @@ Internet Object accommodates three primary numeric data types: **Number**, **Big
 - Floating-point numbers to be written using scientific notation.
 - IEEE 754 special values such as NaN and Infinity to be represented.
 
+[Diagram: The Number Values]
+
 **Data Type Details:**
 
 - **Number (64-bit floating-point):** Ideal for fractional or general floating-point values.
@@ -22,8 +24,6 @@ Note: The term "decimal" is used in two contexts here:
 - Decimal (base‑10): Refers to the common numeral system.
 - Decimal (data type): A fixed-precision type (derived from RDBMS standards) used when exact precision is required, such as in financial calculations.
 {% endhint %}
-
-[The Number Values Diagram]
 
 
 
