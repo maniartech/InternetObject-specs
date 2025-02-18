@@ -27,7 +27,7 @@
     * [Regular Strings](the-structure/values/string/regular-strings.md)
     * [Raw Strings](the-structure/values/string/raw-strings.md)
   * [Numeric Values](the-structure/values/number/README.md)
-    * [Standard Number](the-structure/values/number/decimal-number.md)
+    * [Number](the-structure/values/number/decimal-number.md)
     * [BigInt](the-structure/values/number/bigint.md)
     * [Decimal](the-structure/values/number/decimal.md)
     * [Special Numeric Integer Formats](the-structure/values/number/special-numeric-integer-formats/README.md)
