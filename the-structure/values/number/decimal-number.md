@@ -25,4 +25,3 @@ Some valid examples of decimal numbers are.
 ~ .456
 ~ -.50
 ```
-
