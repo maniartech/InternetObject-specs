@@ -2,49 +2,81 @@
 description: Arrays in Internet Object
 ---
 
-# Array
+# Arrays
 
-An array is represented using the pair of square brackets surrounding zero or more values. Each value is separated by commas. The array starts with an open square bracket `([ U+005B)` and ends with a close square bracket  `(] U+005D)`.&#x20;
+An array is represented by a pair of square brackets, which may contain zero or more values. It begins with an open square bracket ([ U+005B) and ends with a close square bracket (] U+005D). Each value is separated by commas (`,` `U+002C`). Essentially, an array is expressed as **a sequence of values separated by commas** enclosed in square brackets.
 
-![The Array Structure](https://documents.app.lucidchart.com/documents/076b4f9c-b79d-410c-8002-1ac23fdbb786/pages/0\_0?a=18531\&x=4123\&y=1635\&w=824\&h=341\&store=1\&accept=image%2F\*\&auth=LCA%201735d785667faea87b8a53f4a46a7c46f5cf3f10-ts%3D1608203761)
+## Syntax
 
-### An Array Walkthrough
+<figure><img src="../../.gitbook/assets/array-structure.png" alt=""><figcaption><p>Array Syntax</p></figcaption></figure>
 
-A string array.
+### **Array Structural Characters**
 
-```
+| Symbol | Characters          | Unicode  | Description               |
+| ------ | ------------------ | -------- | ------------------------- |
+| `,`    | Comma             | `U+002C` | Used as a value separator |
+| `[`    | Open Square Bracket  | `U+005B` | Begins an array boundary  |
+| `]`    | Close Square Bracket | `U+005D` | Closes an array boundary  |
+
+## Characteristics
+
+Arrays can contain values of various types, including objects, other arrays, strings, numbers, boolean, and null.
+
+### Basic Arrays
+
+A simple array of strings:
+
+```ruby
 [one, two, three]
 ```
 
-An object array.
+An array of objects:
 
-```
+```ruby
 [{ a, b, c }, {j, k, l}, { x, y, z }]
 ```
 
-An array with mixed values.
-
-```
-[one, T, { a:10, b: -Inf, NaN } ]
-```
-
-#### Multi-dimensional Arrays
-
-A Two-dimensional array represents rows and columns. &#x20;
+An array with mixed values:
 
 ```ruby
-# Two-dimentional Array
+[one, T, { a:10, b: -Inf, NaN }]
+```
+
+### Multi-dimensional Arrays
+
+Arrays can be nested to create multi-dimensional data structures.
+
+#### Two-dimensional Arrays
+
+Two-dimensional arrays represent rows and columns:
+
+```ruby
 [[1, 1, 1], [1, 1, 1], [1, 1, 1]]
 ```
 
-A three-dimensional array is a multidimensional array that represents a collection of two-dimensional arrays.
+#### Three-dimensional Arrays
+
+Three-dimensional arrays represent collections of two-dimensional arrays:
 
 ```ruby
-# Three-dimentionali Array
 [
-   [[10,20,30],[40,50,60],[70,80,90]], # elements of block 1   
+   [[10,20,30],[40,50,60],[70,80,90]], # elements of block 1
    [[11,22,33],[44,55,66],[77,88,99]], # elements of block 2
    [[12,23,34],[45,56,67],[78,89,90]]  # elements of block 3
- ]
+]
 ```
 
+### Empty Arrays and Empty Values
+
+An empty array is represented by a pair of square brackets with no values:
+
+```ruby
+[]      # An empty array
+```
+
+Empty values between array elements are not permitted. To include a missing value, you must explicitly specify a valid value such as `null`. However, since the Internet Object specification neither assumes `null` by default nor supports `undefined`, any omission is strictly forbidden. Following are some examples of invalid array structures:
+
+```ruby
+[a,b,] # Trailing comma
+[a,,c] # Array with an empty value in the middle
+```
