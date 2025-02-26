@@ -33,20 +33,6 @@ For example, in `123.45m`:
 - The precision is 5 (total digits: 1,2,3,4,5)
 - The scale is 2 (decimal digits: 4,5)
 
-### Internal Implementation
-
-Internally, Decimal values are stored using a coefficient (BigInt) and exponent (number) combination to ensure exact representation:
-
-```typescript
-// Conceptual representation
-{
-  coefficient: 12345n, // All significant digits as a BigInt
-  exponent: 2         // Scale/number of decimal places
-}
-```
-
-This implementation ensures that decimals can represent values with exact precision, unlike floating-point numbers which can introduce rounding errors.
-
 ## Features
 
 ### Fixed-Precision Arithmetic
@@ -195,7 +181,12 @@ When precision or scale constraints require rounding:
 }
 ```
 
-## Technical Details
+## Technical Considerations
 
-The underlying implementation of the Decimal type uses a coefficient-exponent model, similar to database systems like SQL Server and Oracle, providing a strong basis for interoperability with enterprise data systems.
+When implementing or working with decimal values, keep the following points in mind:
 
+1. **Precision**: Decimal types preserve exact values without rounding errors, unlike floating-point numbers. This makes them ideal for financial and high-precision applications.
+2. **Interoperability**: Decimal types are compatible with database systems and financial applications that require exact decimal arithmetic, ensuring seamless data exchange and integration.
+3. **Performance**: While operations on decimal values may be slower than native floating-point operations, they provide guaranteed precision, which is crucial for applications where accuracy is paramount.
+4. **Consistency**: Decimal calculations produce the same results regardless of the platform or implementation, ensuring reliable and predictable outcomes across different environments.
+5. **Implementation Model**: The underlying implementation of the Decimal type uses a coefficient-exponent model, similar to database systems like SQL Server and Oracle. This provides a strong basis for interoperability with enterprise data systems and ensures consistent behavior.
