@@ -2,7 +2,7 @@
 description: Fixed-precision decimal values for financial and high-precision computations
 ---
 
-# Decimal
+# Decimal (Work In Progress)
 
 ## Overview
 
