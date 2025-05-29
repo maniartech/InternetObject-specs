@@ -135,7 +135,7 @@ BigInt supports these arithmetic operations:
 
 BigInt supports standard bitwise operations:
 
-```
+```js
 // Bitwise AND
 0b1010n & 0b1100n         // 0b1000n (8n)
 
@@ -159,7 +159,7 @@ BigInt supports standard bitwise operations:
 
 BigInt values can be compared as expected:
 
-```
+```js
 123n > 456n               // false
 123n < 456n               // true
 123n === 123n             // true
@@ -177,7 +177,7 @@ BigInt types are particularly valuable in:
 
 ### Cryptographic Example
 
-```
+```js
 {
   algorithm: "RSA",
   publicKey: {
