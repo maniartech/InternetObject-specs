@@ -1,6 +1,6 @@
 # Collection
 
-A Collection is a record aggregator that allows sending multiple records over the internet without repetitively defining a key-value pair. The Collection embeds more than one independent record in the IO document.&#x20;
+A Collection is a structure that groups multiple records together, allowing you to send several records over the internet without repeatedly specifying key-value pairs. Each Collection can contain multiple independent records within a single IO document.
 
 ### Benefits
 
@@ -22,10 +22,10 @@ The tidal sign enables the parser to identify the next record. Here is a code sn
 
 ```yaml
 # Representing a collection in the Internet Object document
-~ Id, empName, age, department, Address  
+~ Id, empName, age, department, Address
 ---
 # Following records represents Collection
-~ 101, Thomas, 25, HR, {Bond Street, New York, NY} 
+~ 101, Thomas, 25, HR, {Bond Street, New York, NY}
 ~ 102, George, 30, Sales, {Duke Street, New York, NY}
 ```
 
