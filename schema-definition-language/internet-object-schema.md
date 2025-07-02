@@ -2,11 +2,13 @@
 
 Internet Object is a schema first format! The Internet Object schema defines the shape and structure of Internet Object documents and helps the developers and designers to create the object definitions in a simple, concise, clear, and human-readable way.
 
+**Good**
+
 The schema asserts the shape of the IO objects and ensures the validity of the data during the serialization and deserialization process.&#x20;
 
 The schema may be attached and placed in the document header or kept separately. Internet Object schema provides a simple way to define the object structure!
 
-![The schema structure (whitespaces are not shown)](https://lh4.googleusercontent.com/5dLQVGwOqEXVaPw-X33NBAB8fZtMrKEO1FTRr7LvHnKdwAl57YvsLehQ21mGtw0f1ExcaG1VhGbO\_bUHGOe\_kNY4VfhBYILCRCa6OtB38Zepu3r9-\_vLq\_Uax2pZvcA65ahERaLt)
+![The schema structure (whitespaces are not shown)](https://lh4.googleusercontent.com/5dLQVGwOqEXVaPw-X33NBAB8fZtMrKEO1FTRr7LvHnKdwAl57YvsLehQ21mGtw0f1ExcaG1VhGbO_bUHGOe_kNY4VfhBYILCRCa6OtB38Zepu3r9-_vLq_Uax2pZvcA65ahERaLt)
 
 In its simplest form, an object schema is just an object with a list of required members. The following example represents the schema with five keys i.e `name`, `age`, `address`, `isActive`, `remark`  which are separated by `","`.
 
