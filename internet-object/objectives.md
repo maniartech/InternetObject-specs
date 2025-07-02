@@ -1,5 +1,7 @@
 # Objectives
 
+The Internet Object format aims to redefine data interchange on the internet by addressing key challenges and limitations present in existing formats.
+
 The inception of the Internet Object began as a side project aimed at addressing the limitations observed in the JSON format. Over time, it evolved into an independent research endeavor, focusing on effectively tackling data-transfer challenges such as size, schema validation, data streaming, header, and metadata support, among others. The design of the Internet Object format revolves around the following key objectives:
 
 ## Uninfluenced Development
