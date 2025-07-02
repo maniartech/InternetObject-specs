@@ -44,7 +44,7 @@
 
 ## The Collections
 
-* [Collection](the-collections/untitled-1.md)
+* [Collection](the-collections/collection.md)
 * [Creating Collection](the-collections/creating-collection.md)
 * [Collection Rules](the-collections/validation-rules.md)
 * [Data Streaming](the-collections/data-streaming.md)
@@ -57,7 +57,7 @@
 
 ## Schema Definition Language
 
-* [Internet Object Schema](schema-definition-language/untitled-1.md)
+* [Internet Object Schema](schema-definition-language/internet-object-schema.md)
 * [The structure](schema-definition-language/schema-representation.md)
 * [Data Types](schema-definition-language/data-types/README.md)
   * [Any](schema-definition-language/data-types/any.md)
