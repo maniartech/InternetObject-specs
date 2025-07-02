@@ -114,6 +114,6 @@ John Doe,,,,,
 ```
 
 {% hint style="info" %}
-Internet Object is a schema-first format. When a [schema](../../schema-definition-language/untitled-1.md) is applied, values can be accessed using their respective keys. Without the [schema](../../schema-definition-language/untitled-1.md), values without keys can be accessed using their respective index position; or through keys, if they are provided.
+Internet Object is a schema-first format. When a [schema](../../schema-definition-language/internet-object-schema.md) is applied, values can be accessed using their respective keys. Without the [schema](../../schema-definition-language/internet-object-schema.md), values without keys can be accessed using their respective index position; or through keys, if they are provided.
 {% endhint %}
 
