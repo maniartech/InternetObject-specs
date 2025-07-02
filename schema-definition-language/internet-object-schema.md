@@ -2,8 +2,6 @@
 
 Internet Object is a schema first format! The Internet Object schema defines the shape and structure of Internet Object documents and helps the developers and designers to create the object definitions in a simple, concise, clear, and human-readable way.
 
-**Good**
-
 The schema asserts the shape of the IO objects and ensures the validity of the data during the serialization and deserialization process.&#x20;
 
 The schema may be attached and placed in the document header or kept separately. Internet Object schema provides a simple way to define the object structure!
@@ -14,14 +12,14 @@ In its simplest form, an object schema is just an object with a list of required
 
 ```ruby
 #Schema with the valid representation
-name, age, address, isActive, remark 
+name, age, address, isActive, remark
 ```
 
 A schema can be embedded in the IO document header or defined independently. The following example shows the schema embedded into the document itself. The upper section declares the schema while the lower section contains the object.
 
 ```ruby
 # Schema with the valid representation
-name, age, address, isActive, remark 
+name, age, address, isActive, remark
 ---
 John Doe, 20, {Bond Street, New York}, T, Nothing
 ```
@@ -33,13 +31,13 @@ We can attach types and sub-schema to the keys to add more constraints and clari
 ```yaml
 # Schema with the members associated with types
 name: string,
-age: int, 
+age: int,
 address: {
-  street: string, 
-  city: string, 
+  street: string,
+  city: string,
   state: string
-}, 
-isActive: bool, 
+},
+isActive: bool,
 remark: string
 ```
 
