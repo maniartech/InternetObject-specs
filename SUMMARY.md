@@ -6,7 +6,7 @@
 
 * [Abstract](internet-object/abstract.md)
 * [The Poetic Principles of Internet Object](internet-object/the-zen-of-internet-object.md)
-* [Objectives](internet-object/untitled-1.md)
+* [Objectives](internet-object/objectives.md)
 * [Introducing Internet Object](internet-object/introduction.md)
 
 ## The Structure
