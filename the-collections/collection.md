@@ -2,8 +2,6 @@
 
 A Collection is a structure that groups multiple records together, allowing you to send several records over the internet without repeatedly specifying key-value pairs. Each Collection can contain multiple independent records within a single IO document.
 
-**Good**
-
 ### Benefits
 
 Collection reduces the complexity of defining key\*\*-\*\*value pairs every time a record is sent over the internet. Thus, simplify application development by offering data parallelism and operational simplicity.
