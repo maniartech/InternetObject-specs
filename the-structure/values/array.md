@@ -4,79 +4,123 @@ description: Arrays in Internet Object
 
 # Arrays
 
-An array is represented by a pair of square brackets, which may contain zero or more values. It begins with an open square bracket ([ U+005B) and ends with a close square bracket (] U+005D). Each value is separated by commas (`,` `U+002C`). Essentially, an array is expressed as **a sequence of values separated by commas** enclosed in square brackets.
+## Overview
+
+An **Array** in Internet Object represents an ordered collection of values enclosed in square brackets. Arrays are scalar containers used to express lists, sequences, and multi-dimensional tabular structures.
+
+Each value in an array may be:
+- A primitive (string, number, boolean, null),
+- A structured value (object or another array).
+
+Internet Object arrays are syntactically compact, support nesting, and avoid ambiguity by enforcing strict value presence and disallowing trailing or elided elements.
+
+---
 
 ## Syntax
 
-<figure><img src="../../.gitbook/assets/array-structure.png" alt=""><figcaption><p>Array Syntax</p></figcaption></figure>
+An array begins with `[` and ends with `]`, containing zero or more comma-separated values.
 
-### **Array Structural Characters**
-
-| Symbol | Characters          | Unicode  | Description               |
-| ------ | ------------------ | -------- | ------------------------- |
-| `,`    | Comma             | `U+002C` | Used as a value separator |
-| `[`    | Open Square Bracket  | `U+005B` | Begins an array boundary  |
-| `]`    | Close Square Bracket | `U+005D` | Closes an array boundary  |
-
-## Characteristics
-
-Arrays can contain values of various types, including objects, other arrays, strings, numbers, boolean, and null.
-
-### Basic Arrays
-
-A simple array of strings:
-
-```ruby
-[one, two, three]
+```ebnf
+array = "[" [ value *("," value) ] "]"
 ```
 
-An array of objects:
+In the above grammar, `value` refers to any valid Internet Object value as defined in the [Values section](../values/README.md). The exact syntax and behavior of each value type (e.g., strings, numbers, booleans, objects, arrays, null) are defined separately in their respective type specifications.
+
+## Structural Characters
+
+| Symbol | Name                 | Unicode  | Description                   |
+| ------ | -------------------- | -------- | ----------------------------- |
+| `[`    | Open Square Bracket  | `U+005B` | Starts an array               |
+| `]`    | Close Square Bracket | `U+005D` | Ends an array                 |
+| `,`    | Comma                | `U+002C` | Separates values within array |
+
+## Valid Forms
 
 ```ruby
-[{ a, b, c }, {j, k, l}, { x, y, z }]
+[]                       # Empty array
+[apple, banana, cherry]  # String values
+[1, 2, 3]                # Number values
+[T, F, N]                # Boolean and null values
+[{x:1}, {y:2}]           # Array of objects
+[1, [2, 3], [4, [5, 6]]] # Nested arrays
+[[1,2],[3,4]]            # 2D array
 ```
 
-An array with mixed values:
+## Optional Behaviors
+
+### Whitespace and Formatting
+
+Whitespace is permitted around elements and structural characters for readability.
 
 ```ruby
-[one, T, { a:10, b: -Inf, NaN }]
+[ a , b , c ]   # Valid
 ```
 
-### Multi-dimensional Arrays
+All forms with equivalent value structure are interpreted identically.
 
-Arrays can be nested to create multi-dimensional data structures.
+### Empty Representation
 
-#### Two-dimensional Arrays
-
-Two-dimensional arrays represent rows and columns:
+An empty array is written as:
 
 ```ruby
-[[1, 1, 1], [1, 1, 1], [1, 1, 1]]
+[]
+```
+This represents a valid array with no elements.
+
+### Nesting
+
+Arrays may contain other arrays, allowing arbitrarily deep structures.
+
+```ruby
+[1, [2, 3], [[4]]]
 ```
 
-#### Three-dimensional Arrays
+## Comments
 
-Three-dimensional arrays represent collections of two-dimensional arrays:
+Comments are allowed around and within arrays, as long as they comply with Internet Object's general comment syntax.
 
 ```ruby
 [
-   [[10,20,30],[40,50,60],[70,80,90]], # elements of block 1
-   [[11,22,33],[44,55,66],[77,88,99]], # elements of block 2
-   [[12,23,34],[45,56,67],[78,89,90]]  # elements of block 3
+  1, 2,  # inline comment
+  3
 ]
 ```
 
-### Empty Arrays and Empty Values
+> Comments must not break value boundaries. Embedded comment styles (like inside strings or object keys) are not permitted.
 
-An empty array is represented by a pair of square brackets with no values:
-
-```ruby
-[]      # An empty array
-```
-
-Empty values between array elements are not permitted. To include a missing value, you must explicitly specify a valid value such as `null`. However, since the Internet Object specification neither assumes `null` by default nor supports `undefined`, any omission is strictly forbidden. Following are some examples of invalid array structures:
+## Invalid Forms
 
 ```ruby
-[a,b,] # Trailing comma
-[a,,c] # Array with an empty value in the middle
+[a, b, ]     # ❌ Trailing comma
+[a,,c]       # ❌ Elided value
+[ , ]        # ❌ Missing value
+[,a]         # ❌ Starts with comma
+[a b c]      # ❌ Missing separators
 ```
+
+### Corrected Versions
+
+```ruby
+[a, b]       # ✅ Valid
+[a, null, c] # ✅ Use null for missing values
+```
+
+## Preservation of Structure
+
+Internet Object preserves:
+
+* Value order
+* Whitespace (non-significant in interpretation)
+* Syntactic fidelity (as written)
+
+However, it does **not** interpret:
+
+* The meaning of order
+* Whether values must be unique
+
+Such semantics are the responsibility of the **schema layer**, **validators**, or **application logic**.
+
+## See Also
+
+* [Schema for Arrays](../../schema-definition-language/data-types/array.md)
+
