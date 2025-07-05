@@ -148,9 +148,9 @@ The following Internet Object is also a valid JSON object:
 ## Invalid Forms
 
 ```ruby
-name: John, Doe, 25        # ❌ Unkeyed values after a key
-{a: 1, b}                  # ❌ Unkeyed value follows keyed entry
-{1, 2, x: 3, y: 4, 5}      # ❌ Final value is unkeyed
+~ name: John, Doe, 25        # ❌ Unkeyed values after a key
+~ {a: 1, b}                  # ❌ Unkeyed value follows keyed entry
+~ {1, 2, x: 3, y: 4, 5}      # ❌ Final value is unkeyed
 ```
 
 ---
