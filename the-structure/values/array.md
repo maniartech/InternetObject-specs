@@ -4,8 +4,6 @@ description: Arrays in Internet Object
 
 # Arrays
 
-## Overview
-
 An **Array** in Internet Object represents an ordered collection of values enclosed in square brackets. Arrays are scalar containers used to express lists, sequences, and multi-dimensional tabular structures.
 
 Each value in an array may be:
@@ -13,8 +11,6 @@ Each value in an array may be:
 - A structured value (object or another array).
 
 Internet Object arrays are syntactically compact, support nesting, and avoid ambiguity by enforcing strict value presence and disallowing trailing or elided elements.
-
----
 
 ## Syntax
 
