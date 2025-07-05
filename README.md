@@ -33,4 +33,4 @@ This document aims to provide the Internet Object 1.0 specification and showcase
 | Status                | `Work-in-Progress` `Draft`                                         |
 | Website               | [https://internetobject.org](https://internetobject.org) (WIP)     |
 | Docs                  | [https://docs.internetobject.org](https://docs.internetobject.org) |
-| Last Updated          | 2nd July 2025                                                 |
+| Last Updated          | 5th July 2025                                                 |
