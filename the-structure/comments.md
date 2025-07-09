@@ -34,14 +34,16 @@ Internet Object supports **single-line comments** for documenting and annotating
 ### Comment Placement
 
 ```ruby
-# Document header comment
+# Person data with comments
 {
-    # Section comment
-    name: "John Doe",          # Inline field comment
-    age: 30,                   # Another inline comment
+    # Person details
+    name: John Doe, # Inline field comment
+    age: 30,        # Another inline comment
+
+    # Contact information
     contact: {
-        email: "john@example.com",
-        phone: "+1-555-0123"   # Contact number
+        email: 'john@example.com',
+        phone: '+1-555-0123'
     }
 }
 ```
