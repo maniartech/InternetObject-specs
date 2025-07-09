@@ -2,11 +2,22 @@
 
 In the Internet Object format, whitespace refers to any character with a Unicode code point less than or equal to `U+0020` (i.e., characters in the range `U+0000` to `U+0020`). This range includes both non-printable control characters and common whitespace characters such as the horizontal tab (`U+0009`), newline (`U+000A`), vertical tab (`U+000B`), form feed (`U+000C`), carriage return (`U+000D`), and space (`U+0020`).
 
-![](https://documents.app.lucidchart.com/documents/076b4f9c-b79d-410c-8002-1ac23fdbb786/pages/SUfm_UR89EBD?a=22620\&x=15\&y=912\&w=990\&h=482\&store=1\&accept=image%2F*\&auth=LCA%20f2a38fdb5e4fb58c2500aa4b23c3735c6b801c05-ts%3D1610795059)
+## EBNF Definition
+
+```ebnf
+whitespace         = ascii_whitespace | unicode_whitespace ;
+
+ascii_whitespace   = ? any character with Unicode code point U+0000 to U+0020 ? ;
+unicode_whitespace = U+1680 | U+2000 | U+2001 | U+2002 | U+2003 | U+2004
+                   | U+2005 | U+2006 | U+2007 | U+2008 | U+2009 | U+200A
+                   | U+2028 | U+2029 | U+202F | U+205F | U+3000 | U+FEFF ;
+```
 
 In addition to the characters in the range `U+0000` to `U+0020`, the Internet Object format also includes characters in the Unicode whitespace category as whitespace. This includes characters such as the non-breaking space (`U+00A0`), em space (`U+2003`), and en space (`U+2002`), among others. Including Unicode whitespace characters can make it easier to work with text in languages that use non-Latin scripts, such as Arabic, Chinese, or Japanese.
 
-It's also worth noting that the Internet Object format recognizes the zero-width non-breaking space (`U+FEFF`) as whitespace. This character is often used as a byte order mark (BOM) in Unicode-encoded documents. Incorporating a more comprehensive range of whitespace characters in Internet Object offers several advantages that can make the format easier to work with, more readable, and more compatible with different systems and programming languages.
+It's also worth noting that the Internet Object format recognizes the zero-width non-breaking space (`U+FEFF`) as whitespace. This character is often used as a byte order mark (BOM) in Unicode-encoded documents.
+
+## Whitespace Characters
 
 The following table lists the valid whitespace characters:
 
@@ -32,13 +43,20 @@ The following table lists the valid whitespace characters:
 | `U+3000`             | Ideographic Space                                  | Space used in East Asian scripts.                                                                  |
 | `U+FEFF`             | Byte Order Mark (BOM)                              | Zero Width Non-Breaking Space, often used as a BOM.                                                |
 
-### Notes
+## Rules
 
-* **Case Sensitivity:** All whitespace characters are recognized based on their Unicode code points. Ensure that the correct character is used to avoid parsing issues.
-* **Whitespace Sensitivity:** Internet Object is not whitespace sensitive, meaning that the parser ignores the whitespaces surrounding the values and structural elements. However, any whitespace characters found within the values or strings themselves are preserved.
-* **Reserved Characters:** All listed whitespace characters are reserved and should not be used as part of identifiers or keys to prevent conflicts and parsing errors.
-* **Best Practices:**
-  * **Enhance Readability:** Use whitespace characters like spaces and tabs to format your document for better readability.
-  * **Avoid Unnecessary Whitespace:** While whitespace can improve readability, excessive or unnecessary whitespace can clutter the document.
-  * **Consistent Formatting:** Maintain a consistent use of whitespace throughout the document to ensure uniformity and ease of maintenance.
-  * **Be Mindful of Invisible Characters:** Some whitespace characters, like zero-width spaces, are invisible but can affect the parsing and rendering of the document. Use them only when necessary.
+- **Whitespace Insensitive**: Internet Object is not whitespace sensitive, meaning that the parser ignores the whitespaces surrounding the values and structural elements
+- **String Preservation**: Any whitespace characters found within the values or strings themselves are preserved
+- **Unicode Code Points**: All whitespace characters are recognized based on their Unicode code points
+- **Reserved Characters**: All listed whitespace characters are reserved and should not be used as part of identifiers or keys
+
+## Best Practices
+
+- **Enhance Readability**: Use whitespace characters like spaces and tabs to format your document for better readability
+- **Avoid Unnecessary Whitespace**: While whitespace can improve readability, excessive or unnecessary whitespace can clutter the document
+- **Consistent Formatting**: Maintain a consistent use of whitespace throughout the document to ensure uniformity and ease of maintenance
+- **Be Mindful of Invisible Characters**: Some whitespace characters, like zero-width spaces, are invisible but can affect the parsing and rendering of the document
+
+## See Also
+- **[Encoding](../encoding.md)** - Unicode character handling and encoding
+- **[String Values](../values/string/)** - Whitespace handling in strings
