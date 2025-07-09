@@ -73,6 +73,8 @@
   * [Object](schema-definition-language/data-types/object.md)
   * [Array](schema-definition-language/data-types/array.md)
   * [Bool](schema-definition-language/data-types/bool.md)
+  * [Base64](schema-definition-language/data-types/base64.md)
+  * [Date and Time](schema-definition-language/data-types/date-and-time.md)
 * [Dynamic Schema](schema-definition-language/validation-rules.md)
 * [Is Object, a MemberDef or a Schema?](schema-definition-language/memberdef.md)
 
