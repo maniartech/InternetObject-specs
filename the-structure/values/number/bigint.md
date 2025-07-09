@@ -13,9 +13,9 @@ Unlike the regular Number type, which is limited to safe integers within approxi
 A BigInt value is expressed as an integer with the `n` suffix:
 
 ```ebnf
-bigint = decimalBigInt | binaryBigInt | octalBigInt | hexBigInt
+bigint = ["-" | "+"] (decimalBigInt | binaryBigInt | octalBigInt | hexBigInt)
 
-decimalBigInt = ["-"] digit+ "n"
+decimalBigInt = digit+ "n"
 binaryBigInt = "0b" binaryDigit+ "n"
 octalBigInt = "0o" octalDigit+ "n"
 hexBigInt = "0x" hexDigit+ "n"
