@@ -31,7 +31,7 @@
     * [BigInt](the-structure/values/number/bigint.md)
     * [Decimal](the-structure/values/number/decimal.md)
     * [NaN and Infinity](the-structure/values/number/nan-and-infinity.md)
-  * [Binary](the-structure/values/binary.md)
+  * [Base64](the-structure/values/base64.md)
   * [Date and Time](the-structure/values/date-and-time.md)
   * [Booleans](the-structure/values/booleans.md)
   * [Nulls](the-structure/values/null.md)
