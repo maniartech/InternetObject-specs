@@ -72,16 +72,16 @@ Comments are not allowed within regular strings, but may appear outside or betwe
 ## Invalid Forms
 Examples of invalid regular strings:
 
-```text
-John Doe         # ❌ Not quoted (should be "John Doe" or 'John Doe')
-"John Doe        # ❌ Missing closing quote
-'John Doe        # ❌ Missing closing quote
-"John Doe""      # ❌ Extra quote at end
-'John Doe''      # ❌ Extra quote at end
-"She said, "I Love it"" # ❌ Unescaped internal quote (should be \"I Love it\")
-'She said, 'I Love it'' # ❌ Unescaped internal quote (should be \'I Love it\')
-"\q"             # ❌ Invalid escape sequence
-'\q'             # ❌ Invalid escape sequence
+```yaml
+John Doe         # ✗ Not quoted (should be "John Doe" or 'John Doe')
+"John Doe        # ✗ Missing closing quote
+'John Doe        # ✗ Missing closing quote
+"John Doe""      # ✗ Extra quote at end
+'John Doe''      # ✗ Extra quote at end
+"She said, "I Love it"" # ✗ Unescaped internal quote (should be \"I Love it\")
+'She said, 'I Love it'' # ✗ Unescaped internal quote (should be \'I Love it\')
+"\q"             # ✗ Invalid escape sequence
+'\q'             # ✗ Invalid escape sequence
 ```
 
 ## Preservation of Structure
