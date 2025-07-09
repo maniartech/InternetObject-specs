@@ -66,11 +66,11 @@ Comments are not allowed within open strings, but may appear outside or between 
 ## Invalid Forms
 Examples of invalid open strings:
 
-```text
- John Doe      # ❌ Starts with whitespace (should be 'John Doe')
-John Doe       # ❌ Ends with whitespace (should be 'John Doe')
-"John Doe"     # ❌ Quoted (should be unquoted for open string)
-.John          # ❌ Starts with a dot (if dot is structural in context)
+```yaml
+ John Doe      # ✗ Starts with whitespace (should be 'John Doe')
+John Doe       # ✗ Ends with whitespace (should be 'John Doe')
+"John Doe"     # ✗ Quoted (should be unquoted for open string)
+.John          # ✗ Starts with a dot (if dot is structural in context)
 ```
 
 ## Preservation of Structure
