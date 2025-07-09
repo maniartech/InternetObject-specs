@@ -1,6 +1,15 @@
 # Comments
 
-Internet Object supports single-line comments. Internet Object comments start with a hash sign (`# U+0023`) and end when the line terminates. You can place comments anywhere inside the document, and any code written after the hash sign on the same line is ignored by the parser.
+Internet Object supports **single-line comments** for documenting and annotating data. Comments start with a hash sign (`#`) and continue to the end of the line.
+
+## Syntax
+
+- **Start Character**: Hash sign (`#` U+0023)
+- **Scope**: Single line only
+- **Placement**: Can appear anywhere in the document
+- **Content**: Everything after `#` on the same line is ignored by the parser
+
+## Examples
 
 ```ruby
 # Internet Object Document: Personnel Records
@@ -22,20 +31,36 @@ Internet Object supports single-line comments. Internet Object comments start wi
 ~ Jane Doe, 20, {Queens, 50010, NewYork}, {Bond Street, 50001, NewYork}
 ```
 
-### Usage and Benefits
+### Comment Placement
 
-Comments in Internet Object serve multiple purposes:
+```ruby
+# Document header comment
+{
+    # Section comment
+    name: "John Doe",          # Inline field comment
+    age: 30,                   # Another inline comment
+    contact: {
+        email: "john@example.com",
+        phone: "+1-555-0123"   # Contact number
+    }
+}
+```
 
-1. **Document Structure Elucidation:** Providing context for different sections of the document.
-2. **Schema and Field Description:** Offering explanations for data structures and individual fields.
-3. **Metadata Provision:** Including information about the document itself, such as version or purpose.
-4. **Code Segmentation:** Improving readability by logically separating different parts of the document.
+## Rules
 
-**Best Practices:**
+- Comments can appear on any line
+- Can be standalone or inline after data
+- Support full Unicode text
+- Cannot span multiple lines
+- No special escaping needed
 
-- **Be Clear and Concise:** Use comments to clarify complex sections, but avoid stating the obvious.
-- **Keep Comments Updated:** Ensure that comments reflect any changes in the code to prevent misinformation.
-- **Avoid Overusing:** Excessive comments can clutter the document. Use them judiciously to highlight important information.
-- **Place Comments Appropriately:** Position comments near the relevant code or data structure to maintain context.
+## Best Practices
 
-Effective use of comments enhances document comprehensibility and maintainability by providing contextual information and explanations for data structures and values.
+- **Be Clear and Concise**: Use simple, direct language
+- **Explain Why, Not What**: Focus on reasoning rather than obvious facts
+- **Keep Comments Updated**: Update comments when data structures change
+- **Use Consistently**: Maintain uniform style throughout documents
+
+## See Also
+- **[Internet Object Structure](./README.md)** - Overall document structure
+- **[Encoding](./encoding.md)** - Unicode support in text content
