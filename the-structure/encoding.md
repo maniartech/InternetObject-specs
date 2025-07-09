@@ -10,4 +10,4 @@ Parsers and serializers must ensure that at least UTF-8 is supported, as it is t
 
 ### Byte Order Mark (BOM)
 
-Adding a Byte Order Mark (`U+FEFF`) at the start of your Internet Object text won’t cause issues—the parser will simply treat it as a space.
+Adding a Byte Order Mark (`U+FEFF`) at the start of your Internet Object text won't cause issues—the parser will simply treat it as a space.
