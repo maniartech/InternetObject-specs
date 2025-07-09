@@ -1,44 +1,89 @@
-# Open Strings
+---
+description: Open strings in Internet Object
+---
 
-This is the simplest and the most basic type of format is the Open string format. As the name suggests, open strings are not enclosed within any sort of enclosures or quotation marks. This free and open type of string starts with any non-whitespace codepoint. They end when any structural character(s) is encountered or when the end of the document is reached.&#x20;
+# Open String
 
-Open strings can not start or end with the whitespace character. However, whitespace characters within the strings are preserved. The quotation characters `( " U+0022 or ' U+0027)` do not require to be escaped.
+An **Open String** in Internet Object is the simplest string format. It is a sequence of Unicode codepoints not enclosed in any quotes. Open strings are ideal for simple, unstructured text that does not begin or end with whitespace and does not require escaping of special or structural characters.
 
+Open strings are scalar values. They preserve all internal whitespace and Unicode content, but cannot start or end with whitespace.
 
+## Syntax
+Open strings begin with any non-whitespace codepoint and end at the first whitespace or structural character, or at the end of the document.
 
-![The Open String](https://lh5.googleusercontent.com/qMlHBw5J8nwUIbnuhlZvrlKy--2quLB9GCYqaQl968y34Zb1sC6BaeD9kn4zLDQppCcad\_GRhhspQjlNq91Jt01V6EwRTEowCyAtGKr7PoR9ah2kf\_H\_KIlvHAYkwGDCCLs9XP0x)
-
-### An Open String Walkthrough
-
-A simple open string. Notice it is not enclosed in any sort of enclosures.
-
+```ebnf
+openString    = nonWhitespace (codepoint)*
+nonWhitespace = any Unicode codepoint except whitespace
+codepoint     = any Unicode codepoint except structural characters or document end
 ```
+
+## Structural Characters
+| Symbol | Name                 | Unicode   | Description                                 |
+|--------|----------------------|-----------|---------------------------------------------|
+| (space, tab, etc.) | Whitespace         | Multiple  | Terminates or invalidates open string start/end |
+| `:`    | Colon                | U+003A    | Structural character (terminates string)    |
+| `,`    | Comma                | U+002C    | Structural character (terminates string)    |
+| `{`    | Open Curly Brace     | U+007B    | Structural character (terminates string)    |
+| `}`    | Close Curly Brace    | U+007D    | Structural character (terminates string)    |
+| `[`    | Open Square Bracket  | U+005B    | Structural character (terminates string)    |
+| `]`    | Close Square Bracket | U+005D    | Structural character (terminates string)    |
+| `"`    | Double Quote         | U+0022    | Allowed, does not terminate or need escape  |
+| `'`    | Single Quote         | U+0027    | Allowed, does not terminate or need escape  |
+
+## Valid Forms
+Examples of valid open strings:
+
+```text
 John Doe
+Peter D'mello
+जॉन डो
+Wow Great
+😃
 ```
 
-Quotes in the open strings don't cause termination.
-
-```
-Peter D'mello 
-```
-
-The following object contains three open string Unicode values.
-
-```
+Multiple open strings in an object:
+```text
 जॉन डो, Wow Great, 😃
 ```
 
-To create a multiline string, you don't need any escaping mechanism. In the following case, a string is spread over the five lines.
+Multiline open string (no escaping required):
+```text
+Lorem ipsum dolor sit amet consetetur sadipscing elitr sed
+diam nonumy eirmod.
 
-```
-Lorem ipsum dolor sit amet consetetur sadipscing elitr sed 
-diam nonumy eirmod. 
-
-Tempor invidunt ut labore et dolore magna aliquyam erat 
+Tempor invidunt ut labore et dolore magna aliquyam erat
 sed diam voluptua
 ```
 
-### Escaping
+## Optional Behaviors
+- **Whitespace**: Open strings cannot start or end with whitespace, but preserve all internal whitespace.
+- **No Escaping**: No character escaping is supported. Quotes and other characters are allowed as-is.
+- **Multiline**: Open strings can span multiple lines if not interrupted by structural characters.
 
-In order to keep things simple, the open string format does not support character escaping. If the text does not fit into open string format, other formats such as regular string can be used.
+## Comments
+Comments are not allowed within open strings, but may appear outside or between values as per Internet Object comment rules.
 
+## Invalid Forms
+Examples of invalid open strings:
+
+```text
+ John Doe      # ❌ Starts with whitespace (should be 'John Doe')
+John Doe       # ❌ Ends with whitespace (should be 'John Doe')
+"John Doe"     # ❌ Quoted (should be unquoted for open string)
+.John          # ❌ Starts with a dot (if dot is structural in context)
+```
+
+## Preservation of Structure
+Internet Object preserves:
+- All Unicode codepoints and internal whitespace as written
+- The unquoted, open form of the string
+
+It does **not** interpret or enforce:
+- Escaping or encoding
+- Leading/trailing whitespace (disallowed)
+- Application-specific constraints
+
+## See Also
+- [String Values Overview](./README.md)
+- [Regular String](./regular-strings.md)
+- [Raw String](./raw-strings.md)

@@ -1,48 +1,82 @@
-# Raw Strings
+---
+description: Raw strings in Internet Object
+---
 
-In some cases (such as representing regular expressions) open string or regular string is not quite an efficient way to represent the string. Raw strings encapsulate the series of Unicode characters inside a single quote `(' U+0027)` character.
+# Raw String
+A **Raw String** in Internet Object is a sequence of Unicode codepoints prefixed with `r` or `R` and enclosed in either single quotes (`' U+0027`) or double quotes (`" U+0022`). Raw strings are ideal for text containing many backslashes, quotes, or structural characters, such as file paths or regular expressions. They do not support escape sequences except for the enclosing quote, which can be represented by doubling the enclosing quote character inside the string.
 
+Raw strings are scalar values. They preserve all content as written, including whitespace, newlines, and Unicode characters.
 
+## Syntax
+A raw string is prefixed with `r` or `R` and enclosed in either single or double quotes. The only special rule is that the enclosing quote character inside the string must be represented as two consecutive enclosing quotes.
 
-![The Raw String](https://documents.app.lucidchart.com/documents/076b4f9c-b79d-410c-8002-1ac23fdbb786/pages/6ugmWkdfYNiK?a=23151\&x=3643\&y=1564\&w=1699\&h=346\&store=1\&accept=image%2F\*\&auth=LCA%2081085e36923bcf2b3e9d955bff2033d880eb1b3c-ts%3D1612689104)
-
-### Use Cases
-
-The raw string is used for representing text with complex characters. The following string represents an application path in the windows directory, it uses both characters i.e colon and backslash which makes it difficult to be represented using open strings and regular strings format.
-
-```
-'C:\program files\example\app.exe'
-```
-
-Raw strings format simplifies the complex string representation and enhances the readability by preventing escapes. The following regular expression is much more readable if represented using raw string format.
-
-```
-'^(19|20)\d\d([- /.])(0[1-9]|1[012])\2(0[1-9]|[12][0-9]|3[01])$'
-```
-
-As with other format of strings, raw strings can also deligently handle Unicode characters.
-
-```
-'जॉन डो', 'Can contain Ucharacters 😃'
+```ebnf
+rawString = "r" (singleQuotedRaw | doubleQuotedRaw)
+singleQuotedRaw = "'" { character | doubleSingleQuote } "'"
+doubleQuotedRaw = '"' { character | doubleDoubleQuote } '"'
+character = any Unicode codepoint except the enclosing quote
+doubleSingleQuote = "''" (represents a single quote inside a single-quoted raw string)
+doubleDoubleQuote = '""' (represents a double quote inside a double-quoted raw string)
 ```
 
-Raw string preserves structural characters, newline characters, and whitespace while parsing
+## Structural Characters
 
+The following characters are used to structure raw strings:
+
+| Symbol | Name                 | Unicode   | Description                                 |
+|--------|----------------------|-----------|---------------------------------------------|
+| `r`    | Raw Prefix           | U+0072    | Indicates raw string type                |
+| `'`    | Single Quote         | U+0027    | Encloses string, doubled inside for escape   |
+| `"`    | Double Quote         | U+0022    | Encloses string, doubled inside for escape   |
+| (space, tab, etc.) | Whitespace         | Multiple  | Preserved as written                        |
+| Any    | Any Unicode codepoint| Multiple  | Allowed, except unescaped enclosing quote    |
+
+> **Note:** The reverse solidus (`\\` U+005C) is always treated as a literal character in raw strings—there is no escaping with backslash.
+
+## Valid Forms
+Examples of valid raw strings:
+
+```ruby
+r'C:\program files\example\app.exe'
+r"C:\program files\example\app.exe"
+r'^(19|20)\d\d([- /.])(0[1-9]|1[012])\2(0[1-9]|[12][0-9]|3[01])$'
+r"^(19|20)\d\d([- /.])(0[1-9]|1[012])\2(0[1-9]|[12][0-9]|3[01])$"
+r'जॉन डो'
+r"Can contain Ucharacters 😃"
+r'A Unicode string (😃) which does not force you to escape\ncharacters like \, \n or anything except a single quote char ''''.'
+r"A Unicode string (😃) which does not force you to escape\ncharacters like \, \n or anything except a double quote char \"\"."
+r'Jonas D''costa'  # Contains a single quote inside
+r"He said, ""Hello!"""  # Contains a double quote inside
 ```
-'A Unicode string (😃) which does not force you to escape
-characters like \, \n or anything except a single quote 
-char ''.'
+
+## Optional Behaviors
+- **Whitespace**: Leading, trailing, and internal whitespace are preserved.
+- **No Escaping**: No escape sequences are supported except for doubling the enclosing quote to represent it inside the string.
+- **Multiline**: Newline and carriage return characters are preserved.
+
+## Comments
+Comments are not allowed within raw strings, but may appear outside or between values as per Internet Object comment rules.
+
+## Invalid Forms
+Examples of invalid raw strings:
+
+```yaml
+rC:\program files\example\app.exe     # ✗ Missing quotes (should be r'...') or r"..."
+r'Jonas D'costa'                      # ✗ Unescaped single quote inside (should be r'Jonas D''costa')
+r"He said, "Hello!""                  # ✗ Unescaped double quote inside (should be r"He said, ""Hello!"")
+r'Unclosed string                     # ✗ Missing closing quote
+r'Contains \\ escapes'                # ✗ Backslash is not an escape, just literal
 ```
 
-### Escaping
+## Preservation of Structure
+Internet Object preserves:
+- All Unicode codepoints and whitespace as written
+- The use of doubled enclosing quotes for embedded quotes
 
-The Raw string does not support the character escaping with a reverse solidus. Every character inside the raw string is treated as exactly the same including reverse solidus `(\ U+005C)`.&#x20;
-
-Only the single quote within the Raw string must be escaped to avoid string termination. To avoid the string termination, single quotes within the raw strings must be escaped using double single quotes.
-
-```
-'Jonas D''costa'
-```
-
-###
-
+It does **not** interpret or enforce:
+- Application-specific constraints
+- Escaping beyond doubled enclosing quotes
+## See Also
+- [String Values Overview](./README.md)
+- [Open String](./open-strings.md)
+- [Regular String](./regular-strings.md)

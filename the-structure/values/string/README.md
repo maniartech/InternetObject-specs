@@ -2,21 +2,33 @@
 description: Strings in Internet Object
 ---
 
-# String
 
-Like many programming languages, strings in Internet Object are a sequence of Unicode codepoints. They may be enclosed in quotation marks `(" U+0022 or ' U+0027)` or remain free without being enclosed. One noticeable difference with Internet Object strings is they all preserve the whitespace found within the boundary!
+# Strings in Internet Object
 
-### String Formats
+Strings in Internet Object represent sequences of Unicode codepoints. They are used for textual data and always preserve whitespace and formatting within their boundaries.
 
-The Internet Object strings can be written in three different formats (a) Open Strings (b) Regular Strings (c) Raw Strings. All of these formats have different ways of representing strings and handling escapes.
+Internet Object supports three distinct string types, each with unique syntax and use cases:
 
+```ebnf
+stringValue = openString | regularString | rawString
+```
 
+| String Type      |  Description                                                                 | Example Syntax         |
+|------------------|-----------------------------------------------------------------------------|-----------------------|
+| [Open String](./open-strings.md)    | Unquoted, simplest form, ends at structural character or whitespace.         | `John Doe`            |
+| [Regular String](./regular-strings.md) | Quoted with double quotes, supports escaping and structural characters.      | `"John Doe"`          |
+| [Raw String](./raw-strings.md)      | Prefixed with `r`, quoted with single or double quotes, minimal escaping.    | `r'C:\path'` or `r"C:\path"` |
 
-![The Internet Object String Format](https://lh6.googleusercontent.com/F767OpaPwLKDjaBW-q1F1y31VitcqNAEyfLu1Xgp1MiFVaZTzWmblA8hI1G9XUz7mLVyp-Zw-Wks-sgDlhth2SCmgGazPtmJ2zm3ggPZU3krjp67Tb1XhhI0ZjxB4f-8ZQfUVl6J)
+All string types preserve whitespace and Unicode content as written.
 
-{% hint style="info" %}
-All formats of strings in Internet Object preserve the whitespaces or any permissible codepoint found within the string boundary.
-{% endhint %}
+## When to Use Each String Type
 
+- **Open String**: For simple, unstructured text without leading/trailing whitespace or special characters.
+- **Regular String**: When you need to include structural characters, whitespace, or require escaping.
+- **Raw String**: For text with many backslashes or quotes (e.g., file paths, regex), with minimal escaping and `r` prefix.
 
+## See also
 
+- [Schema for Strings](../../../schema-definition-language/data-types/string/README.md)
+- [Number Types Overview](../number/README.md)
+- [Values](../values/README.md)
