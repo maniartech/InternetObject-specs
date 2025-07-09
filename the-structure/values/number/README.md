@@ -14,10 +14,6 @@ description: Numbers in Internet Object
 
 ## Number Formats
 
-
-
-
-
 Internet Object supports various number formats. The table below distinguishes between decimal integers and regular (floating-point) numbers, and provides recommendations:
 
 > **Note:** Bases other than decimal (base 10)—that is, binary (base 2), octal (base 8), and hexadecimal (base 16)—can only represent integers, not fractional or decimal values. For non-integer values, use decimal (base 10) or scientific notation.
@@ -67,10 +63,3 @@ See **[Special Numeric Values: NaN and Infinity](./nan-and-infinity.md)** for de
 
 * [Values](../README.md) - Overview of all Internet Object value types
 * [Schema for Numbers](../../../schema-definition-language/data-types/number/README.md) - Number validation and constraints
-
-
-
-
-
-
-
