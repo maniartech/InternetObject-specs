@@ -1,33 +1,43 @@
 # Literals
 
-Literals are specific values that can be used within an Internet Object document. They represent special values and basic data indicators. Below are the literals used in the Internet Object format:
+Literals are predefined constant values in Internet Object that represent common data states and special values. They provide a concise way to express boolean values, null states, and special numeric values without requiring quotes or additional syntax.
 
-| Literals | Represents                      | Notes                                |
-| -------- | ------------------------------- | ------------------------------------ |
-| `T`      | Boolean value True (short)      | Case-sensitive                       |
-| `true`   | Boolean value True              | Use interchangeably with `T`         |
-| `F`      | Boolean value False (short)     | Case-sensitive                       |
-| `false`  | Boolean value False             | Use interchangeably with `F`         |
-| `Inf`    | Number value Infinity           | Represents positive infinity         |
-| `-Inf`   | Number value Negative Infinity  | Represents negative infinity         |
-| `NaN`    | Number value Not a Number       | Represents an undefined or unrepresentable value |
-| `N`      | Null value (short)              | Case-sensitive                       |
-| `null`   | Null value                      | Use interchangeably with `N`         |
+## Supported Literals
 
-### Usage Examples
+Internet Object supports the following literal values:
+
+| Literal | Type | Represents | Case Sensitive |
+|---------|------|------------|----------------|
+| `true` | Boolean | True value | Yes |
+| `T` | Boolean | True value (short form) | Yes |
+| `false` | Boolean | False value | Yes |
+| `F` | Boolean | False value (short form) | Yes |
+| `null` | Null | Null/empty value | Yes |
+| `N` | Null | Null/empty value (short form) | Yes |
+| `Inf` | Number | Positive infinity | Yes |
+| `-Inf` | Number | Negative infinity | Yes |
+| `NaN` | Number | Not a Number | Yes |
+
+## Examples
 
 ```ruby
 # Boolean literals
-~ isActive: true, isVerified: F
-
-# Special number literals
-~ maxValue: Inf, minValue: -Inf, result: NaN
+~ isActive: true, verified: F, isDeleted: false, visible: T
 
 # Null literals
 ~ middleName: null, nickname: N
+
+# Special numeric literals
+~ maxValue: Inf, minValue: -Inf, result: NaN
 ```
 
-### Notes
+## Rules
 
-- **Case Sensitivity:** All literals are case-sensitive. For example, `True` or `FALSE` are not recognized as valid literals.
-- **Short vs. Long Forms:** The short forms (`T`, `F`, `N`) are convenient for brevity, while the long forms (`true`, `false`, `null`) enhance readability and compatibility with JSON.
+- **Case Sensitive**: All literals must use exact case (`True`, `FALSE`, `NULL` are invalid)
+- **No Quotes**: Literals are written without quotes
+- **Short Forms**: Single-letter shortcuts available for brevity
+
+## See Also
+- **[Boolean Values](../values/booleans.md)** - Detailed boolean type specification
+- **[Null Values](../values/null.md)** - Null type and optional values
+- **[Number Literals](../values/number/nan-and-infinity.md)** - Numeric types including special values
