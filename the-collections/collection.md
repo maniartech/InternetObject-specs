@@ -137,7 +137,7 @@ Each collection item (object) is parsed and validated **independently**:
 
 * If a collection item fails to parse or validate, **only that item is marked as an error**.
 * All other items remain unaffected and are processed as usual.
-* Implementations may provide modes for "fail fast" (stop on first error) or “parse all” (continue and collect errors); **it is recommended to parse all items** and report errors per item.
+* Implementations may provide modes for "fail fast" (stop on first error) or "parse all" (continue and collect errors); **it is recommended to parse all items** and report errors per item.
 * If a collection item contains nested child objects, failure means the entire top-level object (the collection item) is in error, not just the child.
 
 **Example:**
