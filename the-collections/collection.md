@@ -6,6 +6,8 @@ description: Collections in Internet Object
 
 A **Collection** in Internet Object is an ordered sequence of *collection items* (objects) within a section of a document. Collections enable efficient serialization, batching, and streaming of multiple objects—such as datasets, tables, or event logs—in a concise, flexible format.
 
+> Collections are conceptually similar to datasets in CSV, streams in JSON Lines, or record arrays in Avro.
+
 Collections are always part of an Internet Object document, **not** standalone documents.
 An Internet Object document consists of a header and a body. The body contains one or more sections. A section can contain either a single object or a **collection** (multiple objects as collection items).
 
@@ -18,7 +20,7 @@ A collection section consists of one or more collection items, each beginning wi
 ```ebnf
 collection = collectionItem *(collectionItem)
 collectionItem = "~" object
-````
+```
 
 > `object` is as defined in the [Objects specification](../the-structure/values/object.md). Both open and closed object forms are permitted, though open form is recommended for clarity.
 
@@ -134,7 +136,7 @@ Each collection item (object) is parsed and validated **independently**:
 ```ruby
 ~ John, 28, m, {Main St, LA}, [red], T        # valid
 ~ Jane, N/A, f, {Second St, LA}, [blue], F    # valid
-~ Alice, OOPS, f, {Third St, NY, [green], T   # Error: unclosed object, invalid
+~ Alice, OOPS, f, {Third St, NY, [green], T   # Error: ❌ unclosed object, invalid
 ~ Bob, 35, m, {Fourth St, NY}, [yellow], T    # valid
 ```
 
