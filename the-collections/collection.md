@@ -104,17 +104,6 @@ it is **implicitly promoted** to an open object containing that value as its onl
 * Each collection item must be a top-level object (open or closed).
 * Objects may contain nested arrays or child objects as fields.
 
-## Comments
-
-* Comments are allowed before, after, or between collection items, and within object values, as per Internet Object comment rules.
-* Comments inside string or value literals are **not** permitted.
-
-```ruby
-~ 101, Thomas, 25, HR, {Bond Street, NY}      # First item
-~                                            # Empty item
-~ 102, George, 30, Sales, {Duke Street, NY}  # Second item
-```
-
 ## Invalid Forms
 
 ```ruby
