@@ -22,7 +22,7 @@ collectionItem = "~" object
 
 > `object` is as defined in the [Objects specification](../the-structure/values/object.md). Both open and closed object forms are permitted, though open form is recommended for clarity.
 
-## Structural Characters
+### Structural Characters
 
 | Symbol | Name         | Unicode            | Description                         |
 | ------ | ------------ | ------------------ | ----------------------------------- |
