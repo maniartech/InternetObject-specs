@@ -109,21 +109,6 @@ ref                = "$" name
 
 * *Note:* Modifiers and complex memberDefs are conventions, not core grammar.
 
-### **Comments in Schema**
-
-Comments can be included in schema definitions for clarity:
-
-```ruby
-{
-  name: string,         # Name of the user
-  age?: int,            # Age is optional
-  address: {            # Nested address object
-    street: string,
-    city: string
-  }
-}
-```
-
 ## **Field Types and Constraints**
 
 ### **Built-in Types**
@@ -227,6 +212,65 @@ name: string, *,         # Allow any extra fields
   `comment?: string, timestamp*: datetime`
 * **Dynamic:**
   `*, *: string`
+
+## **Open Object and Array Forms**
+
+Internet Object allows you to define fields that can accept *any object* or *any array* using open forms:
+
+### **Any Object: `{}`**
+
+- Use `{}` as a schema for a field that may contain any object, regardless of fields or structure.
+- This matches objects of any shape, including empty objects.
+
+```ruby
+meta: {}         # 'meta' can be any object, equivalent to `meta: object`
+payload?: {}     # 'payload' is optional, any object allowed
+data: object     # 'data' can also be written as `data: {}` for any object
+```
+
+### **Any Array: `[]`**
+
+```ruby
+extras: []       # 'extras' can be any array. Same as `extras: array`
+tags?: []        # 'tags' is optional, any array allowed
+choices: array  # 'Can also be written as `choices: []` for any array'
+```
+* Use `[]` as a schema for a field that may contain any array, regardless of element type or length.
+* This matches all arrays, including empty arrays.
+
+```ruby
+extras: []       # 'extras' can be any array
+tags?: []        # 'tags' is optional, any array allowed
+```
+
+### **Why Use Open Forms?**
+
+* Useful for fields where you expect unstructured, arbitrary data (e.g., “metadata,” “extension,” “blob,” or raw API fields).
+* No validation is performed on object keys or array elements—only the container type is enforced.
+
+### **Contrast with Typed Forms**
+
+* To restrict the allowed content, use typed or constrained schemas:
+
+  * `[int]` for an array of integers
+  * `{ name: string }` for an object with required fields
+  * `[ { name: string } ]` for an array of objects with shape
+
+| Syntax        | Meaning                             |
+| ------------- | ----------------------------------- |
+| `{}`          | Any object (no structure required)  |
+| `[]`          | Any array (no type/length required) |
+| `[type]`      | Array of the specified type         |
+| `[MemberDef]` | Array validated by MemberDef        |
+| `[{...}]`     | Array of objects with defined shape |
+
+> **Note:** These open forms can also be used in MemberDefs for fields that may contain arbitrary objects or arrays.
+
+```
+
+**Summary:**
+- Put this new section right after “Common Schema Patterns” and before your “Full Example.”
+- This order introduces specific patterns, then the open (most general) forms, then illustrates usage in a complete example.
 
 ## **Full Example**
 
