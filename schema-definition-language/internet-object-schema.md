@@ -329,5 +329,3 @@ address?: {                  # Optional nested object
 ## **Versioning and Evolution (Future Section)**
 
 * **Schema evolution, migration, backward compatibility** best practices can be addressed in future versions.
-
-**Let me know if you want me to push this as a direct update to your canvas doc, or if you’d like further refinements!**
