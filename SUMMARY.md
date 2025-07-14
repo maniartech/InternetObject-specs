@@ -76,7 +76,8 @@
   * [Base64](schema-definition-language/data-types/base64.md)
   * [Date and Time](schema-definition-language/data-types/date-and-time.md)
 * [Dynamic Schema](schema-definition-language/validation-rules.md)
-* [Is Object, a MemberDef or a Schema?](schema-definition-language/memberdef.md)
+* [MemberDef (with Object Schema Comparison)](schema-definition-language/memberdef.md)
+* [TypeDef](schema-definition-language/typedef.md)
 
 ## Other
 

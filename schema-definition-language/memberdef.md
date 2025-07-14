@@ -1,11 +1,6 @@
----
-description: MemberDef (with Object Schema Comparison)
----
-
 # MemberDef (with Object Schema Comparison)
 
-A **MemberDef** (Member Definition) is the core way to define the type, validation rules, and constraints for a single value in an Internet Object schema.
-With MemberDefs, you can precisely control how each field is validated, using concise and powerful Internet Object syntax.
+A **MemberDef** (Member Definition) is the core way to define the type, validation rules, and constraints for a single value in an Internet Object schema. With MemberDefs, you can precisely control how each field is validated, using concise and powerful Internet Object syntax.
 
 Every MemberDef is strictly validated against its type's [TypeDef](typedef.md), ensuring schema correctness and interoperability.
 
@@ -17,7 +12,7 @@ A **MemberDef** is an IO object that defines:
 * Any **validation rules, constraints, or options** for that value (e.g., `min`, `max`, `choices`, etc.)
 * Optional **default value**, **nullability**, or **optionality** (using positional values and conventions)
 
-**Only options and positional values defined in the [TypeDef](typedef.md) for that type are valid in MemberDefs.**
+**Only options and positional values defined in the** [**TypeDef**](typedef.md) **for that type are valid in MemberDefs.**
 
 ## MemberDef Syntax and Usage
 
@@ -54,8 +49,6 @@ meta: {object, schema: {
 * Add `?` for optional: `age?: {number, min: 10}`
 * Combine: `score?*: {number, min: 0}`
 * Use positional values for default and choices if the TypeDef for that type supports it.
-
-
 
 ## How MemberDefs Are Validated
 
@@ -102,22 +95,21 @@ tags: {array, items: string, minLen: 1}
 While Object Schemas and MemberDefs share `{ ... }` syntax, their purpose and parsing are different:
 
 * **MemberDef**: Validates a single value or field using type and constraints (the focus of this page)
-* **Object Schema**: Defines the *shape* of an object (what keys/fields it has, not how a value is validated)
+* **Object Schema**: Defines the _shape_ of an object (what keys/fields it has, not how a value is validated)
 
 ### Brief Object Schema Definition
 
-An **Object Schema** is a map of field names to types or MemberDefs, specifying the *shape* of objects, e.g.:
+An **Object Schema** is a map of field names to types or MemberDefs, specifying the _shape_ of objects, e.g.:
 
 ```ruby
 address: { street: string, city: string }
 ```
 
-> Object Schemas do *not* add constraints to individual values—they define what fields exist and their types or schemas.
+> Object Schemas do _not_ add constraints to individual values—they define what fields exist and their types or schemas.
 
 ## Why This Is Confusing (And How To Tell the Difference)
 
-Because both use `{ ... }` syntax, it's easy to mix them up.
-Let's look at two lines:
+Because both use `{ ... }` syntax, it's easy to mix them up. Let's look at two lines:
 
 ```ruby
 address: { street: string, city: string }           # Object Schema (declares fields/shape)
@@ -131,12 +123,8 @@ age: { int, min: 0, max: 120 }                      # MemberDef (type and constr
 
 #### Quick Rules
 
-1. **Is the first value a known data type?**
-   → **Yes:** MemberDef
-   → **No:** Go to 2
-2. **Contains `type` or `schema` as a member?**
-   → **Yes:** MemberDef
-   → **No:** Object Schema
+1. **Is the first value a known data type?** → **Yes:** MemberDef → **No:** Go to 2
+2. **Contains `type` or `schema` as a member?** → **Yes:** MemberDef → **No:** Object Schema
 
 #### Flowchart
 
@@ -151,13 +139,9 @@ flowchart TD
 
 ## Common Mistakes and How to Avoid Them
 
-* **Using options not in the TypeDef:**
-  Wrong: `age: {number, minimum: 10}`
-* **Mixing constraints with object schemas:**
-  Wrong: `{username: string, maxLen: 16}` (ambiguous!)
-  Right: `username: {string, maxLen: 16}` inside an object schema
-* **Omitting the type:**
-  Always start with the type in a MemberDef
+* **Using options not in the TypeDef:** Wrong: `age: {number, minimum: 10}`
+* **Mixing constraints with object schemas:** Wrong: `{username: string, maxLen: 16}` (ambiguous!) Right: `username: {string, maxLen: 16}` inside an object schema
+* **Omitting the type:** Always start with the type in a MemberDef
 
 ## Best Practices
 
@@ -168,17 +152,13 @@ flowchart TD
 
 ## FAQ
 
-**Q: Can I use both forms together?**
-A: Yes—use Object Schema for nested structure, MemberDef for each field (even nested).
+**Q: Can I use both forms together?** A: Yes—use Object Schema for nested structure, MemberDef for each field (even nested).
 
-**Q: What if my MemberDef contains a nested schema?**
-A: Use `schema: { ... }` inside the MemberDef for deep validation.
+**Q: What if my MemberDef contains a nested schema?** A: Use `schema: { ... }` inside the MemberDef for deep validation.
 
-**Q: What error do I get if I use the wrong form or invalid key?**
-A: Validation fails, usually with a "type mismatch" or "unexpected/invalid field" error, depending on context and TypeDef.
+**Q: What error do I get if I use the wrong form or invalid key?** A: Validation fails, usually with a "type mismatch" or "unexpected/invalid field" error, depending on context and TypeDef.
 
-**Q: Where do I find all valid options for each type?**
-A: See the [TypeDef reference](typedef.md).
+**Q: Where do I find all valid options for each type?** A: See the [TypeDef reference](typedef.md).
 
 ## See Also
 
