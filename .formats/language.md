@@ -125,7 +125,7 @@ When discussing security or privacy:
 
 Example (with notes below):
 
-```io
+```ruby
 # Schema
 title: string, sku: string, quantity: int, metadata: { fragile: bool }
 ---
