@@ -93,14 +93,14 @@ In many scenarios, it is beneficial to define schemas separately from the data. 
 
 1. Separate schema (person.io)
 
-```io
+```ruby
 # Person schema
 name:string, age:int, active:bool, address: {street:string, city:string}, skills:[string]
 ```
 
 2. Document with collection and metadata
 
-```yaml
+```ruby
 ~ schemaUrl: "https://example.com/schemas/person.io"
 ~ recordCount: 3
 ~ page: 1
