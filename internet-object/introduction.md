@@ -2,11 +2,11 @@
 
 Internet Object (IO) is a document-oriented data serialization format designed to optimize data transmission over networks. This specification introduces IO as an alternative to existing formats such as JSON, offering a structured approach to data representation and exchange.
 
-### Core Structure
+### Core structure
 
 The fundamental structure of IO is an ordered collection of values, analogous to CSV (Comma-Separated Values) but with extended capabilities. These capabilities include support for nested objects, arrays, and inline keys, providing enhanced expressiveness and flexibility.
 
-### Key Features
+### Key features
 
 * **Document-Oriented Design**: In contrast to value-oriented formats, IO adopts a document-centric approach, facilitating the separation of data from definitions to enhance clarity and maintainability.
 * **Ordered Collection with Extended Functionality**: IO's core structure maintains an ordered collection of values while supporting complex data structures such as nested objects and arrays.
@@ -14,13 +14,13 @@ The fundamental structure of IO is an ordered collection of values, analogous to
 * **Concise Syntax**: The syntax of IO is optimized for readability and efficiency, minimizing data size without compromising clarity.
 * **Metadata Integration**: IO documents can incorporate metadata, variables, and multiple schemas within the header section, providing comprehensive context for the data.
 
-### Illustrative Examples
+### Illustrative examples
 
-#### Basic IO Document Structure <a href="#basic-io-document-structure" id="basic-io-document-structure"></a>
+#### Basic IO document structure <a href="#basic-io-document-structure" id="basic-io-document-structure"></a>
 
 The following example demonstrates a basic IO document structure:
 
-```yaml
+```io
 name, age, active, address: {street, city}
 ---
 John Doe, 25, T, {Bond Street, New York}
@@ -40,11 +40,11 @@ This structure illustrates IO's concise syntax and inherent schema support. For 
 }
 ```
 
-#### IO Document with Collections and Data Types <a href="#io-document-with-collections-and-data-types" id="io-document-with-collections-and-data-types"></a>
+#### IO document with collections and data types <a href="#io-document-with-collections-and-data-types" id="io-document-with-collections-and-data-types"></a>
 
 IO supports collections and various data types, as demonstrated in the following example:
 
-```yaml
+```io
 name:string, age:int, active:bool, address: {street:string, city:string}
 ---
 ~ John Doe, 25, T, {Bond Street, New York}
@@ -85,22 +85,22 @@ The equivalent JSON representation would be:
 
 This comparison demonstrates IO's capacity to represent structured data collections efficiently, offering a compact and readable format while maintaining an ordered structure.
 
-### Advanced Examples <a href="#advanced-examples" id="advanced-examples"></a>
+### Advanced examples <a href="#advanced-examples" id="advanced-examples"></a>
 
-#### Separate Schema and Document with Collection <a href="#separate-schema-and-document-with-collection" id="separate-schema-and-document-with-collection"></a>
+#### Separate schema and document with collection <a href="#separate-schema-and-document-with-collection" id="separate-schema-and-document-with-collection"></a>
 
-In many scenarios, it's beneficial to define schemas separately from the data. This approach allows for schema reuse, versioning, and easier maintenance. Here's an example of a separate schema followed by a document using that schema:
+In many scenarios, it is beneficial to define schemas separately from the data. This approach allows for schema reuse, versioning, and easier maintenance. Here is an example of a separate schema followed by a document using that schema:
 
-1. Separate Schema (person.io)
+1. Separate schema (person.io)
 
-```yaml
-# Preson Schema
+```io
+# Person schema
 name:string, age:int, active:bool, address: {street:string, city:string}, skills:[string]
 ```
 
-2. Document with Collection and Metadata
+2. Document with collection and metadata
 
-```
+```yaml
 ~ schemaUrl: "https://example.com/schemas/person.io"
 ~ recordCount: 3
 ~ page: 1
@@ -119,7 +119,7 @@ In this example:
 * The collection contains multiple records, each prefixed with `~`.
 * Each record follows the structure defined in the schema, including an array of skills.
 
-This structure allows for efficient data transmission, as the schema only needs to be sent once and can be cached by the receiving system. It also facilitates easy updates to the schema without necessarily changing the data format.
+This structure allows for efficient data transmission, as the schema only needs to be sent once and can be cached by the receiving system. It also facilitates updates to the schema without necessarily changing the data format.
 
 ### Conclusion <a href="#conclusion" id="conclusion"></a>
 
