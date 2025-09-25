@@ -105,7 +105,23 @@ a, b, c
 name: {any, N}
 
 # The numWord can accept any string or number value.
-numWord: {any, anyOf: [string, number]} 
+numWord: {any, anyOf: [string, number]}
 ```
 
-&#x20;
+#### Dynamic Schema
+
+Objects can use dynamic schemas with `anyOf` to support multiple valid structures, providing flexibility while maintaining validation.
+
+```yaml
+# Dynamic object schema with multiple valid structures
+address: {
+  any,
+  anyOf: [
+    {city: string, state: {string, len: 2}},
+    {street: string, city: string, state: {string, len: 2}, zip?: string}
+  ]
+}
+---
+~ address: {New York, NY}  # Matches first schema
+~ address: {123 Main St, New York, NY, "10001"}  # Matches second schema
+```

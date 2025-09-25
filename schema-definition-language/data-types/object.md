@@ -1,206 +1,274 @@
+---
+description: Defining Object Schema n Internet Object
+---
+
 # Object
 
-An object is the fundamental unit of Internet Object document, it can be defined  with the members such as `schema`, `type`,  `default`,  `optional` and `null`. &#x20;
+The **object** type is the core building block for representing structured, complex data in Internet Object schemas. This page defines the schema rules, options, and best practices for defining the schema of `object` type in Internet Object.
 
-### &#x20;TypeDefs Schema
+### TypeDef Schema
+
+The canonical TypeDef for `object` specifies all allowed constraints and options for this type:
 
 ```yaml
-schema?   : {any, anyof: [string, object]},
-default?  : {},
 type?     : {string, choices: [object]},
+default?  : object,
+schema?   : {object, default: {}},
 optional? : {bool, default: F},
 null?     : {bool, default: F}
 ```
+
+| Option   | Type/Allowed Values | Description                                                                                                | Example                            |
+| -------- | ------------------- | ---------------------------------------------------------------------------------------------------------- | ---------------------------------- |
+| type     | string (`"object"`) | Enforces type name for validation                                                                          | `type: object`                     |
+| default  | object              | Default object value if omitted                                                                            | `default: {}`                      |
+| schema   | object              | Allowed fields/structure for this object. If not provided, the default is `{}` (any object shape is valid) | `schema: {name: string, age: int}` |
+| optional | bool                | Can this object field be omitted?                                                                          | `optional: T`                      |
+| null     | bool                | Can the value be null?                                                                                     | `null: T`                          |
 
 The TypeDef schema ensures the validity of `object` MemberDefs.
 
 #### schema
 
-In the internet object document, the object may or may not be defined with the member called `schema`. But it is always recommended to define the schema for an object.&#x20;
-
-If the schema is not defined then the user can pass an object with values of  `any` type i.e `anyOf: [string, object]`.  &#x20;
+The `schema` member defines the structure and validation rules for the object's properties. When defined, all object instances must conform to this schema. If not provided, the object accepts any structure (equivalent to `{}`).
 
 ```yaml
-# An object with schema
-a: {{city, state, zip}, ...}
+# Object with inline schema definition
+address: {city, state, zip}
 
-# Assigning schema through memberdef
-b: {default: N, schema: {city, state, zip}, null: T}
+# Object with explicit schema member
+address: {object, schema: {city, state, zip}}
+
+# Object without schema (accepts any structure)
+metadata: {}
+metadata: object
 ```
-
-The above code snippet represents how the object can be defined with the typedef member `schema` .&#x20;
 
 #### type
 
-The second member of the typedef is `type`. By default, the object can be of string or an object type. Here the next snippet shows how the object type can be defined.
+The `type` member explicitly specifies that this MemberDef defines an object type. This is useful for clarity and validation.
 
 ```yaml
 # Set type to object
-a: object, b: {type: object}
+user: object
+profile: {type: object}
+settings: {type: object, schema: {theme: string, lang: string}}
 ---
 ```
 
 #### default
 
-The next member in the `object` typedef is `default` . Here is how the default values can be defined for an object.
+The `default` member specifies the default value for the object when it's optional and not provided. The default value must conform to the defined schema.
 
 ```yaml
-# Set default value to null for a and b
-a?: {object, N}, b?: {object, default: N}
----
-```
+# Set default value to empty object
+config?: {object, default: {}}
 
-####
+# Set default value to null
+settings?: {object, default: N, null: T}
+
+# Set default with specific values
+user?: {object, schema: {name: string, active: bool}, default: {name: "Anonymous", active: F}}
+```
 
 #### null
 
-The Object when set to `null` will accept null values. Here the code snippet demonstrates the way how an object can accept a null value.
+Setting `null` to `T` (true) allows the object to accept null as a valid value.This does not make the field optional—null must be explicitly provided if desired. Alternatively, you can make a member nullable by adding a `*` suffix to its name (e.g., `profile*`).
 
 ```yaml
-# Set an empty object to null.
-a*: {}
+# Object that can be null
+profile*: {object, null: T}
 
-#Assign null value to empty object by setting null: T. 
-b: {{}, null: T}
+# Object with schema that can be null
+address*: {{street, city, state}, null: T}
 
-# Set default value of an empty object to null.
-c?*: {{}, default: N}
+# Optional object with null default
+config?*: {object, default: N, null: T}
 
-# Set default value of object {x, y, z} to null.
-d?*: {{x, y, z}, N}
+# Object with explicit null setting
+metadata: {object, schema: {version: string}, null: T}
 ---
 ```
 
 #### optional
 
-&#x20;A member of an object type can be set to optional. Here are some of the ways through which a member of an object type can be made optional.
+The `optional` member specifies whether the object field may be omitted. When `optional` is set to `T` (true), the field does not need to be present in the data. You can also indicate optionality by adding a `?` suffix to the member name.
 
 ```yaml
-# Set an empty object to optional
-a?: {}
-b?: object
+# Set object to optional
+config?: {}
+settings?: object
 
-# Set optional: T  for empty object 
-b: {{}, optional: T}
+# Set optional explicitly
+profile: {object, optional: T}
 
-# Assign optional value to empty object 
-c: {{}, default: N, null: T, default: T}
+# Optional object with default
+preferences?: {object, default: {}, optional: T}
 
-# Set obect {x, y, z} to optional and null
-d*?: {{x, y, z}, N}
+# Optional and nullable object
+metadata?*: {object, optional: T, null: T}
 ---
 ```
 
-### Designing Object Schema
+### Designing Object Schemas
 
 #### Empty Object
 
-An empty object is useful for accepting any object value irrespective of its structure. The empty object definitions can be created using empty curly braces syntax or ignoring schema. Here are some ways in which empty object definitions can be created.
+An empty object accepts any object structure without validation. This is useful for dynamic content, metadata, or when the object structure is not predetermined.
 
 ```yaml
-# Defining an empty object
-address: {}
-#or
-address: object
-#or
-address: {schema:{}}
----
+# By setting the type as object
+config: object
+
+# By assigning the empty object syntax
+config: {}
+
+# By using member definition syntax
+config: {object, schema: {}, default: {}, null: T}
 ```
 
 #### Simple Object
-
-A simple object is an ordered collection of key-value pair that avoids nesting of the object and may or may not contain a child object as shown in the code snippet.
+A simple object defines a flat structure with specific fields and their types. This is the most common form of object schema.
 
 ```yaml
-# A simple object as a schema
-name, age, address, tags
----
+# All fields are mandatory and can accept any value, no type checking
+user: { name, age, email }
+
+# Simple object with typed fields
+user: {name: string, age: int, email: string}
 ```
 
-```yaml
-# A simple object with child object  
-address: { street: string, city: string, state: string }
----
-```
+#### Object with MemberDef
 
-#### With Memberdef
-
-An object can be defined with the MemberDef as shown in the snippet below.
+Objects can be defined using MemberDef syntax to specify additional constraints, defaults, and validation rules.
 
 ```yaml
-# Defining meberdef for an object
+# Object with MemberDef constraints
 address: {
+  object,
   schema: {
-    street: string, 
-    city: string, 
+    street: string,
+    city: string,
     state: string,
-    location*: {
-      { lng: number, lat: number }
-    default: N,
-    null: T
-    }
+    location?: {lng: number, lat: number}
   },
   default: N,
   null: T
 }
+```
+
+#### Nested Objects
+
+Objects can contain other objects as properties, creating hierarchical data structures. Each nested object can have its own schema and constraints.
+
+```yaml
+# Nested object structure
+employee: {
+  name: {string, maxLen: 50},
+  office: {
+    address: {
+      street: string,
+      city: string,
+      state: string,
+      location?: {lng: number, lat: number}
+    },
+    contact: {
+      phone: string,
+      fax?: string,
+      emails: {
+        primary: string,
+        secondary?: string
+      }
+    }
+  }
+}
+```
+
+
+### Object Schema vs MemberDef
+
+Objects can be defined using either direct schema syntax or MemberDef syntax, depending on whether additional constraints are needed.
+
+```yaml
+# Direct schema assignment (simple)
+address: {street, city, state}
+
+# MemberDef with additional options (flexible)
+address?: {object, schema: {street, city, state}, default: N, null: T}
+
+# Mixed approach
+user: {
+  name: string,                    # Direct type
+  address?: {                      # MemberDef with constraints
+    object,
+    schema: {street, city, state},
+    optional: T
+  }
+}
 ---
 ```
 
-#### Nested Object
+### Examples
 
-An Object can be nested inside another object. Accessing a nested object is similar to accessing a nested array. Here is the code snippet that shows how objects can be nested.
+#### Basic Object Usage
 
 ```yaml
-# Nested object
-name: {string, maxLen: 20},
-office: { 
-  address: {
-    street: string, 
-    city: string, 
-    state: string,
-    location*: {
-      { lng: number, lat: number }
-      default: N,
-      null: T
-    }
-  }, 
-   contact: {
-   mobile: number,
-   fax: number,  
-   emails: {
-     primary: email,
-     secondary: email
-    }
-  }  
-}
+# Simple user object
+user: {name: string, age: int, active: bool}
+---
+{John Doe, 25, T}
 ```
 
-#### Dynamic Schema
-
-Defining dynamic schema allows users to add a dynamic object as shown in the snippet below.
+#### Optional and Nullable Objects
 
 ```yaml
-# Defining dynamic schema for an object
-address: {
-  any, 
-  anyOf: [
-    {city: string, state: {string: len: 2}}, 
-    {street: string, 
-     city: string, 
-     state: {string: len: 2}, zip?: string}
-  ]
+# Optional object with default
+config?: {object, default: {theme: "light"}}
+
+# Nullable object
+metadata*: {object, null: T}
+
+# Optional and nullable with schema
+settings?*: {
+  object,
+  schema: {lang: string, debug: bool},
+  default: N,
+  null: T
 }
+---
+{theme: "dark"}, N, {en, F}
 ```
 
-#### Schema or MemberDef
-
-The object can be represented as [MembeDef or Schema](../memberdef.md) as shown here.
+#### Complex Nested Structure
 
 ```yaml
-# The schema directly assigned to the address
-address: {street, city, state}
-
-# The schema assinged through the memberDef. This approach 
-# allows designer to set additional options such as default.
-address?: {{street, city, state}, default: N}
+# E-commerce order object
+order: {
+  id: string,
+  customer: {
+    name: string,
+    email: string,
+    address: {
+      street: string,
+      city: string,
+      country: string,
+      postal: string
+    }
+  },
+  items: [{
+    product: string,
+    quantity: int,
+    price: number
+  }],
+  total: number,
+  status: {string, choices: [pending, processing, shipped, delivered]}
+}
+---
+{
+  ORD-001,
+  {John Doe, john@example.com, {123 Main St, New York, USA, 10001}},
+  [{Widget A, 2, 19.99}, {Widget B, 1, 29.99}],
+  69.97,
+  pending
+}
 ```

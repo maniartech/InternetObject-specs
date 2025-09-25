@@ -5,13 +5,12 @@ A number type can be defined with the members such as `type`,  `default`, `choic
 ### TypeDefs Schema
 
 ```yaml
-type?       : {number, 
-  choices: [number, int, int16, int32, byte]},
+type?       : {number, choices: [number, int, int16, int32, byte]},
 default?    : number,
 choices?    : [number],
 min?        : number,
 max?        : number,
-multipleOf? : number,    
+multipleOf? : number,
 divisibleBy?: number,
 null?       : {bool, F}
 optional?   : {bool, F}
@@ -25,8 +24,8 @@ The first member of the typedef is `type`. The number can be of type `number` or
 
 ```yaml
 # Set type to number
-a: {type: number} 
-# OR 
+a: {type: number}
+# OR
 a: number
 ---
 ```
@@ -35,16 +34,16 @@ a: number
 # Defining number derived types
 
 # Set type to int
-a: int, 
+a: int,
 
 # Set type to int16
-b: int16, 
+b: int16,
 
 # Set type to int32
-c: int32, 
+c: int32,
 
 # Set type to byte
-d: byte, 
+d: byte,
 ---
 
 ```
@@ -74,7 +73,7 @@ b: {number, default: N, optional: T, null: T}
 The `choices` can be added to member variables in numbers so that the input values are restricted to the fixed set of available choices.  Choices must be an array of numbers. The code snippet shows how to add choices.
 
 ```yaml
-# Adding choices 
+# Adding choices
 a: {number, choices: [234, 245, 456, 324]}
 ---
 ```
@@ -139,7 +138,7 @@ a?: {number, default: N, null: T}
 A number when set to `null: true` will accept null values. The snippet below shows how to set a nullable number.
 
 ```yaml
-# Set number to null 
+# Set number to null
 a*: {number, null: true}
 ```
 
@@ -148,13 +147,13 @@ a*: {number, null: true}
 Here are some of the examples that demonstrate how to define number member definition.
 
 ```yaml
-# Add choices to subjectCode 
+# Add choices to subjectCode
 subjectCode: {number, choices: [234, 245, 456, 324]}
 ```
 
 ```yaml
  # Set max value for age
-  age: {number, max:25}, 
+  age: {number, max:25},
 ---
 ~  18 # valid
 ~  25 # valid
@@ -162,8 +161,8 @@ subjectCode: {number, choices: [234, 245, 456, 324]}
 ```
 
 ```yaml
-# Set min value for age 
-  age: {number, min: 18}, 
+# Set min value for age
+  age: {number, min: 18},
 ---
 ~ 25, Male # valid
 ~ 17, Male # invalid
@@ -208,10 +207,10 @@ age?: {type: number, default: 1, optional: true, max: 30}
 
 ```yaml
 # Set age to optional with default: 1 and max: 30
-age?*: { number, 
-        default: 1, 
+age?*: { number,
+        default: 1,
         optional: true,
-        null: true,  
+        null: true,
         max: 30}
 ---
 ~ 20 #valid
