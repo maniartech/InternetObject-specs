@@ -20,6 +20,8 @@
 > - `the-definitions/` (complex schemas, definitions, variables)
 > - `internet-object/` (abstract, introduction, objectives, zen)
 
+> Clarification: Collections are root-level sections (not a data type). Arrays are the only sequence type under `data-types/`. All collection docs live under `the-collections/`.
+
 ```text
 io-specs/
 └── the-io-schema/
@@ -53,10 +55,9 @@ io-specs/
   │   │   ├── 02-bigint.md               # BigInt TypeSchema & constraints
   │   │   └── 03-decimal.md              # Decimal TypeSchema & constraints
   │   │
-  │   ├── collections/                   # Collection type schemas
-  │   │   ├── README.md                  # Collections overview (refs the-collections/)
-  │   │   ├── 01-array.md                # Array TypeSchema & constraints
-  │   │   └── 02-collection.md           # Collection (~) TypeSchema & constraints
+  │   ├── arrays/                        # Array type schema
+  │   │   ├── README.md                  # Arrays overview (refs the-structure/values/array/)
+  │   │   └── 01-array.md                # Array TypeSchema & constraints
   │   │
   │   ├── objects/                       # Object type schemas
   │   │   ├── README.md                  # Objects overview (refs the-structure/values/object.md)
@@ -113,10 +114,9 @@ io-specs/
     │   │   ├── 01-number.md
     │   │   ├── 02-bigint.md
     │   │   └── 03-decimal.md
-    │   ├── collections/
+    │   ├── arrays/
     │   │   ├── README.md
-    │   │   ├── 01-array.md
-    │   │   └── 02-collection.md
+    │   │   └── 01-array.md
     │   ├── objects/
     │   │   ├── README.md
     │   │   ├── 01-object.md
@@ -215,8 +215,8 @@ reference/               # Complete reference materials
 
 ### Priority 2: Important (Should Have) - Week 3
 
-**Data Types - Collections & Advanced (12 files)**
-- ✅ data-types/collections/ (3 files: README + 2 types)
+**Data Types - Arrays, Objects & Advanced (11 files)**
+- ✅ data-types/arrays/ (2 files: README + 1 type)
 - ✅ data-types/objects/ (3 files: README + 2 docs)
 - ✅ data-types/advanced/ (4 files: README + 3 advanced types)
 
@@ -228,7 +228,7 @@ reference/               # Complete reference materials
 - ✅ validation-rules/04-error-handling.md
 - ✅ validation-rules/05-custom-validators.md
 
-**Total: 18 files**
+**Total: 17 files**
 
 ---
 
@@ -239,7 +239,7 @@ reference/               # Complete reference materials
 ```markdown
 # Type Name
 
-> **Type Category:** Primitive | String | Number | Collection | Object | Advanced
+> **Type Category:** Primitive | String | Number | Array | Object | Advanced
 > **Since:** v1.0 | v2.0
 > **Status:** Stable | Experimental
 > **Related:** [link], [link]
@@ -512,7 +512,7 @@ README.md (hub)
   │    ├─→ primitives/ → typeschema.md
   │    ├─→ string/ → data-types/primitives/
   │    ├─→ number/ → data-types/primitives/
-  │    ├─→ collections/ → data-types/primitives/
+  │    ├─→ arrays/ → data-types/primitives/
   │    ├─→ objects/ → memberdef.md
   │    └─→ advanced/ → data-types/
   ├─→ schema-rules/
@@ -587,15 +587,14 @@ README.md (hub)
 
 ---
 
-### Phase 3: Collections, Objects & Advanced Types (Week 3)
+### Phase 3: Arrays, Objects & Advanced Types (Week 3)
 
-**Day 1-3: Collections & Objects**
-1. data-types/collections/README.md
-2. data-types/collections/01-array.md
-3. data-types/collections/02-collection.md
-4. data-types/objects/README.md
-5. data-types/objects/01-object.md
-6. data-types/objects/02-object-vs-memberdef.md
+**Day 1-3: Arrays & Objects**
+1. data-types/arrays/README.md
+2. data-types/arrays/01-array.md
+3. data-types/objects/README.md
+4. data-types/objects/01-object.md
+5. data-types/objects/02-object-vs-memberdef.md
 
 **Day 4-5: Advanced Types**
 7. data-types/advanced/README.md
