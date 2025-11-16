@@ -16,7 +16,7 @@ How `$schema` and `@var` references are resolved during parse/load, and the orde
 Arrays and objects are container types with nested resolution:
 
 - Arrays: resolve the item schema first, then validate each element. Apply array-level constraints (e.g., minLen, maxLen, unique) after element validation.
-- Objects: resolve each field’s TypeSchema (including nested containers), then validate fields (required/optional, nullable, defaults, constraints). Dynamic fields (`*`) resolve their target schema before validating extra keys.
+- Objects: resolve each field’s TypeSchema (including nested containers), then validate fields (required/optional, nullable, defaults, constraints). Schema open policy (`*` / `*: T`) resolves its target schema before validating extra keys.
 
 Error locality
 - Arrays: attach errors to the failing index; array-level violations attach to the array node.

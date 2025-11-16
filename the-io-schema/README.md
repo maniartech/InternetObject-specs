@@ -54,6 +54,22 @@ name: {string, maxLen: 100}, age: {int, min: 0, max: 120}
 address: { street: string, city: string, zip?: int }
 ```
 
+### Closed Schema (default)
+```io
+user: { id: string, name: string }  # only declared keys allowed
+```
+
+### Open Schema
+```io
+# Boolean open: allow any extra keys
+user: { id: string, name: string, * }
+
+# Typed open: extra keys must match the given TypeSchema
+config: { theme: string, *: string }
+```
+
+Note: This is schema openness (allowing extra fields). Do not confuse with object literal open/closed forms described in `the-structure/values/object.md`.
+
 ### Reusable Schema
 ```io
 ~ $address: {street: string, city: string}

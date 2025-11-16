@@ -10,7 +10,7 @@ How TypeSchemas validate values across parse, load, and stringify.
 ## Container Semantics
 
 - Arrays: validate each element against the resolved item schema; then apply array-level constraints (length, uniqueness). Errors carry the failing index.
-- Objects: validate each field per its MemberDef (required/optional, nullable, defaults, constraints). Dynamic field rules (`*`) apply to extra keys. Errors carry the field key.
+- Objects: validate each field per its MemberDef (required/optional, nullable, defaults, constraints). Schema open policy (`*` / `*: T`) applies to extra keys. Errors carry the field key.
 
 ## Throwing Contract
 

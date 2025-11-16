@@ -25,11 +25,13 @@ A Schema defines the shape of an object using the same concise syntax as data. I
 - Throw-on-failure contract (IOValidationError)
 - Optional `compile(config)` for hot-path validation
 
-## Open vs Closed Objects
+## Open vs Closed Schema
 
-- Closed (default): only declared fields allowed
-- Open boolean: `*` → allow any extra fields
-- Open typed: `*: type` → extra fields must match MemberDef
+Note: This section describes schema openness (whether extra fields are allowed by the schema). Do not confuse this with object literal syntax forms (open vs closed objects) defined in `the-structure/values/object.md`.
+
+- Closed schema (default): only declared fields allowed
+- Open schema (boolean): `*` → allow any extra fields
+- Open schema (typed): `*: type` → extra fields must match MemberDef
 
 ## Positional vs Keyed Mapping
 

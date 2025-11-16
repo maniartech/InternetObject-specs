@@ -24,16 +24,16 @@ tags: { name: string, *: string }
 { name: string, age?: int, bio*: string }
 ```
 
-- Open/closed policy:
+- Schema open policy (not to be confused with object literal open/closed forms in `the-structure/values/object.md`):
 
 ```io
-# Closed (default): only declared keys allowed
+# Closed schema (default): only declared keys allowed
 { name: string }
 
-# Open boolean: allow any extra keys
+# Open schema (boolean): allow any extra keys
 { name: string, * }
 
-# Open typed: extra keys must match MemberDef
+# Open schema (typed): extra keys must match MemberDef
 { name: string, *: string }
 ```
 
@@ -68,3 +68,4 @@ dto: { id: bigint, title: {string, minLen: 1}, published: bool }
 - `the-io-schema/11-memberdef.md`
 - `the-io-schema/schema-rules/01-schema-resolution.md`
 - `the-io-schema/validation-rules/01-validation-model.md`
+- `the-io-schema/data-types/objects/03-object-definition-mechanisms.md`

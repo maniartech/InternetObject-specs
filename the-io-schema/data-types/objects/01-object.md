@@ -4,7 +4,7 @@ Detailed guide to object schemas, open policy, and nested validation.
 
 ## Overview
 
-An object TypeSchema is written inline as `{ key: MemberDef, ... }`. Objects are closed by default; use `*` (open) or `*: T` (typed open) to control extra fields.
+An object TypeSchema is written inline as `{ key: MemberDef, ... }`. Schemas are closed by default; use `*` (open schema) or `*: T` (typed open schema) to control extra fields. Do not confuse this with open/closed object literal forms described in `the-structure/values/object.md`.
 
 ## Basic Usage
 
@@ -25,7 +25,7 @@ labels: { *: string }
 # Inline object schema
 { id: bigint, name: string, meta?: { [string]: string } }
 
-# Open/closed policy
+# Schema open policy
 { id: bigint, * }
 { id: bigint, *: string }
 ```
