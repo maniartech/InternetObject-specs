@@ -29,6 +29,18 @@ F, false
 
 See `the-structure/values/boolean.md` for complete literal syntax.
 
+## TypeSchema (IO)
+
+```io
+type      : {string, choices: [boolean, bool]}
+default?  : bool
+choices?  : [bool]
+optional? : {bool}
+null?     : {bool}
+```
+
+> Common fields like `default`, `choices`, `optional`, and `null` are explained in `the-io-schema/data-types/00-common-fields.md`.
+
 ## Constraints
 
 The boolean type has no additional constraints beyond type validation.

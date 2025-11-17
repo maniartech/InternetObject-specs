@@ -16,6 +16,17 @@ data: any
 metadata?: any
 ```
 
+## TypeSchema (IO)
+
+```io
+type      : {string, choices: [any]}
+default?  : any
+optional? : {bool}
+null?     : {bool}
+```
+
+> Common fields like `optional` and `null` are explained in `the-io-schema/data-types/00-common-fields.md`.
+
 ## Constraints
 
 The `any` type has no constraints. All values pass validation.

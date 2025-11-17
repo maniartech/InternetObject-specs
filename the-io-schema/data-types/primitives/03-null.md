@@ -19,6 +19,15 @@ bio*: string  # can be string or null
 note?*: string  # can be omitted, string, or null
 ```
 
+## TypeSchema (IO)
+
+```io
+type      : {string, choices: [null]}
+optional? : {bool}
+```
+
+> Common fields are explained in `the-io-schema/data-types/00-common-fields.md`.
+
 ## Semantics
 
 - Null represents an intentional absence of value.
