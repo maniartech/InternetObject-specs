@@ -32,5 +32,4 @@ This document aims to provide the Internet Object 1.0 specification and showcase
 | Version               | `1.0 Draft` |
 | Status                | `Work-in-Progress` `Draft` |
 | Website               | [https://internetobject.org](https://internetobject.org) |
-| Docs                  | [https://docs.internetobject.org](https://docs.internetobject.org) |
-| Last Updated          | 13th September 2025 |
+| Docs                  | [https://github.com/maniartech/InternetObject-specs](https://github.com/maniartech/InternetObject-specs) |
