@@ -1,127 +1,96 @@
-# Any
+# Any Type
 
-Any data type is used to assign any type of value to the variables. It is useful in the case where either the actual type is not known or types are needed to be dynamically assigned. Thus for undefined type, the default type will be always set to  `any` . &#x20;
+The `any` type is a flexible type that can accept values of any data type. It is useful when the type of a field is not known in advance or can vary.
 
-Any type can be defined with the members such as `type`,  `default`,  `choices`, `anyOf`, `optional`, and `null` .  Schema of `any` TypeDef should be  written as,
+## Syntax
 
-### TypeDef Schema
+```internet-object
+# Simple
+data: any
 
-```yaml
-type?     : {string, default: any, choices: [any]},
-default?  : any,
-choices?  : [any],
-anyOf?    : [$memberDef],
-null?     : {bool, default: F},
-optional? : {bool, default: F}
+# With Constraints (MemberDef)
+data: { any, optional: T }
+```
+
+## TypeDef Schema
+
+The **TypeDef Schema** defines the structure and validation rules for the `any` MemberDef itself.
+
+```internet-object
+type: { string, choices: [any] },
+default?: any,
+choices?: array,
+anyOf?: { array, of: { type: any, __memberdef: T } },
+isSchema?: { bool, default: F },
+optional?: bool,
+null?: bool
+```
+
+## Constraints
+
+### Choices (`choices`)
+The `choices` option restricts the value to a specific set of allowed values, which can be of mixed types.
+
+```internet-object
+# Accepts only specific values
+status: { any, choices: [1, "active", T] }
+```
+
+### Union Types (`anyOf`)
+The `anyOf` option allows the value to match one of several specified types or schemas.
+
+```internet-object
+# Accepts either a string or a number
+id: { any, anyOf: [string, number] }
+
+# Accepts either a specific object structure or null
+config: { any, anyOf: [{ host: string, port: int }, null] }
+```
+
+## Examples
+
+Any kind of value can be assigned to an `any` type field, subject to any constraints defined.
+
+```internet-object
+# Schema
+data: any
 ---
+# Valid Values
+~ 42                # Valid: number
+~ "Hello, World!"   # Valid: string
+~ T                 # Valid: boolean
+~ [1, 2, 3]        # Valid: array
+~ { key: "value" }  # Valid: object
 ```
 
-The TypeDef schema ensures the validity of `any` MemberDefs.
+## Invalid Examples
 
-#### type
-
-As with most of the types in Internet Object, the first member of typedef is `type`. The next snippet shows different ways to define the members `a`, `b`, and `c` as `any`.
-
-```yaml
-# Type set to any
-a, b: any, c: {type: any}
+```internet-object
+# Schema
+status: { any, choices: [1, "active"] }
 ---
+# Invalid Values
+~ 2           # Fail: Not in choices
+~ "inactive"  # Fail: Not in choices
+~ N           # Fail: Not nullable
 ```
 
-#### default
-
-The second member in the `any` typedef is `default` . Here is how the default values can be defined.
-
-```yaml
-# Set default value for a and b
-a?: {any, Monday}, b?: {any, default: N}
+```internet-object
+# Schema
+id: { any, anyOf: [string, number] }
 ---
+# Invalid Values
+~ T               # Fail: Boolean matches neither string nor number
+~ {}              # Fail: Object matches neither string nor number
 ```
 
-Here, the default value for `a` is  `Monday` and default value for `b` is `null` .
+## Validation Behavior
 
-#### choices
+1. **Type check**: Always passes (unless `anyOf` restricts it).
+2. **Choice check**: If `choices` specified, value must be in list.
+3. **AnyOf check**: If `anyOf` specified, value must validate against at least one of the provided types/schemas.
 
-The `choices` restricts the member to be strictly bound with the unique constant values. If set, the choices must be an array of any type of value. The code snippet shows how `choices` can be defined for the `any` type.&#x20;
+## Implementation Notes
 
-```yaml
-# Defining choices for member
-a: {any, choices: [1, One, 2, Two, 3, Three]}
----
-```
-
-#### anyOf
-
-In some cases, a member must accept different kinds of values. Such as, a number could be a multiple of 3 or a multiple of 5; they could be a string or number but not that of other types; two different formats of the schema. The`anyOf` allows schema designers to define members that can accept different kinds of constrained values. It accepts an array of MemberDef and/or schema and types.
-
-```yaml
-member: {any, anyOf?: [$memberDef, type, schema]}
----
-```
-
-This snippet explains how `a` , `b` and `c` can accept various kinds of values.&#x20;
-
-```yaml
-# Can accept multipole of 5 or multiple of 3
-a: {any, anyOf: [{int, multipleOf: 5}, {int, multipleOf: 3}]},
-
-# Can accept string or number values
-b: {any, anyOf: [string, number]
-
-# Can accept any of two type of address!
-c: {any, anyOf: [{city, state}, {street, city, state}]}
----
-```
-
-#### null
-
-When set `null` to true, a member can accept null values. Here are some of the ways through which a member of any type can accept null values.
-
-```yaml
-# Set default value of a, b, c, d to null
-a*, b*: any, c: {any, null: T}, d: {any, null: true}
----
-```
-
-#### optional
-
-When set `optioanl` to true, a member can be marked as optional. Here are some of the ways through which a member of any type can be made optional.
-
-```yaml
-# Set a, b, c, and d to optional
-a?, b?: any, c: {any, optional: T}, d: {any, optional: true}
----
-```
-
-### Examples
-
-Some of the valid examples of members with `any` are...
-
-```yaml
-# The members a, b, and are by default assigned the any type.
-a, b, c
-
-# The name is any and default value is null
-name: {any, N}
-
-# The numWord can accept any string or number value.
-numWord: {any, anyOf: [string, number]}
-```
-
-#### Dynamic Schema
-
-Objects can use dynamic schemas with `anyOf` to support multiple valid structures, providing flexibility while maintaining validation.
-
-```yaml
-# Dynamic object schema with multiple valid structures
-address: {
-  any,
-  anyOf: [
-    {city: string, state: {string, len: 2}},
-    {street: string, city: string, state: {string, len: 2}, zip?: string}
-  ]
-}
----
-~ address: {New York, NY}  # Matches first schema
-~ address: {123 Main St, New York, NY, "10001"}  # Matches second schema
-```
+* **Type Safety**: When using `any`, parsers should still validate the value against the constraints if provided (e.g., `choices` or `anyOf`).
+* **AnyOf Validation**: For `anyOf`, the parser should try to match the value against each type/schema in the list. The first successful match determines the type.

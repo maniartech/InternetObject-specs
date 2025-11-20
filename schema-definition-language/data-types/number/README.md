@@ -1,226 +1,123 @@
-# Number
+# Number Type
 
-A number type can be defined with the members such as `type`,  `default`, `choices`,  `min`,  `max`,  `multipleOf`,  `divisibleBy`,  `optional` and `null`.  Schema of the number TypeDef should be  written as,&#x20;
+The `number` type represents numeric values, including integers and floating-point numbers. It supports various subtypes for specific numeric ranges and behaviors.
 
-### TypeDefs Schema
+## Syntax
 
-```yaml
-type?       : {number, choices: [number, int, int16, int32, byte]},
-default?    : number,
-choices?    : [number],
-min?        : number,
-max?        : number,
-multipleOf? : number,
-divisibleBy?: number,
-null?       : {bool, F}
-optional?   : {bool, F}
+```internet-object
+# Simple
+field: number
+
+# With Constraints (MemberDef)
+field: { number, option: value, ... }
 ```
 
-The TypeDef schema ensures the validity of `number` MemberDefs.
+## TypeDef Schema
 
-#### type&#x20;
+The **TypeDef Schema** defines the structure and validation rules for the `number` MemberDef itself. It ensures that when you define a number field in your schema, you are using valid options and constraints.
 
-The first member of the typedef is `type`. The number can be of type `number` or its derived types i.e `int`, `int16`,  `int32`, `byte`. Here the next snippet shows how the `number` type and its derived types can be defined.
+```internet-object
+type: { string, choices: [number, int, byte, int16, int32, decimal, bigint] },
+default?: number,
+choices?: [number],
+min?: number,
+max?: number,
+multipleOf?: number,
+format?: { string, choices: [decimal, hex, octal, binary, scientific] },
+optional?: bool,
+null?: bool
+```
 
-```yaml
-# Set type to number
-a: {type: number}
-# OR
-a: number
+## Subtypes
+
+* **`number`**: Generic numeric type (includes floats and integers).
+* **`int`**: Integer values only.
+* **`byte`**: 8-bit integer.
+* **`int16`**: 16-bit integer.
+* **`int32`**: 32-bit integer.
+* **`decimal`**: High-precision decimal numbers (useful for financial data).
+* **`bigint`**: Arbitrary-precision integers.
+
+## Constraints
+
+### Range Constraints (`min`, `max`)
+The `min` and `max` options restrict the numeric range of the value (inclusive).
+
+```internet-object
+# Age must be between 0 and 120
+age: { int, min: 0, max: 120 }
+
+# Probability must be between 0.0 and 1.0
+probability: { number, min: 0.0, max: 1.0 }
+```
+
+### Multiples (`multipleOf`)
+The `multipleOf` option ensures the value is a multiple of the specified number.
+
+```internet-object
+# Must be an even number
+evenNumber: { int, multipleOf: 2 }
+
+# Time in 15-minute intervals
+minutes: { int, multipleOf: 15 }
+```
+
+### Choices (`choices`)
+The `choices` option restricts the value to a specific set of allowed numbers (Enum).
+
+```internet-object
+# Only specific values allowed
+status: { int, choices: [0, 1, -1] }
+```
+
+### Formatting (`format`)
+The `format` option controls how the number is displayed when serialized. It does not affect the value itself, only its representation.
+
+Supported formats: `decimal` (default), `hex`, `octal`, `binary`, `scientific`.
+
+```internet-object
+# Display as Hexadecimal (e.g., 0xFF)
+color: { int, format: hex }
+
+# Display in Scientific Notation (e.g., 1.5e+3)
+distance: { number, format: scientific }
+```
+
+## Examples
+
+```internet-object
+# Schema
+score: { int, min: 0, max: 100, multipleOf: 2 }
 ---
+# Valid Values
+~ 50    # Valid: Even and within range
+~ 0     # Valid: Min value
+~ 100   # Valid: Max value
 ```
 
-```yaml
-# Defining number derived types
+## Invalid Examples
 
-# Set type to int
-a: int,
-
-# Set type to int16
-b: int16,
-
-# Set type to int32
-c: int32,
-
-# Set type to byte
-d: byte,
+```internet-object
+# Schema
+age: { int, min: 0, max: 120 }
 ---
-
+# Invalid Values
+~ -1     # Fail: Less than min
+~ 150    # Fail: Greater than max
+~ 25.5   # Fail: Not an integer (subtype mismatch)
+~ "25"   # Fail: Wrong type (string)
 ```
 
-#### **default**
+## Validation Behavior
 
-The second member in the `number` typedef is `default` . Here is how the default values can be defined for a number.
+1. **Type check**: Value must be a number.
+2. **Subtype check**: If `int`, `byte`, etc., verify value fits the type (e.g., is an integer).
+3. **Range check**: If `min`/`max` specified, verify value is within bounds.
+4. **Multiple check**: If `multipleOf` specified, verify `value % multipleOf == 0`.
+5. **Choice check**: If `choices` specified, value must be in list.
 
-```yaml
-# Assign default value for a as 1.
-a: {number, default: 1, optional: T}
+## Implementation Notes
 
-
-# Set b with a null default
-b: {number, default: N, optional: T, null: T}
----
-```
-
-**Rules for default:**
-
-1. The default value is applicable only if no other value is provided for the key.
-2. If for a key,  null is set to true then it must be replaced by its default value.
-3. The default value when set must match with the data type of a key.&#x20;
-
-#### **choices**&#x20;
-
-The `choices` can be added to member variables in numbers so that the input values are restricted to the fixed set of available choices.  Choices must be an array of numbers. The code snippet shows how to add choices.
-
-```yaml
-# Adding choices
-a: {number, choices: [234, 245, 456, 324]}
----
-```
-
-#### **max**
-
-The `max` represents the maximum value of a key, that must be a number. The numeric instance  `max` is valid only if its value is less than or equal to the value of the `max`. Here is the snippet that shows how to set `max`  value for a number.
-
-```yaml
-# Set max: 25 for a number
-a: {number, max: 25}
----
-```
-
-#### min
-
-The `min` represents the minimum value of a key, that must be a number. The numeric instance  `min` is valid only if its value is greater than or equal to the value of the `min`. Here is the snippet that shows how to set `min`  value for a number.
-
-```yaml
- # Set min: 3 for a number
- a: {number, min: 3}
-```
-
-#### multipleOf
-
-The  `multipleOf` is used to restrict the value to multiples of a given number. The Value of `multipleOf`  must be a positive integer. The code snippet shows how to restrict the input value to the multiple of the desired number.&#x20;
-
-```yaml
- # Set member def multipleOf: 5 for number
- a: {number, multipleOf: 5}
- ---
-```
-
-#### **divisibleBy**
-
-The `divisibleBy` is used to restrict the value to divisible by of a given number as shown below.
-
-```yaml
- # Set member def divisibleBy: 5 for a number
- a: {number, divisibleBy: 5}
----
-```
-
-#### **optional**
-
-The member of a number type can be set to `optional`. Here is the code snippet that demonstrates how a number can be set to optional.
-
-```yaml
-# Set number to optional
-a?: number
-
-# Assign otional: true to number
-a?: {number, optional: true}
-
-# Set number to optional using optional and null
-a?: {number, default: N, null: T}
-
-```
-
-### null
-
-A number when set to `null: true` will accept null values. The snippet below shows how to set a nullable number.
-
-```yaml
-# Set number to null
-a*: {number, null: true}
-```
-
-### Examples
-
-Here are some of the examples that demonstrate how to define number member definition.
-
-```yaml
-# Add choices to subjectCode
-subjectCode: {number, choices: [234, 245, 456, 324]}
-```
-
-```yaml
- # Set max value for age
-  age: {number, max:25},
----
-~  18 # valid
-~  25 # valid
-~  35 # invalid as the value is greater than max value
-```
-
-```yaml
-# Set min value for age
-  age: {number, min: 18},
----
-~ 25, Male # valid
-~ 17, Male # invalid
-```
-
-```yaml
-# Set multipleOf: 5 for the input value of rollNo
-rollNo: {number, multipleOf: 5}
----
-~ 10 # valid
-~ 25 # valid
-~ 30 # valid
-~ 95 # valid
-~ -10 # valid
-~ 34 # invalid
-~ 12 # invalid
-```
-
-```yaml
-# Set divisibleBy: 12 for a rollNo
-rollNo: {number, divisibleBy: 12}
----
-~ 48 # valid
-~ 60 # valid
-~ 96 # valid
-~ 120 # valid
-~ -36 # valid
-~ 8 # invalid
-~ 55 # invalid
-```
-
-```yaml
-#Set age to optional
-age?: {type: number, default: 1, optional: true, max: 30}
-
-```
-
-```yaml
- # Set age to null
- age*: {type: number, default: 1, null: true, max: 30}
-```
-
-```yaml
-# Set age to optional with default: 1 and max: 30
-age?*: { number,
-        default: 1,
-        optional: true,
-        null: true,
-        max: 30}
----
-~ 20 #valid
-~ 30 #valid
-~ N  #valid
-~ 15 #valid
-```
-
-###
-
-####
-
-####
+* **Precision**: Implementations should handle the precision requirements of subtypes like `int`, `int32`, `decimal`, etc., appropriate to the host language.
+* **BigInt**: The `bigint` type should be used for integers that exceed the safe integer limit of the host environment (e.g., > 2^53 - 1 in JavaScript).
+* **Formatting**: The `format` option is primarily a hint for serialization. Parsers should be able to read numbers in any standard format regardless of the `format` constraint, unless strict mode is enforced.

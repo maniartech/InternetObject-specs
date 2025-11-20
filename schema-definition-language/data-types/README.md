@@ -1,61 +1,30 @@
 # Data Types
 
-The internet object schema defines six data types that include [string](string/), [number](number/), [int](number/derived-types/integer.md), [int32](number/derived-types/int32.md), [int16](number/derived-types/int16.md), [byte](number/derived-types/byte.md), [email](string/string-derived-types/email.md), [url](string/string-derived-types/url.md), [datetime](string/string-derived-types/datetime.md), [date](string/string-derived-types/date.md), [time](string/string-derived-types/time.md), [bool](bool.md), [object](object.md), [array ](array.md)or [any](any.md).
+Internet Object Schema supports a rich set of data types to validate and structure your data.
 
-![Internet Object Data Types](https://documents.app.lucidchart.com/documents/076b4f9c-b79d-410c-8002-1ac23fdbb786/pages/SUfm\_UR89EBD?a=22456\&x=2657\&y=1364\&w=946\&h=792\&store=1\&accept=image%2F\*\&auth=LCA%20cf2ec801d5bc4f25cf66c288efe8e9b1d4d1069e-ts%3D1610795059)
+## Core Types
 
-{% hint style="info" %}
-The types string and number have subtypes. The email, url, datetime, date and time are subtypes of string. The int, int32, int16, byte are subtypes of number.
-{% endhint %}
+| Type | Description |
+| :--- | :--- |
+| [**any**](any.md) | Accepts any value. |
+| [**array**](array.md) | An ordered list of values. |
+| [**base64**](base64.md) | Binary data encoded as Base64. |
+| [**bool**](bool.md) | Boolean values (`true`, `false`). |
+| [**date-and-time**](date-and-time.md) | Temporal values (`datetime`, `date`, `time`). |
+| [**number**](number/README.md) | Numeric values (integers, floats, decimals). |
+| [**object**](object.md) | Structured data with key-value pairs. |
+| [**string**](string/README.md) | Textual data (including `email`, `url`). |
 
-### TypeDefs
+## Type Hierarchy
 
-Typedefs are a memberdef schema for the specified type. They define the constraints for the particular data type. The following example&#x20;
-
-
-
-{% tabs %}
-{% tab title="The $type definition" %}
-```yaml
-type: { string, choices: [
-    string, email, url, datetime, date, time,
-    number, int, int32, int16, byte,
-    object, array, bool
-  ]
-}
-```
-{% endtab %}
-{% endtabs %}
-
-{% tabs %}
-{% tab title="The String TypeDef" %}
-```ruby
-type      : {string, choices: [string, email, url, datetime, date, time]},
-default?  : string,
-choices?  : [string],
-pattern?  : string,
-maxLen?   : {int, min:0},
-len?      : {int, min:0},
-optional? : {bool, F},
-null?     : {bool, F}
-```
-{% endtab %}
-{% endtabs %}
-
-Some of the valid String MemberDef values are...
-
-```ruby
-# The name is string and default value is ""
-name: {string, ""}
-
-# The website is of url type!
-website: {url, optional:T} 
-
-# The rgb's default is red, and choices are red, green, blue
-rgb: {string, red, [red, green, blue]}
-
-# The description is string that can have maximum length of 500 characters 
-description: {string, maxLen:500} # 
-```
-
-As shown in the example above, Objects, Numbers, Arrays, Boolean, and Any have their respective TypeDef. &#x20;
+* **Scalar Types**
+  * `base64`
+  * `bool`
+  * `number` (includes `int`, `byte`, `decimal`, etc.)
+  * `string` (includes `email`, `url`)
+  * `datetime`, `date`, `time`
+* **Collection Types**
+  * `array`
+  * `object`
+* **Special Types**
+  * `any`
