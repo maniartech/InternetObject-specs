@@ -8,7 +8,7 @@ In the Internet Object format, whitespace refers to any character with a Unicode
 whitespace         = ascii_whitespace | unicode_whitespace ;
 
 ascii_whitespace   = ? any character with Unicode code point U+0000 to U+0020 ? ;
-unicode_whitespace = U+1680 | U+2000 | U+2001 | U+2002 | U+2003 | U+2004
+unicode_whitespace = U+00A0 | U+1680 | U+2000 | U+2001 | U+2002 | U+2003 | U+2004
                    | U+2005 | U+2006 | U+2007 | U+2008 | U+2009 | U+200A
                    | U+2028 | U+2029 | U+202F | U+205F | U+3000 | U+FEFF ;
 ```
@@ -24,6 +24,7 @@ The following table lists the valid whitespace characters:
 | Code Points          | Description                                        | Notes                                                                                              |
 | -------------------- | -------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
 | `U+0000` to `U+0020` | Space, Line Feed, Carriage Return, Tab, Bell, etc. | Any character having charCode `<=0x20` such as space. Includes ASCII space and control characters. |
+| `U+00A0`             | No-Break Space                                     | Non-breaking space, commonly used in documents.                                                    |
 | `U+1680`             | Ogham Space Mark                                   | Space used in Ogham scripts.                                                                       |
 | `U+2000`             | En Quad                                            | Space equal to the width of the lowercase letter "n".                                              |
 | `U+2001`             | Em Quad                                            | Space equal to the width of the uppercase letter "M".                                              |
