@@ -170,15 +170,43 @@ name: {string, maxLen: 100}, age: {int, min: 0, max: 120}
 
 * **Nested objects**:
   Use `{ ... }` for fields whose value is itself an object.
-* **Reusable schemas**:
-  Named with `$` in the schema header; referenced as `$name`.
 
-#### **Example:**
+## **Schema Declaration Modes**
+
+The IO document header supports two distinct modes for declaring schemas, each suited to different use cases.
+
+### **Inline Schema Mode**
+
+For simple schemas, write the schema directly in the header (without `~` prefix):
+
+```ruby
+name: string, age: int, address: {street: string, city: string}
+---
+John Doe, 30, {Bond Street, New York}
+```
+
+This is concise and works well for flat or moderately nested structures.
+
+### **Definition Mode**
+
+For complex or reusable schemas, use the definition syntax (with `~` prefix and `$` for schema variables):
 
 ```ruby
 ~ $address: {street: string, city: string}
 ~ $user: {name: string, age: int, address: $address}
+~ $schema: $user
+---
+John Doe, 30, {Bond Street, New York}
 ```
+
+The special `$schema` key designates the default schema used to validate the data section. In the example above, `$schema: $user` tells the parser to use the `$user` schema for validation.
+
+Definition mode allows you to:
+- **Reuse schemas** — Define once, reference multiple times with `$name`
+- **Improve readability** — Break complex schemas into named parts
+- **Define variables** — Create reusable values alongside schemas
+
+For more details on definitions, see [Definitions](../the-definitions/).
 
 ### **Syntax Summary Table**
 
@@ -200,7 +228,7 @@ schema             = objectEntries
 objectEntries      = memberDef *( "," memberDef )
 memberDef          = [key] [fieldModifier] [":" typeOrDef]
 key                = string
-fieldModifier      = "?" | "*" | "?*"
+fieldModifier      = "?" | "*" | "?*" | "*?"
 typeOrDef          = type | memberDef | ref
 type               = "string" | "int" | "bool" | "object" | "array" | ...
 ref                = "$" name
@@ -240,7 +268,7 @@ Internet Object schemas use the following **conventions** (not syntax) for speci
 * **Optional (****`?`****)**: Field can be omitted from the data object.
   If omitted, its value is undefined unless a default is provided.
 * **Nullable (****`*`****)**: Field can explicitly be set to `null`.
-* **Both (****`?*`****)**: Field can be omitted or set to `null`.
+* **Both (****`?*`**** or ****`*?`****)**: Field can be omitted or set to `null`. Both orderings are equivalent and serve as a canonical shorthand—internally, this maps to `{optional: true, null: true}` in the MemberDef.
 
 **Examples:**
 
