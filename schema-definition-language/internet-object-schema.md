@@ -3,11 +3,110 @@ description: Internet Object Schema Specification
 ---
 # **Internet Object Schema Specification**
 
-Internet Object schemas define the structure ("shape") of objects in IO documents. Unlike verbose, map-based standards, IO schemas use the same concise object syntax as actual data, making them both human-friendly and machine-tractable.
+## **What is an Internet Object Schema?**
 
-### **Philosophy and Motivation**
+An **Internet Object Schema** defines the structure, types, and constraints of data in an Internet Object (IO) document. Think of it as a contract that describes what valid data looks like—field names, their types, whether they're required or optional, and any validation rules they must follow.
 
-Internet Object schemas are designed for clarity, expressiveness, and minimalism. They avoid the verbosity of traditional schema languages (like JSON Schema or XML Schema) by using the same syntax for both data and schema. This makes it easy for humans to author, read, and maintain schemas, while keeping them fully machine-tractable for validation, tooling, and interoperation with other formats.
+If you're familiar with JSON Schema, TypeScript interfaces, or database schemas, IO schemas serve the same purpose—but with a radically simpler syntax.
+
+### **At a Glance**
+
+Here's the simplest possible schema—just field names, it just checks the structure validly:
+
+```ruby
+# Schema: Define the fields of a person with an address
+name, age, email, address: {street, city, state}
+---
+# Data: A valid person object
+John Doe, 30, john@example.com, {Bond Street, New York, NY}
+```
+
+That's it. Field names define the structure, and nested objects use `{ }`. No types, no boilerplate.
+
+**Adding Types**
+
+When you need validation, add types:
+
+```ruby
+name: string, age: int, email: string, address: {street: string, city: string, state: string}
+```
+
+**Adding Optionality**
+
+Make a field optional with `?`:
+
+```ruby
+name: string, age: int, email?: string, address?: {street: string, city: string, state: string}
+```
+
+**Adding Constraints**
+
+Add validation rules inline:
+
+```ruby
+name: string, age: {int, min: 0, max: 120}, email?: string
+```
+
+The schema and data use the **same IO syntax**—no separate schema language to learn. You start simple and add complexity only when needed. For more information about the Internet Object syntax, see [The Structure](../the-structure/).
+
+### **Why IO Schemas?**
+
+Traditional schema languages are verbose and hard to read. Compare defining the same structure:
+
+**JSON Schema (39 lines):**
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "name": { "type": "string" },
+    "age": { "type": "integer", "minimum": 0, "maximum": 120 },
+    "email": { "type": "string" }
+  },
+  "required": ["name", "age"]
+}
+```
+
+**Internet Object Schema (1 line):**
+```ruby
+name: string, age: {int, min: 0, max: 120}, email?: string
+```
+
+IO schemas are:
+- **Concise** — Express complex structures in minimal syntax
+- **Readable** — Humans can author and review them easily
+- **Unified** — Same syntax for both schema and data
+- **Powerful** — Full support for types, constraints, nesting, and optionality
+
+### **Who Is This For?**
+
+This specification is for developers, API designers, and data engineers who want to:
+- Define data contracts for APIs and data exchange
+- Validate incoming/outgoing data
+- Document data structures in a human-friendly format
+- Generate code or convert to other schema formats
+
+### **Prerequisites**
+
+Before diving in, you should be familiar with:
+- Basic Internet Object syntax (objects, arrays, values)
+- General concepts of data validation and schemas
+
+### **What You'll Learn**
+
+This document covers:
+1. **Schema Structure** — How to define fields, types, and nested objects
+2. **Field Types & Constraints** — Built-in types and validation rules
+3. **Optional & Nullable Fields** — Handling missing or null values
+4. **Dynamic Fields** — Allowing extra/unknown fields
+5. **Reusable Schemas** — Defining and referencing named schemas
+6. **Interoperability** — Mapping to JSON Schema and other formats
+
+---
+
+## **Philosophy and Motivation**
+
+Internet Object schemas are designed for **clarity**, **expressiveness**, and **minimalism**. They avoid the verbosity of traditional schema languages by using the same syntax for both data and schema. This makes it easy for humans to author, read, and maintain schemas, while keeping them fully machine-tractable for validation, tooling, and interoperation with other formats.
 
 Schemas describe:
 
