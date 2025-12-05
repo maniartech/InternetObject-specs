@@ -3,7 +3,7 @@ description: Internet Object Schema Specification
 ---
 # **Internet Object Schema Specification**
 
-Internet Object schemas define the structure (“shape”) of objects in IO documents. Unlike verbose, map-based standards, IO schemas use the same concise object syntax as actual data, making them both human-friendly and machine-tractable.
+Internet Object schemas define the structure ("shape") of objects in IO documents. Unlike verbose, map-based standards, IO schemas use the same concise object syntax as actual data, making them both human-friendly and machine-tractable.
 
 ### **Philosophy and Motivation**
 
@@ -25,11 +25,11 @@ A schema is written using the Internet Object **object syntax**:
 * Fields are comma-separated: `name, age, address`
 * Each field can be:
 
-  * **Just a name** (defaults to “any” type)
+  * **Just a name** (defaults to "any" type)
   * **Typed** (`name: string`)
   * **Nested** (`address: { street: string, city: string }`)
   * **Constrained** (`score: {int, min: 0, max: 100}`)
-* **Fields may be marked as optional or dynamic using conventions** (see “Semantic Field Modifiers”).
+* **Fields may be marked as optional or dynamic using conventions** (see "Semantic Field Modifiers").
 
 #### **Examples:**
 
@@ -170,7 +170,7 @@ name: string, *,         # Allow any extra fields
 
 ## **Mapping to Industry Standards (for Interoperability)**
 
-* **Keyed schemas** map directly to “properties” in JSON Schema, Avro, etc.
+* **Keyed schemas** map directly to "properties" in JSON Schema, Avro, etc.
 * **Optionals (****`?`****)** are omitted from `"required"` arrays.
 * **Dynamic fields (****`*`****)** map to `additionalProperties`.
 * **Constraints** map to field-level attributes in target schema (e.g., minLength, enum).
@@ -245,7 +245,7 @@ tags?: []        # 'tags' is optional, any array allowed
 
 ### **Why Use Open Forms?**
 
-* Useful for fields where you expect unstructured, arbitrary data (e.g., “metadata,” “extension,” “blob,” or raw API fields).
+* Useful for fields where you expect unstructured, arbitrary data (e.g., "metadata," "extension," "blob," or raw API fields).
 * No validation is performed on object keys or array elements—only the container type is enforced.
 
 ### **Contrast with Typed Forms**
@@ -269,7 +269,7 @@ tags?: []        # 'tags' is optional, any array allowed
 ```
 
 **Summary:**
-- Put this new section right after “Common Schema Patterns” and before your “Full Example.”
+- Put this new section right after "Common Schema Patterns" and before your "Full Example."
 - This order introduces specific patterns, then the open (most general) forms, then illustrates usage in a complete example.
 
 ## **Full Example**
