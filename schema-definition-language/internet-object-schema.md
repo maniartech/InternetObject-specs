@@ -268,7 +268,7 @@ Internet Object schemas use the following **conventions** (not syntax) for speci
 * **Optional (****`?`****)**: Field can be omitted from the data object.
   If omitted, its value is undefined unless a default is provided.
 * **Nullable (****`*`****)**: Field can explicitly be set to `null`.
-* **Both (****`?*`**** or ****`*?`****)**: Field can be omitted or set to `null`. Both orderings are equivalent and serve as a canonical shorthand—internally, this maps to `{optional: true, null: true}` in the MemberDef.
+* **Both (****`?*`**** or ****`*?`****)**: Field is both optional and nullable—it can be omitted from the data or explicitly set to `false`. Both orderings are equivalent and represent the canonical combination of these two modifiers.
 
 **Examples:**
 
