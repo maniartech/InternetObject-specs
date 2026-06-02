@@ -1,64 +1,59 @@
+---
+description: The header's definition section — metadata, variables, and references.
+---
+
 # Definitions
 
-Apart from the schema, the IO document header can have definitions. The definitions allow you to define schema, variables, metadata, and much more. In essence, the definitions are the collection of key-value pairs, with the following structure.
+Besides the schema, an Internet Object document's **header** can hold *definitions*. A
+definition is a key–value pair on its own line, introduced by a tilde `~`:
 
+```
+~ key: value
+```
 
+There are three kinds of definition, distinguished by the key's prefix:
 
-![The Defination Structure](https://documents.app.lucidchart.com/documents/076b4f9c-b79d-410c-8002-1ac23fdbb786/pages/GvgmgBMpLy15?a=22620\&x=3674\&y=161\&w=1881\&h=205\&store=1\&accept=image%2F\*\&auth=LCA%209433da9053044359ab00cbee570df59bbb4999ce-ts%3D1611059180)
+| Prefix | Kind | Purpose |
+| ------ | ---- | ------- |
+| *(none)* | **Metadata** | Document-level data (paging, status, …). Surfaces in the output header. |
+| `@` | **Value variable** | A reusable value referenced as `@name`. See [Variables](variables.md). |
+| `$` | **Reference (ref)** | A reusable schema or type referenced as `$name`. See [Schema References](schema-references.md). |
 
-{% hint style="info" %}
-Whitespaces surrounding the tokens, keys, and values are optional.
-{% endhint %}
+The special key **`$schema`** names the document's default schema.
 
-The definition must start with a tidal symbol `(~ U+007E)` followed by a key-value pair. The key-value pair must be separated by a colon `(: U+003A)`.&#x20;
+## Metadata
 
-| Element | Unicode         | Details                                                                              |
-| ------- | --------------- | ------------------------------------------------------------------------------------ |
-| `~`     | `U+007E`        | Tilde - Starts the definition                                                        |
-| `:`     | `U+003A`        | Colon - Key and Value Separator                                                      |
-| Key     | N/A             | The string key, as defined in the [String section](../the-structure/values/string/). |
-| Value   | N/A             | The values as defined in the [Values section](../the-structure/values/).             |
-| WS      | WhiteSpace Char | 0 or more white-space character                                                      |
-
-### A definition walkthrough
-
-#### Simple definitions
-
-Simple definitions such as meta-data declaration can be written as shown in the code snippet below.
+Bare keys carry document metadata. They appear under a `header` in the loaded result,
+separate from the data:
 
 ```ruby
-# The result meta-data
-~ pageSize: 1
-~ currentPage: 1
-~ totalPages: 1
-~ recordCount: 2
+~ pageSize: 10
 ~ success: T
+~ $schema: { name: string }
 ---
-# The data
-~ John Done, 25, {Bond Street, New York, NY}
-~ Jane Doe, 20, {Bond Street, New York, NY}
+~ John
+~ Jane
 ```
 
-#### Value and Schema definitions
+## Variables and references
 
-Any value defined in the definition section can be used as a variable. The dollar $ prefix can be used to declare schema and/or consume the variable value. If the key starts with `$` a sign the variable will be treated as a schema and handled likewise.
+`@` defines a value variable; `$` defines a reusable schema (a ref). Both are then used by
+name:
 
 ```ruby
-# Variables and schema definitions
-~ y: yes # value var
-~ n: no  # value var
-~ $address: {street, city, state} # schema var
-~ $schema: {name, age, $address, ready:{string, choices:[$y, $n]} # schema var
+~ @active: T
+~ $address: { street, city }
+~ $schema: { name: string, addr: $address, isActive: bool }
 ---
-~ John Done, 25, {Bond Street, New York, NY}, $y
-~ Jane Doe, 20, {Bond Street, New York, NY}, $y
+~ John, { Main St, NYC }, @active
+~ Jane, { Oak Ave, LA }, @active
 ```
 
-Here in the code snippet, `y: yes`  and `n: no` are used as value definition similarly keys in the schema prefixed with `$` sign represents schema definitions.&#x20;
+> **A document may be header-only.** If there is no data, the header still ends with the
+> `---` separator.
 
-{% hint style="info" %}
-An Internet object document may only contain the header section and not a data section.  In such a case, the header section must be separated from the data section by a data separator `"---".`
-{% endhint %}
+## See Also
 
-####
-
+* [Variables](variables.md) — value variables (`@`)
+* [Schema References](schema-references.md) — schema and type refs (`$`)
+* [Internet Object Schema](../schema-definition-language/internet-object-schema.md)

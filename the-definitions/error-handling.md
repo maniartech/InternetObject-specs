@@ -1,9 +1,41 @@
 ---
-description: Errors specific to definitions: undefined, forward, and circular references.
+description: Errors that arise from header definitions and references.
 ---
 
 # Error Handling in Definitions
 
-> **Status: Draft stub.** Part of the Internet Object 1.0 specification restructure; full content is being written.
->
-> **Scope:** Errors specific to definitions: undefined, forward, and circular references.
+Definitions are resolved as the header is processed and as data is validated. The errors
+specific to definitions are:
+
+| Condition | Error | Cause |
+| --------- | ----- | ----- |
+| Reference to an undefined schema | `schema-not-defined` | `$name` used but no `$name` defined |
+| Reference to an undefined variable | `variable-not-defined` | `@name` used but no `@name` defined |
+| Forward reference | resolution error | a ref used before it is defined |
+
+## Undefined reference
+
+A `$` reference must name a schema defined earlier in the header:
+
+```ruby
+~ $schema: { name: string, home: $address }
+---
+~ John, { Main St, NYC }    # ✗ schema-not-defined — $address is never defined
+```
+
+## Forward references
+
+A reference MUST appear **after** its definition. Define `$address` before the schema that
+uses it:
+
+```ruby
+~ $address: { street, city }
+~ $schema: { name: string, home: $address }
+---
+~ John, { Main St, NYC }    # ✓
+```
+
+## See Also
+
+* [Definitions](definitions.md) · [Schema References](schema-references.md)
+* [Error Model](../parsing-and-errors/error-model.md)

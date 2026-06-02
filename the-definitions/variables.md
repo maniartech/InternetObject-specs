@@ -1,187 +1,65 @@
+---
+description: Value variables — reusable values referenced with @.
+---
+
 # Variables
 
-The Internet Object document promotes reusability through variables. It allows defining variables that can be applied to simplify schema and definitions, obfuscate values, or reduce the data size. Every key defined in the definition section can be used as a variable.&#x20;
+A **value variable** is a reusable value defined in the header with an `@`-prefixed key and
+used anywhere a value is expected by writing `@name`. Variables reduce repetition, shrink
+payloads, and let you keep sensitive values in one place.
 
-### Types of Variables
+> `@` is for **values**. For reusable *schemas and types*, use `$` references — see
+> [Schema References](schema-references.md).
 
-Internet Object variables can be categorized into two groups.&#x20;
-
-1. Value Variables
-2. Schema Variables
-
-#### Value Variable
-
-The Value variables are used to directly access and reuse values.
+## Defining and using
 
 ```ruby
-# Defining value variables 
-~ record: 123
-~ y: yes
-~ n: no
-~ rgb: [red, green, blue]
+~ @active: T
+~ $schema: { name: string, isActive: bool }
 ---
+~ John, @active
+~ Jane, @active
 ```
 
-In the above snippet `records`, `y`, `n`, and `rgb` are the value variables.&#x20;
+## In schema constraints
 
-#### Schema Variable
-
-The schema variables start with `$`sign and it is used to directly access and reuse schema.
+A variable can supply a constraint value, such as a `choices` list:
 
 ```ruby
-# Defining schema variables
-~ $address: {
-    street: string, 
-    zip: {string, maxLength: 5}, 
-    city: string
-  }
-~ $person: {
-    name: string,
-    age: int,
-    homeAddress?: $address,
-    officeAddress?: $address
-  }
- ---
-```
-
-In the above code snippet, the schema variable `address` is reused in another schema variable named `person` .&#x20;
-
-### Advantages and Use Cases
-
-#### Reuse Definitions
-
-The value variables and schema variables enable the reuse of definition.
-
-```ruby
-# Reusing value variable and schema variable
-~ y: yes
-~ n: no
-~ rgb: [red, green blue]
-~ $address: { 
-            street: string, 
-            zip: {string, maxLength: 5}, 
-            city: string }
-~ $person: {
-    name: string,
-    age: int,
-    seniorCitizen: {choices: [$y, $n]}
-    color: {string, choices: $rgb},
-    homeAddress?: $address,
-    officeAddress?: $address
-       }
+~ @r: red
+~ @g: green
+~ @b: blue
+~ $schema: { name: string, color: { string, choices: [@r, @g, @b] } }
 ---
-Spiderman, 25, $n, red, {Queens, 50010, New York}, {Bond Street, 50001, New York}
+~ John, red
 ```
 
+## Use cases
 
+### Reduce size and repetition
+
+Define a value once and reference it many times:
 
 ```ruby
-# Reusing value variable and schema variable
-~ $person: {
-    name: string,
-    age: int,
-    seniorCitizen: {choices: [yes, no]}
-    color: {string, choices: [red, green, blue},
-    homeAddress?: {
-      street: string, 
-      zip: {string, maxLength: 5}, 
-      city: string
-    },
-    officeAddress?: {
-      street: string, 
-      zip: {string, maxLength: 5}, 
-      city: string
-    }
-  }
+~ @co: 'ACME Corporation'
+~ $schema: { name: string, employer: string }
 ---
-Spiderman, 25, no, red, {Queens, 50010, New York}, {Bond Street, 50001, New York}
+~ John, @co
+~ Jane, @co
 ```
 
-#### Obfuscate Data
+### Keep sensitive values together
 
-Variables are also used for hiding critical information with modified content to enforce data protection and security.&#x20;
-
-The following example demonstrates how one can pass critical information over the internet using variables.
-
-```ruby
-# Key saved on the client side
-~ s: ghhhj456nhghhhy11569bbbgtxxcv123654897
-~ a: jk889456llkhynnnk12364lkkkhuk4125336nk
-```
-
-The above code snippet represents `secrectKey` as  `s` and `activationKey` as `a` saved on the client-side. This information is securely passed over the internet using variables as shown below, &#x20;
+Variables let you isolate secrets/keys in the header instead of scattering them through the
+data:
 
 ```ruby
-# Information passed on the server
-~ y: yes
-~ n: no
-~ rgb: [red, green blue]
-~ $address: {city, zipCode, state} 
-~ $person: {
-             name, 
-             age, 
-             currentAddress: $address, 
-             permanentAddress: $address
-            }
-~ $accountDetails: {
-                    name,
-                    phoneNo, 
-                    currentAddress: $address, 
-                    secretKey, activationKey
-                    }
+~ @key: 'sk_live_8f3a9c2b'
+~ $schema: { account: string, apiKey: string }
 ---
-Spiderman, 7855423656,  {Queens, 50010, New York}, $s, $a
+~ acct_001, @key
 ```
 
-The receiver will receive the following information without compromising on data security.&#x20;
+## See Also
 
-```ruby
-# Information Received by the receiver
-{
-  name: "Spiderman",
-  phoneNo: 7855423656,
-  currentAddress:{
-                   city: "Queens",
-                   zipCode: 50010,
-                   state: "New York"
-                 }
-secretKey: "ghhhj456nhghhhy11569bbbgtxxcv123654897",
-activationKey: "jk889456llkhynnnk12364lkkkhuk4125336nk"      
-}
-```
-
-#### Reduce data size
-
-The use of variables helps to reduce the code size as it enables definition reuse that ultimately reduces bandwidth utilization.
-
-```ruby
-#  Reduce the code length by facilating code reuse
-~ rgb: [red, green blue]
-~ $address: {
-             street: string, 
-             zip: { string, maxLength:5 }, 
-             city: string 
-             }
-~ $accountDetails: {branchName:string, accountNo, IFSCcode}   
-~ $person: {
-             name: string,
-             age: int,
-             bankaccountInfo: $accountDetails,
-             color: { string, choices: $rgb },
-             homeAddress?: $address,
-             officeAddress?: $address
-            }
----
-{ Spiderman, 25, red, 
-   {Queens, 50010, New York}, 
-     {Bond Street, 50001, New York}
-     }
-
-```
-
-In the above code snippet, the schema variable `address` and `accountDetails` are used in the `person` schema definition. So, rather than creating a similar schema multiple times for `address` it can be created once and reused multiple times in the document.
-
-#### Improves schema readability&#x20;
-
-Variables improve schema readability by grouping similar and reusable codes and limiting line length.&#x20;
-
+* [Definitions](definitions.md) · [Schema References](schema-references.md)
