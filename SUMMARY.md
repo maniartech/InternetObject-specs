@@ -5,21 +5,28 @@
 ## Internet Object
 
 * [Abstract](internet-object/abstract.md)
-* [The Poetic Principles of Internet Object](internet-object/the-zen-of-internet-object.md)
+* [The Poetic Principles](internet-object/the-zen-of-internet-object.md)
 * [Objectives](internet-object/objectives.md)
 * [Introducing Internet Object](internet-object/introduction.md)
+* [Why Internet Object?](internet-object/why-internet-object.md)
+* [Getting Started](internet-object/getting-started.md)
 
-## The Structure
+## Core Concepts
+
+* [Document-Oriented Nature](core-concepts/document-oriented.md)
+* [Schema-First Design](core-concepts/schema-first.md)
+
+## Structure and Syntax
 
 * [Internet Object Document](the-structure/introduction/README.md)
   * [Header](the-structure/introduction/header.md)
   * [Data Sections](the-structure/introduction/data.md)
 * [Structural Elements](the-structure/structural-elements/README.md)
-  * [Structural Characters and Literals](the-structure/structural-elements/structural-characters-n-keywords.md)
+  * [Structural Characters & Separators](the-structure/structural-elements/structural-characters-n-keywords.md)
   * [Literals](the-structure/structural-elements/literals.md)
   * [Other Special Characters](the-structure/structural-elements/other-special-characters.md)
-  * [Whitespaces](the-structure/structural-elements/whitespaces.md)
-* [Values Representations](the-structure/values/README.md)
+  * [Whitespace & Indentation](the-structure/structural-elements/whitespaces.md)
+* [Value Representations](the-structure/values/README.md)
   * [Objects](the-structure/values/object.md)
   * [Arrays](the-structure/values/array.md)
   * [Strings](the-structure/values/string/README.md)
@@ -30,58 +37,90 @@
     * [Number](the-structure/values/number/number.md)
     * [BigInt](the-structure/values/number/bigint.md)
     * [Decimal](the-structure/values/number/decimal.md)
+    * [Special Numeric Formats](the-structure/values/number/special-formats.md)
     * [NaN and Infinity](the-structure/values/number/nan-and-infinity.md)
-  * [Base64](the-structure/values/base64.md)
+  * [Binary](the-structure/values/binary.md)
   * [Date and Time](the-structure/values/date-and-time.md)
   * [Booleans](the-structure/values/booleans.md)
   * [Nulls](the-structure/values/null.md)
+* [Case Sensitivity Rules](the-structure/case-sensitivity.md)
 * [Comments](the-structure/comments.md)
 * [Encoding](the-structure/encoding.md)
+* [Syntax Errors](the-structure/syntax-errors.md)
 
-## The Collections
+## Definitions
 
-* [Collection](the-collections/collection.md)
-* [Creating Collection](the-collections/creating-collection.md)
-* [Collection Rules](the-collections/validation-rules.md)
+* [Structure and Syntax](the-definitions/definitions.md)
+* [Variables](the-definitions/variables.md)
+* [Schema References](the-definitions/schema-references.md)
+* [Error Handling in Definitions](the-definitions/error-handling.md)
+
+## Collections
+
+* [The Structure](the-collections/collection.md)
+* [Creating Collections](the-collections/creating-collection.md)
+* [Collection Rules](the-collections/collection-rules.md)
 * [Data Streaming](the-collections/data-streaming.md)
 
-## The Definitions
+## Streaming
 
-* [Definitions](the-definitions/definitions.md)
-* [Variables](the-definitions/variables.md)
-* [Complex Schema](the-definitions/complex-schema.md)
+* [Streaming (Overview)](streaming/README.md)
 
 ## Schema Definition Language
 
-* [Internet Object Schema](schema-definition-language/internet-object-schema.md)
-* [The structure](schema-definition-language/schema-representation.md)
-* [Data Types](schema-definition-language/data-types/README.md)
+* [Overview](schema-definition-language/internet-object-schema.md)
+* [Schema Representation](schema-definition-language/schema-representation.md)
+* [Schema Data Types](schema-definition-language/data-types/README.md)
   * [Any](schema-definition-language/data-types/any.md)
-  * [String](schema-definition-language/data-types/string/README.md)
-    * [String Derived Types](schema-definition-language/data-types/string/string-derived-types/README.md)
-      * [Email](schema-definition-language/data-types/string/string-derived-types/email.md)
-      * [URL](schema-definition-language/data-types/string/string-derived-types/url.md)
-      * [Date](schema-definition-language/data-types/string/string-derived-types/date.md)
-      * [Time](schema-definition-language/data-types/string/string-derived-types/time.md)
-      * [DateTime](schema-definition-language/data-types/string/string-derived-types/datetime.md)
-  * [Number](schema-definition-language/data-types/number/README.md)
+  * [String Types](schema-definition-language/data-types/string/README.md)
+    * [Email](schema-definition-language/data-types/string/string-derived-types/email.md)
+    * [URL](schema-definition-language/data-types/string/string-derived-types/url.md)
+    * [Date](schema-definition-language/data-types/string/string-derived-types/date.md)
+    * [Time](schema-definition-language/data-types/string/string-derived-types/time.md)
+    * [DateTime](schema-definition-language/data-types/string/string-derived-types/datetime.md)
+  * [Numeric Types](schema-definition-language/data-types/number/README.md)
     * [Derived Types](schema-definition-language/data-types/number/derived-types/README.md)
-      * [int](schema-definition-language/data-types/number/derived-types/integer.md)
-      * [byte](schema-definition-language/data-types/number/derived-types/byte.md)
-      * [int16](schema-definition-language/data-types/number/derived-types/int16.md)
-      * [int32](schema-definition-language/data-types/number/derived-types/int32.md)
-  * [Object](schema-definition-language/data-types/object.md)
+  * [BigInt](schema-definition-language/data-types/number/bigint.md)
+  * [Decimal](schema-definition-language/data-types/number/decimal.md)
+  * [Date and Time](schema-definition-language/data-types/date-and-time.md)
+  * [Binary](schema-definition-language/data-types/binary.md)
+  * [Object (SchemaDef)](schema-definition-language/data-types/object.md)
   * [Array](schema-definition-language/data-types/array.md)
   * [Bool](schema-definition-language/data-types/bool.md)
-  * [Base64](schema-definition-language/data-types/base64.md)
-  * [Date and Time](schema-definition-language/data-types/date-and-time.md)
-* [Dynamic Schema](schema-definition-language/validation-rules.md)
-* [MemberDef (with Object Schema Comparison)](schema-definition-language/memberdef.md)
-* [TypeDef](schema-definition-language/typedef.md)
+* Advanced Schema Concepts
+  * [TypeDef](schema-definition-language/typedef.md)
+  * [MemberDef](schema-definition-language/memberdef.md)
+  * [Open & Dynamic Schemas](schema-definition-language/dynamic-schema.md)
+  * [Union Types (anyOf)](schema-definition-language/union-types.md)
+  * [Composition & Reuse](schema-definition-language/composition.md)
 
-## Other
+## Parsing & Errors
 
-* [Best Practices](best-practices.md)
+* [Overview](parsing-and-errors/README.md)
+* [Error Model](parsing-and-errors/error-model.md)
+* [Parser Behavior & Recovery](parsing-and-errors/parser-behavior.md)
+* [Error Accumulation](parsing-and-errors/error-accumulation.md)
+
+## Conformance
+
+* [Validation Model](conformance/validation-model.md)
+* [Conformance Requirements](conformance/requirements.md)
+
+## Interoperability
+
+* [JSON Compatibility](json-compatibility.md)
+* [Converting To/From Other Formats](interoperability/conversions.md)
+
+## Best Practices
+
+* [Best Practices & Guidelines](best-practices.md)
+
+## Appendices
+
+* [Formal Grammar (EBNF)](appendices/grammar.md)
+* [Glossary](appendices/glossary.md)
 * [FAQs](faqs-1.md)
+* [Roadmap](roadmap.md)
+* [Version History](appendices/version-history.md)
 * [Contributors](contributors.md)
 * [License](license.md)

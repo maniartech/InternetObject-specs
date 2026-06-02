@@ -1,70 +1,73 @@
+---
+description: The bool type — true/false values.
+---
+
 # Bool
 
-A boolean data type is used to assign boolean values to the variable i.e True and False. A boolean can be defined  with the members such as `type`, `default`, `optional` and `null`. Schema of the array TypeDef should be  written as,&#x20;
+The **`bool`** type validates a boolean value. In data it is written compactly as `T`/`F` or
+verbosely as `true`/`false`.
 
-### TypeDef Schema
+> For the boolean *value* syntax, see [Booleans](../../the-structure/values/booleans.md).
 
-```yaml
-type?     : {string, choices: [bool]} 
-default?  : bool,
-optional? : {bool, F},
-null?     : {bool, F}
-```
+## TypeDef
 
-The TypeDef schema ensures the validity of `bool` MemberDefs.
+A `bool` MemberDef accepts only the options below. Any other key is invalid.
 
-#### type
+| Option | Type | Description |
+| ------ | ---- | ----------- |
+| `type` | string | The type name `bool`. First positional value. |
+| `default` | bool | Value used when the member is omitted. Second positional value. |
+| `optional` | bool | If `true`, the member may be omitted. Shorthand: `?` suffix on the key. |
+| `null` | bool | If `true`, the member may be `null`. Shorthand: `*` suffix on the key. |
 
-The first member of the  `bool` typedef is `type`. The next snippet shows how to define a boolean type. We can pass only two values i.e true or false. It can be represented as `T`, `true`, `F`, `false`.
+## Examples
 
-```yaml
-# Set type to bool 
-a: bool, b: {type: bool}
+```ruby
+active: bool
 ---
+~ T        # ✓ true
+~ false    # ✓
+~ yes      # ✗ not-a-bool
 ```
 
-#### default
+Optional with a default:
 
-The next member of the `bool` typedef is `default`.  The code snippet shows how to define a default for the `bool` type. The default values are used during the processing of data/instructions if a value is not provided for a key.
-
-```yaml
-# Boolean a and b with default value set to false
-a?: {bool, false}, b?: {bool, default: false}
+```ruby
+verified?: { bool, T }    # optional; defaults to true when omitted
 ---
+~ {}        # ✓ verified resolves to T
+~ F         # ✓ verified is F
 ```
 
-#### optional
+Nullable:
 
-A member can be marked as optional. If `optional` is set to true. The value of an `optional` must be boolean type i.e `true` or `false`.  Here, are some ways the the member of bool type can be marked as optional.
-
-```yaml
-# Boolean a and b set to optional
-a?: bool, b?: {bool, optional: true}
+```ruby
+flag*: bool               # nullable (value may be N)
 ---
+~ N         # ✓ null
+~ T         # ✓
 ```
 
-#### null
+## Optional, nullable & defaults
 
-When  `null` is set to true, a member can accept null values. The following snippet shows how to set a member of the bool type to null.&#x20;
+| Input | Result |
+| ----- | ------ |
+| `T`/`true`/`F`/`false` | the boolean |
+| any other token | `not-a-bool` error |
+| `N`, key nullable (`*`) | `null` |
+| `N`, not nullable | `null-not-allowed` error |
+| omitted, `default` set | the default |
+| omitted, optional (`?`), no default | absent |
+| omitted, required | `value-required` error |
 
-```yaml
-# Set a, b so that it will accept null values  
-a*: bool, b*: {bool, null: true }
----
-```
+> **Use the `*` suffix for nullability.** The keyed `null:` option is part of the TypeDef but
+> is not currently honored — see *Implementation status*.
 
-### Examples
+## Implementation status (beta)
 
-Here are some valid examples of members with `bool` type...
+- Keyed `optional:` works; keyed `null:` is not yet honored — use the `*` suffix.
 
-```yaml
-# The members accOpen and verified are assign to bool type
-accOpen: bool, Verified: {type: bool}
+## See Also
 
-# The exServicemen is of bool type and default value is false
-exServicemen: {bool, false}
-
-# The regClose is set to optional and null.
-regClose?*: {bool, optional: true, null: true} 
-
-```
+* [Booleans (value syntax)](../../the-structure/values/booleans.md)
+* [TypeDef](../typedef.md) · [MemberDef](../memberdef.md)

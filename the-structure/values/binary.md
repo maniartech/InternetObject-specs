@@ -91,4 +91,4 @@ When processed by an Internet Object parser:
 
 ## See Also
 - [Values Overview](./README.md)
-- [Base64 Schema](../../schema-definition-language/data-types/base64.md)
+- [Binary Schema](../../schema-definition-language/data-types/binary.md)

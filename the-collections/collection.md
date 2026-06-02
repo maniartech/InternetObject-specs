@@ -152,6 +152,6 @@ The third item is invalid, but the others are unaffected.
 
 * [Objects](../the-structure/values/object.md)
 * [Schema Definition Language](../schema-definition-language/)
-* [Validation Rules](../validation-rules/)
+* [Collection Rules](./collection-rules.md)
 * [Document Structure](../the-structure/structure-of-document)
 * [Comments](../the-structure/structural-elements/comments)

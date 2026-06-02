@@ -86,8 +86,8 @@ age: {number, length: 10}                # ❌ 'length' not valid for number
 Use the `schema:` key to define validation for nested object or array types:
 
 ```ruby
-meta: {object, schema: {author: string, version: int}, required: ["author"]}
-tags: {array, items: string, minLen: 1}
+meta: {object, schema: {author: string, version: int}}
+tags: {array, of: string, minLen: 1}
 ```
 
 ## Comparison: MemberDef vs Object Schema

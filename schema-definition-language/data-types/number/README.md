@@ -1,227 +1,176 @@
-# Number
-
-A number type can be defined with the members such as `type`,  `default`, `choices`,  `min`,  `max`,  `multipleOf`,  `divisibleBy`,  `optional` and `null`.  Schema of the number TypeDef should be  written as,&#x20;
-
-### TypeDefs Schema
-
-```yaml
-type?       : {number, 
-  choices: [number, int, int16, int32, byte]},
-default?    : number,
-choices?    : [number],
-min?        : number,
-max?        : number,
-multipleOf? : number,    
-divisibleBy?: number,
-null?       : {bool, F}
-optional?   : {bool, F}
-```
-
-The TypeDef schema ensures the validity of `number` MemberDefs.
-
-#### type&#x20;
-
-The first member of the typedef is `type`. The number can be of type `number` or its derived types i.e `int`, `int16`,  `int32`, `byte`. Here the next snippet shows how the `number` type and its derived types can be defined.
-
-```yaml
-# Set type to number
-a: {type: number} 
-# OR 
-a: number
 ---
-```
-
-```yaml
-# Defining number derived types
-
-# Set type to int
-a: int, 
-
-# Set type to int16
-b: int16, 
-
-# Set type to int32
-c: int32, 
-
-# Set type to byte
-d: byte, 
+description: The number type and its family of integer, unsigned, and float shortcuts.
 ---
 
-```
+# Numeric Types
 
-#### **default**
+The **`number`** type validates a numeric value. It is the base of a small family of
+**predefined shortcuts** — `int`, `uint`, `int8`, `byte`, and so on — where each shortcut is
+simply `number` with a fixed set of constraints baked in. For example, `int8` is `number`
+restricted to whole values in −128…127.
 
-The second member in the `number` typedef is `default` . Here is how the default values can be defined for a number.
+> Two related numeric types have their own pages: [BigInt](bigint.md) (arbitrary-precision
+> integers, suffix `n`) and [Decimal](decimal.md) (fixed-precision decimals, suffix `m`).
+> For how numbers are *written* (decimal, hex, octal, binary, scientific, `NaN`, `Inf`), see
+> [Numeric Values](../../../the-structure/values/number/README.md).
 
-```yaml
-# Assign default value for a as 1.
-a: {number, default: 1, optional: T}
+## The number family
 
+Each name below is the base `number` type plus preset constraints. A conformant validator
+MUST recognize all of these names.
 
-# Set b with a null default
-b: {number, default: N, optional: T, null: T}
+| Type | Whole number? | Range |
+| ---- | ------------- | ----- |
+| `number` | no | IEEE-754 double |
+| `float` | no | IEEE-754 double |
+| `int` | yes | unbounded integer |
+| `uint` | yes | integer ≥ 0 |
+| `int8` | yes | −128 … 127 |
+| `uint8` / `byte` | yes | 0 … 255 |
+| `int16` | yes | −32 768 … 32 767 |
+| `uint16` | yes | 0 … 65 535 |
+| `int32` | yes | −2 147 483 648 … 2 147 483 647 |
+| `uint32` | yes | 0 … 4 294 967 295 |
+
+`byte` is an alias for `uint8`. A value outside a type's range MUST be rejected with an
+`invalid-range` error:
+
+```ruby
+age: int8
 ---
+~ 200      # ✗ invalid-range — int8 max is 127
 ```
 
-**Rules for default:**
+> **Whole-number rule.** The `int`/`uint`/`int8…32`/`uint8…32` shortcuts MUST reject values
+> with a fractional part (`int` accepts `42`, not `42.5`). `number` and `float` accept any
+> finite double.
 
-1. The default value is applicable only if no other value is provided for the key.
-2. If for a key,  null is set to true then it must be replaced by its default value.
-3. The default value when set must match with the data type of a key.&#x20;
+> **Reserved (not yet supported).** `int64`, `uint64`, `float32`, and `float64` are reserved
+> for future use; the reference implementation currently rejects them.
 
-#### **choices**&#x20;
+## TypeDef
 
-The `choices` can be added to member variables in numbers so that the input values are restricted to the fixed set of available choices.  Choices must be an array of numbers. The code snippet shows how to add choices.
+A `number` MemberDef accepts only the options below. Any other key is invalid.
 
-```yaml
-# Adding choices 
-a: {number, choices: [234, 245, 456, 324]}
+| Option | Type | Description |
+| ------ | ---- | ----------- |
+| `type` | string | Type name (`number` or any family member). First positional value. |
+| `default` | number | Value used when the member is omitted. Second positional value. |
+| `choices` | array of number | Restricts the value to a fixed set. Third positional value. |
+| `min` | number | Minimum allowed value (inclusive). |
+| `max` | number | Maximum allowed value (inclusive). |
+| `multipleOf` | number | The value must be an exact multiple of this. |
+| `format` | string | Serialization format: `decimal` (default), `hex`, `octal`, `binary`, `scientific`. |
+| `optional` | bool | If `true`, the member may be omitted. Shorthand: `?` suffix on the key. |
+| `null` | bool | If `true`, the member may be `null`. Shorthand: `*` suffix on the key. |
+
+## Constraints
+
+### min / max
+
+Inclusive bounds. A value outside the bounds is rejected with `invalid-range`.
+
+```ruby
+age: { number, min: 18, max: 25 }
 ---
+~ 18     # ✓
+~ 25     # ✓
+~ 35     # ✗ invalid-range
 ```
 
-#### **max**
+> An explicit `min`/`max` **replaces** a shortcut's built-in bound rather than narrowing it —
+> e.g. `{ int8, min: -200 }` currently accepts −200. See *Implementation status* below.
 
-The `max` represents the maximum value of a key, that must be a number. The numeric instance  `max` is valid only if its value is less than or equal to the value of the `max`. Here is the snippet that shows how to set `max`  value for a number.
+### multipleOf
 
-```yaml
-# Set max: 25 for a number
-a: {number, max: 25}
+The value must be an exact multiple of the given number.
+
+```ruby
+rollNo: { number, multipleOf: 5 }
 ---
+~ 10     # ✓
+~ -10    # ✓
+~ 12     # ✗ — must be a multiple of 5
 ```
 
-#### min
+### choices
 
-The `min` represents the minimum value of a key, that must be a number. The numeric instance  `min` is valid only if its value is greater than or equal to the value of the `min`. Here is the snippet that shows how to set `min`  value for a number.
+Restricts the value to a fixed set. As the third positional value it may omit the key.
 
-```yaml
- # Set min: 3 for a number
- a: {number, min: 3}
-```
-
-#### multipleOf
-
-The  `multipleOf` is used to restrict the value to multiples of a given number. The Value of `multipleOf`  must be a positive integer. The code snippet shows how to restrict the input value to the multiple of the desired number.&#x20;
-
-```yaml
- # Set member def multipleOf: 5 for number
- a: {number, multipleOf: 5}
- ---
-```
-
-#### **divisibleBy**
-
-The `divisibleBy` is used to restrict the value to divisible by of a given number as shown below.
-
-```yaml
- # Set member def divisibleBy: 5 for a number
- a: {number, divisibleBy: 5}
+```ruby
+code: { number, choices: [234, 245, 456] }
 ---
+~ 245    # ✓
+~ 5      # ✗ invalid-choice
 ```
 
-#### **optional**
+### format
 
-The member of a number type can be set to `optional`. Here is the code snippet that demonstrates how a number can be set to optional.
+Controls how the number is **written** on serialization; it does not restrict which input
+notations are accepted (any [notation](../../../the-structure/values/number/README.md) is read).
 
-```yaml
-# Set number to optional
-a?: number
-
-# Assign otional: true to number
-a?: {number, optional: true}
-
-# Set number to optional using optional and null
-a?: {number, default: N, null: T}
-
+```ruby
+flags: { uint16, format: hex }      # serialized as 0x…
+mask:  { uint8,  format: binary }   # serialized as 0b…
 ```
 
-### null
+## Special values
 
-A number when set to `null: true` will accept null values. The snippet below shows how to set a nullable number.
+`NaN` and `Inf`/`-Inf` are valid only for `number`/`float`. When combined with a numeric
+bound, the reference implementation currently coerces them to `null` rather than validating
+them — see *Implementation status*.
 
-```yaml
-# Set number to null 
-a*: {number, null: true}
+## Optional, nullable & defaults
+
+How a member resolves (verified behavior):
+
+| Input | Result |
+| ----- | ------ |
+| value present, valid | the value |
+| value present, out of range | `invalid-range` error |
+| value is `N` (null), key is nullable (`*`) | `null` |
+| value is `N` (null), key is **not** nullable | `null-not-allowed` error |
+| value omitted, `default` set | the default |
+| value omitted, key optional (`?`), no default | absent |
+| value omitted, required, no default | `value-required` error |
+
+```ruby
+a?: { number, 7 }    # optional with default 7  →  omitted yields 7
+b*: number           # nullable  →  N yields null
+c?*: number          # optional and nullable
 ```
 
-### Examples
+> **Use the `*` suffix for nullability.** The keyed `null: T` option is part of the TypeDef
+> but is **not currently honored** — only the `*` suffix enables null. (See below.)
 
-Here are some of the examples that demonstrate how to define number member definition.
+## Implementation status (beta)
 
-```yaml
-# Add choices to subjectCode 
-subjectCode: {number, choices: [234, 245, 456, 324]}
+A few behaviors on this page describe the agreed target; the reference implementation is
+catching up:
+
+- **Whole-number enforcement** for the `int` family is not yet applied (`int` currently
+  accepts `3.14`).
+- **`byte`** alias is being added (currently only `uint8` is recognized).
+- **Explicit `min`/`max`** can widen a shortcut's range (under review).
+- **`NaN`/`Inf`** under a bound resolve to `null` (under review).
+- **Keyed `null:`** is not honored; use the `*` suffix.
+
+## Examples
+
+A schema mixing notations and family members (adapted from the playground):
+
+```ruby
+~ $row: { hex: uint8, oct: uint8, bin: uint8, dec: number, sci: { number, min: 999999999 } }
+--- rows: $row
+~ 0x11, 0o2, 0b11, 10, 4.329e+10
+~ 0x22, 0o3, 0b100, 20, 2.329e+20
 ```
 
-```yaml
- # Set max value for age
-  age: {number, max:25}, 
----
-~  18 # valid
-~  25 # valid
-~  35 # invalid as the value is greater than max value
-```
+Any input notation works for any number type — `0x11`, `0o21`, `0b10001`, and `17` all denote
+the same value.
 
-```yaml
-# Set min value for age 
-  age: {number, min: 18}, 
----
-~ 25, Male # valid
-~ 17, Male # invalid
-```
+## See Also
 
-```yaml
-# Set multipleOf: 5 for the input value of rollNo
-rollNo: {number, multipleOf: 5}
----
-~ 10 # valid
-~ 25 # valid
-~ 30 # valid
-~ 95 # valid
-~ -10 # valid
-~ 34 # invalid
-~ 12 # invalid
-```
-
-```yaml
-# Set divisibleBy: 12 for a rollNo
-rollNo: {number, divisibleBy: 12}
----
-~ 48 # valid
-~ 60 # valid
-~ 96 # valid
-~ 120 # valid
-~ -36 # valid
-~ 8 # invalid
-~ 55 # invalid
-```
-
-```yaml
-#Set age to optional
-age?: {type: number, default: 1, optional: true, max: 30}
-
-```
-
-```yaml
- # Set age to null
- age*: {type: number, default: 1, null: true, max: 30}
-```
-
-```yaml
-# Set age to optional with default: 1 and max: 30
-age?*: { number, 
-        default: 1, 
-        optional: true,
-        null: true,  
-        max: 30}
----
-~ 20 #valid
-~ 30 #valid
-~ N  #valid
-~ 15 #valid
-```
-
-###
-
-####
-
-####
+* [Numeric Values](../../../the-structure/values/number/README.md) — how numbers are written
+* [BigInt](bigint.md) · [Decimal](decimal.md) — related numeric types
+* [TypeDef](../../typedef.md) · [MemberDef](../../memberdef.md) — how type options work
