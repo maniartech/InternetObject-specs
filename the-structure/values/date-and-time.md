@@ -257,6 +257,6 @@ t'14:30:45'                        # → Time: 14:30:45.000 (date irrelevant)
 
 ## See Also
 - [String Values Overview](./README.md)
-- [Base64 Byte String](./base64.md)
+- [Binary Byte String](./binary.md)
 - [Raw String](./raw-strings.md)
 - [Regular String](./regular-strings.md)

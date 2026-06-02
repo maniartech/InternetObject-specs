@@ -33,7 +33,7 @@ choices?    : [number],
 min?        : number,
 max?        : number,
 multipleOf? : number,
-divisibleBy?: number,
+format?     : {string, choices: [decimal, hex, octal, binary, scientific]},
 null?       : {bool, F},
 optional?   : {bool, F}
 ```
@@ -42,7 +42,7 @@ optional?   : {bool, F}
 * **default?**: Default value for the field (optional).
 * **choices?**: Allowed set of values (optional).
 * **min?**, **max?**: Numeric range constraints (optional).
-* **multipleOf?**, **divisibleBy?**: Mathematical constraints.
+* **multipleOf?**: Mathematical constraint (value must be a multiple). **format?**: serialization base.
 * **null?**, **optional?**: Whether value may be null or optional.
 
 ### **Positional and Keyed Members**

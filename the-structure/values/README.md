@@ -23,7 +23,7 @@ Scalar values represent single, atomic pieces of data:
 - **[Strings](./string/)** - Text data with various encoding and formatting options
 - **[Booleans](./booleans.md)** - True/false values
 - **[Null](./null.md)** - Absence of value
-- **[Base64 Byte Strings](./base64.md)** - Binary data encoded as Base64
+- **[Binary Byte Strings](./binary.md)** - Binary data encoded as Base64
 - **[Date and Time](./date-and-time.md)** - Temporal values with ISO 8601 compatibility
 
 ### Structured Values
@@ -67,7 +67,7 @@ Internet Object provides built-in support for [date and time values](./date-and-
 
 For binary data representation, Internet Object uses:
 
-- **[Base64 Byte Strings](./base64.md)** (`b'SGVsbG8='`) - Efficient encoding of binary data as text
+- **[Binary Byte Strings](./binary.md)** (`b'SGVsbG8='`) - Efficient encoding of binary data as text
 
 ## Value Syntax Overview
 
@@ -138,14 +138,14 @@ Internet Object values support:
 ## Navigation
 
 ### Quick Links
-- **Scalar Types**: [Numbers](./number/) • [Strings](./string/) • [Booleans](./booleans.md) • [Null](./null.md) • [Binary Data](./base64.md) • [Date & Time](./date-and-time.md)
+- **Scalar Types**: [Numbers](./number/) • [Strings](./string/) • [Booleans](./booleans.md) • [Null](./null.md) • [Binary Data](./binary.md) • [Date & Time](./date-and-time.md)
 - **Structured Types**: [Objects](./object.md) • [Arrays](./array.md)
 
 ### By Use Case
 - **Text Data**: [String Types](./string/) - Regular, Open, and Raw strings
 - **Numeric Data**: [Number Types](./number/) - Standard, BigInt, Decimal, and Special values
 - **Temporal Data**: [Date and Time](./date-and-time.md) - Dates, times, and datetimes
-- **Binary Data**: [Base64 Byte Strings](./base64.md) - Encoded binary content
+- **Binary Data**: [Binary Byte Strings](./binary.md) - Encoded binary content
 - **Logical Data**: [Booleans](./booleans.md) and [Null](./null.md)
 - **Complex Data**: [Objects](./object.md) and [Arrays](./array.md)
 

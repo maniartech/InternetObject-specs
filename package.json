@@ -1,0 +1,14 @@
+{
+  "name": "internet-object-specs",
+  "version": "1.0.0-draft",
+  "private": true,
+  "description": "The Internet Object 1.0 specification.",
+  "type": "module",
+  "scripts": {
+    "check:examples": "tsx tools/check-examples.ts"
+  },
+  "devDependencies": {
+    "internet-object": "file:../io-js2",
+    "tsx": "^4.19.0"
+  }
+}

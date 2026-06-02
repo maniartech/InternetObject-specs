@@ -1,111 +1,82 @@
+---
+description: The any type — accepts any value, optionally constrained by anyOf or choices.
+---
+
 # Any
 
-Any data type is used to assign any type of value to the variables. It is useful in the case where either the actual type is not known or types are needed to be dynamically assigned. Thus for undefined type, the default type will be always set to  `any` . &#x20;
+The **`any`** type accepts a value of **any** type. It is the default when a field is declared
+without a type (`name` is the same as `name: any`). You can still narrow it with `choices` or,
+for a union of types, `anyOf`.
 
-Any type can be defined with the members such as `type`,  `default`,  `choices`, `anyOf`, `optional`, and `null` .  Schema of `any` TypeDef should be  written as,
-
-### TypeDef Schema
-
-```yaml
-type?     : {string, default: any, choices: [any]},
-default?  : any,
-choices?  : [any],
-anyOf?    : [$memberDef],
-null?     : {bool, default: F},
-optional? : {bool, default: F}
+```ruby
+a, b: any, c: { type: any }
 ---
+~ hello, 42, T        # ✓ — anything goes
 ```
 
-The TypeDef schema ensures the validity of `any` MemberDefs.
+## Declaring alternatives (anyOf)
 
-#### type
+`anyOf` lets a field accept any one of several types or MemberDefs — Internet Object's union
+type.
 
-As with most of the types in Internet Object, the first member of typedef is `type`. The next snippet shows different ways to define the members `a`, `b`, and `c` as `any`.
-
-```yaml
-# Type set to any
-a, b: any, c: {type: any}
+```ruby
+id: { any, anyOf: [string, int] }
 ---
+~ 42        # ✓ matches int
+~ abc       # ✓ matches string
 ```
 
-#### default
-
-The second member in the `any` typedef is `default` . Here is how the default values can be defined.
-
-```yaml
-# Set default value for a and b
-a?: {any, Monday}, b?: {any, default: N}
+```ruby
+flag: { any, anyOf: [bool, int] }
 ---
+~ hello     # ✗ matches neither
 ```
 
-Here, the default value for `a` is  `Monday` and default value for `b` is `null` .
+Each alternative may be a full MemberDef or a SchemaDef:
 
-#### choices
-
-The `choices` restricts the member to be strictly bound with the unique constant values. If set, the choices must be an array of any type of value. The code snippet shows how `choices` can be defined for the `any` type.&#x20;
-
-```yaml
-# Defining choices for member
-a: {any, choices: [1, One, 2, Two, 3, Three]}
+```ruby
+value: { any, anyOf: [{ int, multipleOf: 5 }, { int, multipleOf: 3 }] }
 ---
+~ 10        # ✓ multiple of 5
+~ 9         # ✓ multiple of 3
 ```
 
-#### anyOf
+## TypeDef
 
-In some cases, a member must accept different kinds of values. Such as, a number could be a multiple of 3 or a multiple of 5; they could be a string or number but not that of other types; two different formats of the schema. The`anyOf` allows schema designers to define members that can accept different kinds of constrained values. It accepts an array of MemberDef and/or schema and types.
+An `any` MemberDef accepts only the options below.
 
-```yaml
-member: {any, anyOf?: [$memberDef, type, schema]}
+| Option | Type | Description |
+| ------ | ---- | ----------- |
+| `type` | string | The type name `any`. |
+| `default` | any | Value used when the member is omitted. |
+| `choices` | array | Restricts the value to a fixed set (of any type). |
+| `anyOf` | array of MemberDef/type | The value must match one of these. |
+| `optional` | bool | If `true`, the member may be omitted. Shorthand: `?` suffix. |
+| `null` | bool | If `true`, the member may be `null`. Shorthand: `*` suffix. |
+
+## choices
+
+```ruby
+pick: { any, choices: [1, One, T] }
 ---
+~ One       # ✓
+~ Two       # ✗ invalid-choice
 ```
 
-This snippet explains how `a` , `b` and `c` can accept various kinds of values.&#x20;
+## Optional, nullable & defaults
 
-```yaml
-# Can accept multipole of 5 or multiple of 3
-a: {any, anyOf: [{int, multipleOf: 5}, {int, multipleOf: 3}]},
-
-# Can accept string or number values
-b: {any, anyOf: [string, number]
-
-# Can accept any of two type of address!
-c: {any, anyOf: [{city, state}, {street, city, state}]}
+```ruby
+note?*: any
 ---
+~ {}        # ✓ omitted → absent
+~ N         # ✓ null
 ```
 
-#### null
+## Implementation status (beta)
 
-When set `null` to true, a member can accept null values. Here are some of the ways through which a member of any type can accept null values.
+- Keyed `null:` is not yet honored — use the `*` suffix.
 
-```yaml
-# Set default value of a, b, c, d to null
-a*, b*: any, c: {any, null: T}, d: {any, null: true}
----
-```
+## See Also
 
-#### optional
-
-When set `optioanl` to true, a member can be marked as optional. Here are some of the ways through which a member of any type can be made optional.
-
-```yaml
-# Set a, b, c, and d to optional
-a?, b?: any, c: {any, optional: T}, d: {any, optional: true}
----
-```
-
-### Examples
-
-Some of the valid examples of members with `any` are...
-
-```yaml
-# The members a, b, and are by default assigned the any type.
-a, b, c
-
-# The name is any and default value is null
-name: {any, N}
-
-# The numWord can accept any string or number value.
-numWord: {any, anyOf: [string, number]} 
-```
-
-&#x20;
+* [Union Types (anyOf)](../union-types.md)
+* [TypeDef](../typedef.md) · [MemberDef](../memberdef.md)

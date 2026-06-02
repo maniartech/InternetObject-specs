@@ -1,0 +1,14 @@
+root: ./
+
+structure:
+  readme: README.md
+  summary: SUMMARY.md
+
+# Redirects preserve old URLs after the v1 ToC restructure file renames.
+# Format: <new-path>: <old-path>  (paths are URL paths, no .md extension)
+redirects:
+  the-structure/values/binary: the-structure/values/base64
+  the-definitions/schema-references: the-definitions/complex-schema
+  the-collections/collection-rules: the-collections/validation-rules
+  schema-definition-language/dynamic-schema: schema-definition-language/validation-rules
+  schema-definition-language/data-types/binary: schema-definition-language/data-types/base64
