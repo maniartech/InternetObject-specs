@@ -1,38 +1,40 @@
-# Creating Collection
+---
+description: Creating collections, with or without a schema.
+---
 
-A collection may be created with or without explicitly defining schema definition for the records. However, it is always recommended to define a schema for the collections of records.&#x20;
+# Creating Collections
 
-### Simple Collection &#x20;
+A collection is a sequence of records in the data section, each introduced by a tilde `~`. You
+can create one with or without a schema — though a schema is recommended.
 
-A Simple Collection can be created in the data section of the Internet object document by prefixing each record with a tidal sign `(~ U+007E)`.  It enables the parser to identify the next record when multiple records are sent.&#x20;
+## Simple collection (no schema)
 
-In the Simple Collection as the schema is not defined the type and the structure of collection records can differ. &#x20;
+Without a schema, each record is parsed on its own and its values are mapped to positional
+indices. Records may differ in shape:
 
 ```ruby
-# Creating a simple Collection
 ---
-~ Ironman, 20, Male, {Bond Street, New York, NY}
-~ Spiderman, 25, Male, {Duke Street, New York, NY}, cool
-
+~ Ironman, 20, Male, { Bond Street, New York, NY }
+~ Spiderman, 25, Male, { Duke Street, New York, NY }, cool
 ```
 
-### **Explicit Collection**
+## Explicit collection (with schema)
 
-An Explicit Collection is created by explicitly defining the schema for the collection of records. Prefixing schema with the tidal sign  `(~ U+007E)` enables the parser to understand the multiple records that may be sent according to a particular schema definition.&#x20;
+Define a schema in the header; every record is validated against it. Use a keyed reference
+(`address: $address`) to reuse a shape:
 
 ```ruby
-# Creating an Explicit Collection
-~ $address: {street, city, state}
-~ $schema: { 
-            name: string, 
-            age: {int, min:28}, 
-            gender: {string, choices: [Male, Female]}, 
-            $address
-            }
+~ $address: { street, city, state }
+~ $schema: { name: string, age: { int, min: 18 }, address: $address }
 ---
-~ Ironman, 20, Male, {Bond Street, New York, NY}
-~ Spiderman, 25, Male, {Duke Street, New York, NY}
-~ Wonderwoman, 25, Female, {Z street, San Francisco, California}
+~ Ironman, 20, { Bond Street, New York, NY }      # ✓
+~ Wonderwoman, 25, { Z Street, San Francisco, CA } # ✓
 ```
 
-Here in the code snippet,  multiple records are passed in the data section of the document using Collections.&#x20;
+> Reference a shape with a **keyed** member (`address: $address`). A bare `$address` in the
+> schema is read as a field literally named `$address`, not as the referenced shape.
+
+## See Also
+
+* [Collection](collection.md) · [Collection Rules](collection-rules.md)
+* [Schema References](../the-definitions/schema-references.md)

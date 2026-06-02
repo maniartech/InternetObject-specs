@@ -153,5 +153,5 @@ The third item is invalid, but the others are unaffected.
 * [Objects](../the-structure/values/object.md)
 * [Schema Definition Language](../schema-definition-language/)
 * [Collection Rules](./collection-rules.md)
-* [Document Structure](../the-structure/structure-of-document)
-* [Comments](../the-structure/structural-elements/comments)
+* [Document Structure](../the-structure/introduction/README.md)
+* [Comments](../the-structure/comments.md)

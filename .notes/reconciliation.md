@@ -272,6 +272,17 @@ memberdef: drift fixed (`divisibleBy`→`format`; `items`→`of`; removed `requi
   in those Phase-2 passes (real drift like `maxLength`→`maxLen`, data violating own schema,
   bracket typo; plus block-isolation false-positives needing `io:test skip`).
 
+## L. Collections-group findings (verified)
+
+- **L1.** A **bare positional `$ref`** member (e.g. `$schema: {name, age, $address}`) is NOT
+  resolved — it becomes a field literally named `$address` (unvalidated object). Use the keyed
+  form `address: $address`. Docs must use keyed refs. (Possible code gap — flag.)
+- **L2.** No-schema collections parse each item into index-keyed objects (`{"0":…,"1":…}`).
+- **L3.** Empty record `~` is valid iff every field is optional/nullable; else `value-required`.
+- **L4.** Items validate independently — one bad item errors without stopping the rest.
+- **L5.** Old collection pages used `#invalid`/`#valid` prose (not `# ✗ <code>`) and
+  `min:28`-vs-`20` mismatches → rewritten with verified examples + `✗` annotations.
+
 ## C. Values / syntax (verify against published pages — risk of stale drafts)
 
 ### C2 below are flagged from the stale `.notes/temp-wip.md` (raw strings as `@"..."`,
