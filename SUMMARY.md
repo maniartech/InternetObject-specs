@@ -50,14 +50,14 @@
 
 ## Definitions
 
-* [Structure and Syntax](the-definitions/definitions.md)
+* [Definitions](the-definitions/definitions.md)
 * [Variables](the-definitions/variables.md)
 * [Schema References](the-definitions/schema-references.md)
 * [Error Handling in Definitions](the-definitions/error-handling.md)
 
 ## Collections
 
-* [The Structure](the-collections/collection.md)
+* [Collection](the-collections/collection.md)
 * [Creating Collections](the-collections/creating-collection.md)
 * [Collection Rules](the-collections/collection-rules.md)
 * [Data Streaming](the-collections/data-streaming.md)

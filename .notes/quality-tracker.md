@@ -63,15 +63,15 @@ example-MUST gate is green repo-wide. Re-run after any example edit:
 | 37 | `the-structure/encoding.md` | Syntax | A+ | ✅ |
 | 38 | `the-structure/syntax-errors.md` | Syntax/companion | A+ | ✅ |
 | | **Definitions** | | | |
-| 39 | `the-definitions/definitions.md` | Syntax | — | ⏳ |
-| 40 | `the-definitions/variables.md` | Syntax | — | ⏳ |
-| 41 | `the-definitions/schema-references.md` | Syntax | — | ⏳ |
-| 42 | `the-definitions/error-handling.md` | Normative | — | ⏳ |
+| 39 | `the-definitions/definitions.md` | Syntax | A+ | ✅ |
+| 40 | `the-definitions/variables.md` | Syntax | A+ | ✅ |
+| 41 | `the-definitions/schema-references.md` | Syntax | A+ | ✅ |
+| 42 | `the-definitions/error-handling.md` | Normative | A+ | ✅ |
 | | **Collections** | | | |
-| 43 | `the-collections/collection.md` | Syntax/conceptual | — | ⏳ |
-| 44 | `the-collections/creating-collection.md` | Syntax | — | ⏳ |
-| 45 | `the-collections/collection-rules.md` | Normative | — | ⏳ |
-| 46 | `the-collections/data-streaming.md` | Conceptual | — | ⏳ |
+| 43 | `the-collections/collection.md` | Syntax/conceptual | A+ | ✅ |
+| 44 | `the-collections/creating-collection.md` | Syntax | A+ | ✅ |
+| 45 | `the-collections/collection-rules.md` | Normative | A+ | ✅ |
+| 46 | `the-collections/data-streaming.md` | Conceptual | A+ | ✅ |
 | | **Streaming** | | | |
 | 47 | `streaming/README.md` | Index (placeholder) | — | ⚠ source-first |
 | | **Schema Definition Language** | | | |
@@ -224,4 +224,56 @@ README.md — its index is `internet-object-schema.md`); `schema-definition-lang
 → `schema.md`, `object.md`; `.formats/schema-datatype.md` → `typedef.md`, `schema.md` (stray
 `.formats/` dir, not in SUMMARY).
 
-_(next: Batch 3 — Definitions (39–42) + Collections (43–46))_
+### Batch 3 — Definitions (39–42) + Collections (43–46) · verifier 125/0/115
+
+All 8 pages **A+ ✅**. Verifier rose 117→125 passing (added testable examples), 0 failed.
+Every behavioral claim re-verified against io-js2 (header definitions, refs, variables,
+collection structure, type promotion, error codes). Repo-wide link check: **0 broken links
+introduced**; the previously-flagged `collection.md → ../schema-definition-language/` dir link
+is **fixed** (now → `internet-object-schema.md`). Remaining 4 broken links are all in later
+batches (`memberdef.md → schema.md/object.md`; stray `.formats/` dir not in SUMMARY).
+
+**Nav/H1 alignment (SUMMARY):** two child nav labels collided with vague/duplicate names and
+were realigned to their H1s (canon §4): Definitions group intro "Structure and Syntax" →
+**"Definitions"** (it duplicated the top-level group name); Collections group intro
+"The Structure" → **"Collection"**.
+
+**Accuracy fixes (verified against io-js2; logged reconciliation E2, L6, L7):**
+- **41 schema-references / 42 error-handling — forward references were documented wrong.** Both
+  pages claimed a ref "MUST be defined before it is used (no forward references)" / "MUST appear
+  after its definition," and error-handling listed a bogus "Forward reference → resolution
+  error" row. **Verified:** definitions resolve after the *whole header* is read, so order is
+  not significant and a forward ref resolves cleanly. Rewrote the resolution rules to: order is
+  insignificant, a forward ref is allowed (SHOULD still define-before-use for readability), and
+  the genuine errors are **undefined** names — `schema-not-defined` (`$`) and
+  `variable-not-defined` (`@`), both verified and now testable (`# ✗` assertions pass).
+- **43 collection.md — "Invalid Forms" was inaccurate.** `~ 101 Thomas 25 HR` and `~ 101, 25 HR`
+  do **not** error (spaces never separate values → they merge into one open string). Reframed
+  into **Genuine errors** (the thrown bare-object-then-`~` `unexpected-token`, plus
+  `expecting-bracket`/`unexpected-token` for unterminated/trailing tokens) and **Common
+  mistakes** (the no-error merge, now a testable valid block). Removed the `❌` emoji; fixed the
+  false "comments are preserved" claim (comments/whitespace are insignificant, not preserved).
+- **41 schema-references — type-ref note sharpened.** A `$`-def body like
+  `{ number, min: 0, max: 100 }` is read as an object shape (not a number type) and does not
+  compile as a type-ref today; note now states this precisely and frames the syntax as target.
+
+**Style/consistency fixes:** `collection.md` fully rewritten to canon — sentence-case headings,
+**record** as the primary term (with "collection item" as the formal synonym; EBNF keeps
+`collectionItem`), spaced em-dashes, `>` callouts with bold lead-ins, clean EBNF
+(`collectionItem+`), and **type promotion** clarified to show the real positional-key form
+(`~ 1` → `{ "0": 1 }`). `definitions.md`: bare ``` fence → ` ```ruby `.
+
+**Already-compliant (no change):** 40 variables, 44 creating-collection, 45 collection-rules,
+46 data-streaming — newer canon-aligned pages; all testable examples verified green
+(`value-required`, `invalid-range`, empty-record validity, schema-less positional mapping,
+streaming example).
+
+**Five-perspective pass (representative):** Newcomer — clear leads, familiar parallels,
+recommended forms; Implementer — every example machine-checked, accurate stable error codes,
+honest beta gaps (type-refs); Adversary — "Common mistakes" documents the silent-merge gotcha
+truthfully, forward-ref behavior corrected, no overclaim; Editor — sentence-case headings,
+canon terms, no emoji/smart-quotes; Maintainer — front matter on every page, broken link fixed,
+nav↔H1 aligned.
+
+_(next: Batch 4 — Schema Definition Language (48–71); page 47 `streaming/README.md` stays ⚠
+source-first/deferred per plan)_

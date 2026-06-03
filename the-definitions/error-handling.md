@@ -4,18 +4,21 @@ description: Errors that arise from header definitions and references.
 
 # Error Handling in Definitions
 
-Definitions are resolved as the header is processed and as data is validated. The errors
-specific to definitions are:
+Definitions are resolved after the **entire header** has been read, and references are checked
+again as data is validated. Two errors are specific to definitions:
 
-| Condition | Error | Cause |
-| --------- | ----- | ----- |
-| Reference to an undefined schema | `schema-not-defined` | `$name` used but no `$name` defined |
-| Reference to an undefined variable | `variable-not-defined` | `@name` used but no `@name` defined |
-| Forward reference | resolution error | a ref used before it is defined |
+| Condition | Error code | Cause |
+| --------- | ---------- | ----- |
+| Reference to an undefined schema or type | `schema-not-defined` | `$name` is used but no `$name` is defined anywhere in the header |
+| Reference to an undefined variable | `variable-not-defined` | `@name` is used but no `@name` is defined anywhere in the header |
 
-## Undefined reference
+> Error codes are stable; messages and positions may vary between implementations. Branch on
+> the code, not the message.
 
-A `$` reference must name a schema defined earlier in the header:
+## Undefined schema reference
+
+A `$` reference must name a schema or type defined in the header. An undefined name fails with
+`schema-not-defined`:
 
 ```ruby
 ~ $schema: { name: string, home: $address }
@@ -23,19 +26,34 @@ A `$` reference must name a schema defined earlier in the header:
 ~ John, { Main St, NYC }    # ✗ schema-not-defined — $address is never defined
 ```
 
-## Forward references
+## Undefined variable reference
 
-A reference MUST appear **after** its definition. Define `$address` before the schema that
-uses it:
+A `@` reference must name a variable defined in the header. An undefined name fails with
+`variable-not-defined`:
 
 ```ruby
-~ $address: { street, city }
+~ $schema: { name: string, isActive: bool }
+---
+~ John, @active             # ✗ variable-not-defined — @active is never defined
+```
+
+## Reference order
+
+Because definitions resolve only after the whole header is read, **order within the header is
+not significant** — a reference MAY appear before the definition it targets. The following
+resolves even though `$address` is defined after the schema that uses it:
+
+```ruby
 ~ $schema: { name: string, home: $address }
+~ $address: { street, city }
 ---
 ~ John, { Main St, NYC }    # ✓
 ```
 
+For readability you SHOULD still define a reference before you use it; doing so reads top to
+bottom and makes the dependency obvious.
+
 ## See Also
 
-* [Definitions](definitions.md) · [Schema References](schema-references.md)
-* [Error Model](../parsing-and-errors/error-model.md)
+* [Definitions](definitions.md) · [Schema References](schema-references.md) · [Variables](variables.md)
+* [Error Model](../parsing-and-errors/error-model.md) — the full error catalogue

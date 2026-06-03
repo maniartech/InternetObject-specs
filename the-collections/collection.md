@@ -1,157 +1,186 @@
 ---
-description: Collections in Internet Object
+description: The structure of a collection — an ordered sequence of records in a data section.
 ---
 
 # Collection
 
-A **Collection** in Internet Object is an ordered sequence of *collection items* (objects) within a section of a document. Collections enable efficient serialization, batching, and streaming of multiple objects—such as datasets, tables, or event logs—in a concise, flexible format.
+A **collection** is an ordered sequence of **records** within a data section of a document.
+Each record is an object, written on its own line and introduced by a tilde `~`. Collections
+make it efficient to serialize, batch, and stream many objects — datasets, tables, event logs
+— in a concise, uniform form.
 
-> Collections are conceptually similar to datasets in CSV, streams in JSON Lines, or record arrays in Avro.
+> **Familiar parallels.** A collection is conceptually similar to a dataset in CSV, a stream in
+> JSON Lines, or a record array in Avro — but each record is a full Internet Object object.
 
-Collections are always part of an Internet Object document, **not** standalone documents.
-An Internet Object document consists of a header and a body. The body contains one or more sections. A section can contain either a single object or a **collection** (multiple objects as collection items).
-
-Collections support both **homogeneous** and **heterogeneous** data. Each item in the collection is independent; failure of one item does not affect others.
+A collection is always part of a document, **not** a standalone document. A document has a
+header and a data section; a data section holds either a single object or a collection of one
+or more records. Records may be **homogeneous** (the same shape) or **heterogeneous** (each
+shaped differently); each record is independent, so a failure in one does not affect the rest.
 
 ## Syntax
 
-A collection section consists of one or more collection items, each beginning with a tilde `~` (`U+007E`) followed by an object.
+A collection is one or more records. Each record is a tilde `~` followed by an object:
 
 ```ebnf
-collection = collectionItem *(collectionItem)
-collectionItem = "~" object
+collection     = collectionItem+
+collectionItem = "~" [ object ]
 ```
 
-> `object` is as defined in the [Objects specification](../the-structure/values/object.md). Both open and closed object forms are permitted, though open form is recommended for clarity.
+Here `object` is an object as defined in the [Objects](../the-structure/values/object.md)
+specification, in either open or closed form. An absent body (a bare `~`) is an **empty
+record**. A bare scalar or array is promoted to an object — see [Type promotion](#type-promotion).
 
-### Structural Characters
+### Structural characters
 
-| Symbol | Name         | Unicode            | Description                         |
-| ------ | ------------ | ------------------ | ----------------------------------- |
-| `~`    | Tilde        | `U+007E`           | Begins a new collection item        |
-| `,`    | Comma        | `U+002C`           | Separates values within an object   |
-| `{}`   | Curly Braces | `U+007B`, `U+007D` | For closed object syntax (optional) |
+| Symbol | Name | Unicode | Role |
+| ------ | ---- | ------- | ---- |
+| `~` | Tilde | `U+007E` | Begins a record |
+| `,` | Comma | `U+002C` | Separates values within a record |
+| `{` `}` | Curly braces | `U+007B`, `U+007D` | Enclose a closed-object record |
 
-## Definition of Collection Item
+## Records
 
-A **collection item** is the top-level object immediately following a tilde (`~`) in a collection section.
+A **record** (also called a *collection item*) is the top-level object immediately following a
+tilde in a collection. Every record is parsed as an object:
 
-* Each collection item **must be a valid Internet Object object**—either in open form (comma-separated values) or closed form (enclosed in `{}`).
-* If the item is empty (`~` alone), it is called an **empty item** and is interpreted as an empty object (`{}`).
+- A record MUST be a valid object — either open form (comma-separated values) or closed form
+  (enclosed in `{ }`).
+- A bare `~` is an **empty record** and loads as an empty object (`{}`).
 
-### Type Promotion of Collection Items
+### Type promotion
 
-If a collection item appears syntactically to be a single primitive value (number, string, boolean, null) or an array,
-it is **implicitly promoted** to an open object containing that value as its only field.
-
-**Examples:**
+If a record looks like a single scalar (number, string, boolean, null) or an array, it is
+promoted to an open object holding that value at positional index `0`. Unnamed values in an
+open object always take positional keys (`0`, `1`, `2`, …):
 
 ```ruby
-~ 1                   # Interpreted as: { 1 }
-~ true                # Interpreted as: { true }
-~ [a, b, c, d]        # Interpreted as: { [a, b, c, d] }
-~ John Doe            # Interpreted as: { John Doe }
-~ {1, 2}              # Remains: { 1, 2 }
-~                     # Empty item, parsed as: {}
-~ name: John Doe      # Interpreted as: { name: John Doe }
+---
+~ 1                   # record: { "0": 1 }
+~ true                # record: { "0": true }
+~ [red, green, blue]  # record: { "0": [red, green, blue] }
+~ John Doe            # record: { "0": "John Doe" }
+~ {1, 2}              # record: { "0": 1, "1": 2 }
+~                     # empty record: {}
+~ name: John Doe      # record: { "name": "John Doe" }
 ```
 
-> **Rule:** Every collection item is parsed as an object, regardless of whether it appears to be a primitive, array, or explicit object.
+> Every record is an object, whether it is written as a scalar, an array, or an explicit
+> object. A schema later maps these values to named members.
 
-## Valid Forms
+## Valid forms
 
-### Collection of Open Objects (Recommended)
+### Open-object records (recommended)
+
+Open form is the most concise and is the recommended style:
 
 ```ruby
+---
 ~ 101, Thomas, 25, HR, {Bond Street, New York, NY}
-~                         # Empty item; parsed as {}
+~                                                    # empty record → {}
 ~ 102, George, 30, Sales, {Duke Street, New York, NY}
 ```
 
-### Collection of Closed Objects
+### Closed-object records
+
+A record may be a closed object enclosed in `{ }`:
 
 ```ruby
+---
 ~ {Jane Doe, 20, f, N/A, [0xFF0000, 0x0000FF], F}
 ```
 
-### Collection with JSON like object syntax
+### JSON-style records
+
+Quoted keys and standard JSON punctuation are accepted, so JSON-shaped records read naturally:
 
 ```ruby
-~ {"name": " John Doe", "address": {"street": "Main St", "city": "Seattle"}, "favorite_colors": ["purple"], "is_active": true}
-~ {"name": "Eve", "age": 33, "gender": "female", "location": {"city": "Dallas", "state": "TX"}, "favorite_colors": ["orange"], "is_active": false}
+---
+~ {"name": "John Doe", "address": {"street": "Main St", "city": "Seattle"}, "is_active": true}
+~ {"name": "Eve", "age": 33, "location": {"city": "Dallas", "state": "TX"}, "is_active": false}
 ```
 
-### Mixed
+### Mixed records
+
+Open and closed records may be mixed in one collection:
 
 ```ruby
+---
 ~ Dave, 40, m, {Main St, Seattle, WA}, [purple], T
 ~ {Eve, 33, f, {Elm St, Dallas, TX}, [orange], F}
 ```
 
-## Optional Behaviors
+## Whitespace, commas, and comments
 
-### Whitespace and Formatting
+- Whitespace around the tilde, commas, and braces is insignificant.
+- Records are usually separated by newlines, but any whitespace works.
+- A trailing comma inside an object is allowed and ignored.
+- Comments (`#` to end of line) may trail a record or stand alone; they are ignored.
 
-* Whitespace is allowed around the tilde, commas, and within objects.
-* Collection items are typically separated by newlines, but any whitespace may be used.
-* Trailing commas within objects are allowed and ignored.
+## Invalid forms
 
-### Empty Items
+Some inputs are genuine syntax errors; others parse without error but not the way you might
+expect. Both are worth recognizing.
 
-* An empty item (just `~`) is always interpreted as an empty object (`{}`).
-* If a schema is present, an empty item is valid only if all fields are optional or nullable; otherwise, it is invalid.
+### Genuine errors
 
-### Nesting or Composition
-
-* Each collection item must be a top-level object (open or closed).
-* Objects may contain nested arrays or child objects as fields.
-
-## Invalid Forms
+A record (`~`) cannot follow a bare, non-collection object in the same section:
 
 ```ruby
-# ✗ Missing tilde
-101, Thomas, 25, HR, ...
-
-# ✗ Missing commas between values, all values are considered as a single value
-~ 101 Thomas 25 HR ...
-
-# ✗ Missing comma between values
-~ 101, 25 HR, ...
-
-# ✗ Trailing data outside object
-~ {101, 25, HR} extra
+---
+101, Thomas, 25        # a single (non-collection) object …
+~ 102, George          # ✗ unexpected-token — a record cannot follow a bare object
 ```
 
-## Collection Item Independence and Error Handling
-
-Each collection item (object) is parsed and validated **independently**:
-
-* If a collection item fails to parse or validate, **only that item is marked as an error**.
-* All other items remain unaffected and are processed as usual.
-* Implementations may provide modes for "fail fast" (stop on first error) or "parse all" (continue and collect errors); **it is recommended to parse all items** and report errors per item.
-* If a collection item contains nested child objects, failure means the entire top-level object (the collection item) is in error, not just the child.
-
-**Example:**
+An unterminated object or array, or stray tokens after a closed object, are also errors. (Each
+is reported against the record it appears in; the surrounding records are unaffected.)
 
 ```ruby
-~ John, 28, m, {Main St, LA}, [red], T        # valid
-~ Jane, N/A, f, {Second St, LA}, [blue], F    # valid
-~ Alice, OOPS, f, {Third St, NY, [green], T   # Error: ❌ unclosed object, invalid
-~ Bob, 35, m, {Fourth St, NY}, [yellow], T    # valid
+~ {101, 25, HR} extra               # ✗ unexpected-token — tokens after a closed object
+~ Alice, f, {Third St, NY, [green]  # ✗ expecting-bracket — object/array not closed
 ```
 
-The third item is invalid, but the others are unaffected.
+### Common mistakes
 
-## Preservation of Structure
+Missing separators do **not** raise an error — spaces never separate values, so a run of words
+collapses into a single open string:
 
-* Collection item order and structure are preserved as written.
-* Whitespace and comments are preserved (but ignored for parsing).
-* Interpretation, key uniqueness, and field mapping are determined by schemas, validators, or application logic.
+```ruby
+---
+~ 101 Thomas 25 HR     # one value: the open string "101 Thomas 25 HR"
+~ 101, 25 HR           # two values: 101 and the open string "25 HR"
+```
+
+> If a record loads with fewer members than you expect, look for a missing comma — spaces alone
+> never separate values.
+
+## Independent validation
+
+Each record is parsed and validated on its own. If a record fails — a syntax error or a
+validation error — only that record is reported as an error; the records before and after it
+still load:
+
+```ruby
+~ John, 28, m, {Main St, LA}, [red], T          # loads
+~ Jane, N/A, f, {Second St, LA}, [blue], F      # loads
+~ Alice, f, {Third St, NY, [green], T           # ✗ expecting-bracket — object not closed
+~ Bob, 35, m, {Fourth St, NY}, [yellow], T      # loads — unaffected by the error above
+```
+
+A conformant processor SHOULD collect per-record errors and continue rather than stop at the
+first failure. See [Collection Rules](collection-rules.md) for schema validation, empty-record
+rules, and a worked example.
+
+## Preservation of order
+
+Record order is preserved exactly as written. Whitespace and comments are insignificant and do
+not appear in the loaded result. How members are named, deduplicated, and mapped to fields is
+governed by the schema — or, without a schema, by positional index.
 
 ## See Also
 
-* [Objects](../the-structure/values/object.md)
-* [Schema Definition Language](../schema-definition-language/)
-* [Collection Rules](./collection-rules.md)
-* [Document Structure](../the-structure/introduction/README.md)
-* [Comments](../the-structure/comments.md)
+* [Objects](../the-structure/values/object.md) — the object grammar a record follows
+* [Creating Collections](creating-collection.md) — collections with and without a schema
+* [Collection Rules](collection-rules.md) — validation, empty records, and error handling
+* [Data Streaming](data-streaming.md) — collections produced and consumed over time
+* [Internet Object Document](../the-structure/introduction/README.md) — header and data sections
+* [Schema Definition Language](../schema-definition-language/internet-object-schema.md) — validating records

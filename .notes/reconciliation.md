@@ -118,6 +118,22 @@ Evidence cites `io-js2/src/...` (reference implementation) read directly.
   (`uint8`, `email`) and user `$` type-refs as the same concept at different scopes
   (universal vs document-local). See [[A8]].
 
+### E2. Forward references DO resolve — `[code-as-truth]` (spec text was wrong)
+**Runtime-verified** (definitions resolve after the whole header is read, so order is not
+significant):
+- `~ $schema: { name: string, home: $address }` **then** `~ $address: { street, city }`
+  (ref used before its definition) → **resolves, no error.**
+- `~ $schema: {…isActive: bool}` then `~ @active: T`, data `~ John, @active` → resolves.
+- Undefined `$` ref → **`schema-not-defined`** (validation error node, `collectionIndex` set).
+- Undefined `@` variable → **`variable-not-defined`** (validation error node).
+- **Spec was wrong:** `schema-references.md` ("a ref MUST be defined before it is used (no
+  forward references)") and `error-handling.md` ("a reference MUST appear after its definition";
+  table row "Forward reference → resolution error") both contradicted the implementation.
+- **Resolution:** document that definitions resolve after the full header is parsed → order
+  within the header is not significant; a *forward* reference is allowed. The genuine error is
+  an **undefined** name (`schema-not-defined` / `variable-not-defined`). Keep "define before
+  use" as a readability SHOULD, not a MUST. (Fixed in both pages, Batch 3.)
+
 ## F. MemberDef / TypeDef page mismatches (found in memberdef.md, typedef.md)
 
 ### F1. Array element-type keyword is inconsistent across spec; code uses `of` — `[code-as-truth]`
@@ -297,6 +313,17 @@ memberdef: drift fixed (`divisibleBy`→`format`; `items`→`of`; removed `requi
 - **L4.** Items validate independently — one bad item errors without stopping the rest.
 - **L5.** Old collection pages used `#invalid`/`#valid` prose (not `# ✗ <code>`) and
   `min:28`-vs-`20` mismatches → rewritten with verified examples + `✗` annotations.
+- **L6.** `collection.md` "Invalid Forms" was inaccurate (verified): `~ 101 Thomas 25 HR`
+  and `~ 101, 25 HR` do **not** error — spaces never separate values, so the run collapses to
+  one open string (`{"0":"101 Thomas 25 HR"}` / `{"0":101,"1":"25 HR"}`). Trailing commas are
+  ignored. **Genuine errors:** a `~` record after a bare (non-collection) object → thrown
+  `unexpected-token`; an unterminated `{`/`[` → `expecting-bracket`; tokens after a closed
+  `}` → `unexpected-token`. Note: in-record syntax errors are serialized as **strings** inside
+  `toObject()` output (not live `__error` nodes), so the verifier can't introspect them — keep
+  those as fragments. The thrown bare-object-then-`~` case *is* detectable (testable).
+- **L7.** Type promotion verified: a bare value/array record is promoted to an open object with
+  the value at **positional index `0`** (`~ 1` → `{"0":1}`, `~ [a,b]` → `{"0":["a","b"]}`,
+  `~ {1,2}` → `{"0":1,"1":2}`, `~` → `{}`, `~ name: x` → `{"name":"x"}`).
 
 ## C. Values / syntax (verify against published pages — risk of stale drafts)
 
