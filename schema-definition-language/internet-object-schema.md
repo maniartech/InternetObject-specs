@@ -1,331 +1,150 @@
 ---
-description: Internet Object Schema Specification
+description: How Internet Object schemas describe the shape of data, and the pieces that make them up.
 ---
-# **Internet Object Schema Specification**
 
-Internet Object schemas define the structure (“shape”) of objects in IO documents. Unlike verbose, map-based standards, IO schemas use the same concise object syntax as actual data, making them both human-friendly and machine-tractable.
+# Overview
 
-### **Philosophy and Motivation**
+An Internet Object **schema** describes the shape of the objects in a document: their members,
+the type of each value, and the constraints each value must satisfy. A schema is written in the
+**same object syntax as the data it validates**, so it is compact, readable, and easy to author
+by hand.
 
-Internet Object schemas are designed for clarity, expressiveness, and minimalism. They avoid the verbosity of traditional schema languages (like JSON Schema or XML Schema) by using the same syntax for both data and schema. This makes it easy for humans to author, read, and maintain schemas, while keeping them fully machine-tractable for validation, tooling, and interoperation with other formats.
+> **Schema and data share one syntax.** Unlike map-based schema languages (JSON Schema, XML
+> Schema), an IO schema looks like the object it validates. There is no second grammar to learn.
 
-Schemas describe:
+A schema is normally declared once in the [header](../the-structure/introduction/header.md) — as
+the default `$schema` or as a reusable `$` reference — and applied to every record in the data
+section. Validating a value against a schema either succeeds or produces a stable
+[error code](../parsing-and-errors/error-model.md).
 
-* Field names (and order, if needed)
-* Types and constraints
-* Nesting and composition
-* Optional and dynamic fields (by convention)
+## The shape of an object
 
-## **Schema Structure and Syntax**
-
-### **Schema as Object Shape**
-
-A schema is written using the Internet Object **object syntax**:
-
-* Fields are comma-separated: `name, age, address`
-* Each field can be:
-
-  * **Just a name** (defaults to “any” type)
-  * **Typed** (`name: string`)
-  * **Nested** (`address: { street: string, city: string }`)
-  * **Constrained** (`score: {int, min: 0, max: 100}`)
-* **Fields may be marked as optional or dynamic using conventions** (see “Semantic Field Modifiers”).
-
-#### **Examples:**
+A schema is a comma-separated list of **members**. In its simplest form it is just a list of
+keys; each value then has the `any` type:
 
 ```ruby
-# Minimal schema (all fields are "any" type)
 name, age, address
-
-# Typed schema
-name: string, age: int, isActive: bool
-
-# Nested schema
-address: { street: string, city: string }
-
-# Typed with constraints (MemberDef)
-name: {string, maxLen: 100}, age: {int, min: 0, max: 120}
+---
+John, 30, { Main St, NYC }
 ```
 
-### **Open and Closed Schema Objects**
-
-* **Top-level schemas** may use the open object form (no braces):
-  `name, age, address`
-* **Nested objects** (schemas for nested fields) must use `{ ... }`:
-  `address: { street: string, city: string }`
-
-### **Keyed and Positional Fields**
-
-* **Keyed fields**:
-  Schema and data map fields by name (`name: value`).
-* **Unkeyed (positional) fields**:
-  Supported for compact, CSV-like data.
-  *Recommendation:* Use positional mapping only when all fields are required and unambiguous.
-
-#### **Mixed Mode**
-
-* Unkeyed fields can appear **before** any keyed fields.
-* Once a keyed field appears, all remaining fields **must be keyed**.
-
-### **Nesting and Reuse**
-
-* **Nested objects**:
-  Use `{ ... }` for fields whose value is itself an object.
-* **Reusable schemas**:
-  Named with `$` in the schema header; referenced as `$name`.
-
-#### **Example:**
+Give a member a type by writing `key: type`:
 
 ```ruby
-~ $address: {street: string, city: string}
-~ $user: {name: string, age: int, address: $address}
+name: string, age: int, isActive: bool
+---
+John, 30, T
 ```
 
-### **Syntax Summary Table**
+Add constraints by replacing the bare type with a **MemberDef** — a small object whose first
+value is the type and whose remaining entries are constraints:
 
-| Feature     | Example Syntax                              | Description                  |
-| ----------- | ------------------------------------------- | ---------------------------- |
-| Field       | `name`                                      | Unkeyed field, type is `any` |
-| Typed Field | `name: string`                              | Keyed field, explicit type   |
-| Constraint  | `age: {int, min: 0, max: 120}`              | With constraints             |
-| Optional    | `remark?`                                   | Field may be omitted         |
-| Nullable    | `address*`                                  | Field may be `null`          |
-| Dynamic     | `*, *: string`                              | Allow extra fields           |
-| Nested      | `address: { street: string, city: string }` | Nested object                |
-| Reusable    | `$address`                                  | Reference to a named schema  |
+```ruby
+score: { int, min: 0, max: 100 }
+---
+85
+```
 
-### **Schema Grammar (EBNF)**
+A value outside the constraint fails validation with a stable code:
+
+```ruby
+score: { int, min: 0, max: 100 }
+---
+150          # ✗ invalid-range — score is above max
+```
+
+Members nest: a member's type can itself be an object schema or an array:
+
+```ruby
+name: string, address: { street: string, city: string }
+---
+John, { Main St, NYC }
+```
+
+## The building blocks
+
+A schema is assembled from a few orthogonal pieces. Each has its own reference page:
+
+| Piece | What it does | Reference |
+|-------|--------------|-----------|
+| **MemberDef** | One member: a type plus its constraints | [MemberDef](memberdef.md) |
+| **Data types** | The base types and built-in shortcuts (`string`, `int`, `email`, …) | [Schema Data Types](data-types/README.md) |
+| **TypeDef** | The fixed set of options each type accepts | [TypeDef](typedef.md) |
+| **Optional, nullable & defaults** | `?`, `*`, and default values | [MemberDef](memberdef.md) |
+| **Open & dynamic schemas** | Allowing extra members with `*` and `*: type` | [Open & Dynamic Schemas](dynamic-schema.md) |
+| **References** | Reusable schemas and types (`$name`) | [Schema References](../the-definitions/schema-references.md) |
+| **Union types** | A value matching one of several types (`anyOf`) | [Union Types](union-types.md) |
+| **Composition & reuse** | Building large schemas from small ones | [Composition & Reuse](composition.md) |
+
+The exact placement rules — open vs. closed objects, keyed vs. positional members, and how the
+default `$schema` is chosen — are covered in
+[Schema Representation](schema-representation.md).
+
+## Optional, nullable, and default members
+
+A member name can carry a marker that changes how a missing or `null` value is treated. These
+markers are **first-class schema features**, not informal conventions: a conformant validator
+MUST honor them.
+
+- **Optional** (`?`) — the member MAY be omitted from the data.
+- **Nullable** (`*`) — the member MAY be `null` (`N`).
+- **Both** (`?*`) — the member may be omitted or `null`.
+- **Default** — the second value in a MemberDef supplies a value to use when the member is
+  omitted (equivalently, the keyed `default:` option).
+
+```ruby
+~ $schema: { name: string, email?: string, nickname?*: string, role?: { string, guest } }
+---
+~ John                          # email & nickname omitted, role defaults to "guest"
+~ Mary, mary@x.com, N, admin    # nickname is null, role is "admin"
+```
+
+See [MemberDef](memberdef.md) for the full resolution rules and
+[Open & Dynamic Schemas](dynamic-schema.md) for accepting members beyond those listed.
+
+## Schema grammar
+
+The shape of a member, informally:
 
 ```ebnf
-schema             = objectEntries
-objectEntries      = memberDef *( "," memberDef )
-memberDef          = [key] [fieldModifier] [":" typeOrDef]
-key                = string
-fieldModifier      = "?" | "*" | "?*"
-typeOrDef          = type | memberDef | ref
-type               = "string" | "int" | "bool" | "object" | "array" | ...
-ref                = "$" name
+schema    = member ( "," member )*
+member    = openMember | [ key modifier? ":" ] typeOrDef
+openMember = "*" [ ":" typeOrDef ]
+modifier  = "?" | "*" | "?*"
+typeOrDef = typeName | ref | memberDef | "{" schema "}" | "[" typeOrDef "]"
+memberDef = "{" ( typeName | ref ) ( "," constraint )* "}"
+ref       = "$" name
 ```
 
-* *Note:* Modifiers and complex memberDefs are conventions, not core grammar.
+The complete, normative grammar for documents and schemas is in the
+[Formal Grammar](../appendices/grammar.md) appendix.
 
-## **Field Types and Constraints**
+## A complete example
 
-### **Built-in Types**
-
-Internet Object supports the following built-in types:
-
-* `string`, `int`, `bool`, `float`, `number`, `object`, `array`, and domain-specific types (`date`, `datetime`, etc.)
-* Types may be **extended** or **customized** in a future version by user-defined type systems.
-
-### **Constraints Reference**
-
-* **min / max / minLen / maxLen**: For numbers, strings, arrays.
-* **choices**: For enums. Example: `{string, choices: [A, B, C]}`
-* **pattern**: For regex constraints on strings. Example: `{string, pattern: "^[a-z]+$"}`
-* **default**: Assigns a default value if missing.
-
-## **Semantic Field Modifiers (Conventions)**
-
-Internet Object schemas use the following **conventions** (not syntax) for special field semantics:
-
-* **Optional**: Suffix `?` on field name (e.g., `age?`).
-  Means the field may be omitted in data.
-* **Nullable**: Suffix `*` (e.g., `remark*`).
-  Means the field can be `null`.
-* **Dynamic/extra fields**: Use `*` at end (e.g., `name, age, *` or `*: string`).
-* These are **interpreted by schema tooling**, not by the object parser itself.
-
-### **Optional and Nullable Field Semantics**
-
-* **Optional (****`?`****)**: Field can be omitted from the data object.
-  If omitted, its value is undefined unless a default is provided.
-* **Nullable (****`*`****)**: Field can explicitly be set to `null`.
-* **Both (****`?*`****)**: Field can be omitted or set to `null`.
-
-**Examples:**
+A header defines a reusable `$address` and a default `$schema`; the data section is validated
+against it:
 
 ```ruby
-email?: string           # May be omitted
-nickname*: string        # May be null
-bio?*: string            # May be omitted or null
-```
-
-### **Dynamic/Extra Fields**
-
-* `*` at the end of a schema allows extra fields not specified in the schema.
-* `*: type` constrains the type of all extra fields.
-
-**Example:**
-
-```ruby
-name: string, *,         # Allow any extra fields
-*: int                   # All extra fields must be int
-```
-
-### **Recommendations on Modifiers**
-
-* For strict validation and best interoperability, avoid `*` unless required.
-* For positional schemas, avoid optionals except at the end.
-
-## **Mapping to Industry Standards (for Interoperability)**
-
-* **Keyed schemas** map directly to “properties” in JSON Schema, Avro, etc.
-* **Optionals (****`?`****)** are omitted from `"required"` arrays.
-* **Dynamic fields (****`*`****)** map to `additionalProperties`.
-* **Constraints** map to field-level attributes in target schema (e.g., minLength, enum).
-
-### **Canonicalization for Tooling**
-
-**Recommendation:**  For robust tooling and validation, always canonicalize Internet Object schemas to a fully-keyed, explicit, and type-complete form internally. This enables safe mapping to and from JSON Schema, Avro, or other industry formats.
-
-### **Mapping Table: IO Schema → JSON Schema**
-
-| IO Schema                     | JSON Schema Equivalent                                 |
-| ----------------------------- | ------------------------------------------------------ |
-| `foo: string`                 | `{ "foo": { "type": "string" } }`                      |
-| `age?: int`                   | `{ "age": { "type": "integer" } }, "required": []`     |
-| `*, *: string`                | `additionalProperties: true` or `{ "type": "string" }` |
-| `{ foo: {string, minLen:2} }` | `{ "foo": { "type": "string", "minLength": 2 } }`      |
-
-### **JSON Compatibility**
-
-* A subset of Internet Object schemas and data are directly compatible with JSON and JSON Schema.
-* For full compatibility, use quoted keys and JSON-legal values.
-
-## **Best Practices**
-
-* Prefer **explicit types** for all fields in production schemas.
-* Use **fully-keyed schemas** for anything beyond trivial/CSV-like records.
-* Use **optionals only at the end** if using positional mapping.
-* Document and canonicalize mixed or dynamic schemas for robust tooling.
-
-## **Common Schema Patterns**
-
-* **Flat (CSV-like):**
-  `name, age, score`
-* **Typed object:**
-  `name: string, age: int, score: float`
-* **Nested:**
-  `user: {name: string, address: {city: string}}`
-* **Optional/nullable:**
-  `comment?: string, timestamp*: datetime`
-* **Dynamic:**
-  `*, *: string`
-
-## **Open Object and Array Forms**
-
-Internet Object allows you to define fields that can accept *any object* or *any array* using open forms:
-
-### **Any Object: `{}`**
-
-- Use `{}` as a schema for a field that may contain any object, regardless of fields or structure.
-- This matches objects of any shape, including empty objects.
-
-```ruby
-meta: {}         # 'meta' can be any object, equivalent to `meta: object`
-payload?: {}     # 'payload' is optional, any object allowed
-data: object     # 'data' can also be written as `data: {}` for any object
-```
-
-### **Any Array: `[]`**
-
-```ruby
-extras: []       # 'extras' can be any array. Same as `extras: array`
-tags?: []        # 'tags' is optional, any array allowed
-choices: array  # 'Can also be written as `choices: []` for any array'
-```
-* Use `[]` as a schema for a field that may contain any array, regardless of element type or length.
-* This matches all arrays, including empty arrays.
-
-```ruby
-extras: []       # 'extras' can be any array
-tags?: []        # 'tags' is optional, any array allowed
-```
-
-### **Why Use Open Forms?**
-
-* Useful for fields where you expect unstructured, arbitrary data (e.g., “metadata,” “extension,” “blob,” or raw API fields).
-* No validation is performed on object keys or array elements—only the container type is enforced.
-
-### **Contrast with Typed Forms**
-
-* To restrict the allowed content, use typed or constrained schemas:
-
-  * `[int]` for an array of integers
-  * `{ name: string }` for an object with required fields
-  * `[ { name: string } ]` for an array of objects with shape
-
-| Syntax        | Meaning                             |
-| ------------- | ----------------------------------- |
-| `{}`          | Any object (no structure required)  |
-| `[]`          | Any array (no type/length required) |
-| `[type]`      | Array of the specified type         |
-| `[MemberDef]` | Array validated by MemberDef        |
-| `[{...}]`     | Array of objects with defined shape |
-
-> **Note:** These open forms can also be used in MemberDefs for fields that may contain arbitrary objects or arrays.
-
-```
-
-**Summary:**
-- Put this new section right after “Common Schema Patterns” and before your “Full Example.”
-- This order introduces specific patterns, then the open (most general) forms, then illustrates usage in a complete example.
-
-## **Full Example**
-
-### **Complete Schema Example with Comments**
-
-```ruby
-# User schema
-name: string,                # Required
-age?: int,                   # Optional
-email: {string, pattern:"^[^@]+@[^@]+$"},  # Required, pattern constraint
-isActive: bool,              # Required
-address?: {                  # Optional nested object
-  street: string,
-  city: string,
-  zip?: int                  # Optional zip code
-},
-*: string                    # Allow extra string fields
-```
-
-**Valid Data:**
-
-```ruby
-{
-  name: John Doe,
-  isActive: T,
-  address: {
-    street: Bond Street,
-    city: New York
-  },
-  nickname: Johnny
+~ $address: { street: string, city: string, zip?: int }
+~ $schema: {
+    name: string,
+    age?: int,
+    email: { string, pattern: "^[^@]+@[^@]+$" },
+    isActive: bool,
+    address?: $address
 }
+---
+~ John Doe, 30, john@example.com, T, { Bond Street, New York }
+~ Jane Doe, 28, jane@example.com, F
 ```
 
-## **Appendix: Object Syntax Reference**
+Both records validate: `John Doe` supplies an address; `Jane Doe` omits the optional `address`.
 
-(Refer to your `object.md` for formal object syntax and EBNF.)
+## See Also
 
-## **Object Syntax EBNF (from Object Spec)**
-
-> See \[object.md] for formal definition; include diagrams or syntax trees as appendix if desired.
-
-## **FAQ & Clarifications**
-
-* `*` and `?` are **schema conventions**—they do **not** change object syntax.
-* All schema fields are mapped to data fields using either position (unkeyed) or name (keyed).
-* For compatibility, always provide a canonical, fully-keyed, fully-typed version of the schema for external tooling.
-* **Can I mix positional and keyed fields?**
-  Yes, but only unkeyed fields before any keys. Once a key is present, all subsequent fields must be keyed.
-* **What happens if a required field is missing?**
-  Validation fails unless the field is optional (`?`) or has a default.
-* **Are keys case-sensitive?**
-  Yes. `"Name"` and `"name"` are distinct.
-* **How are unknown fields handled?**
-  If `*` is present in the schema, unknown fields are accepted (and optionally typed); otherwise, they are rejected by validators.
-
-## **Versioning and Evolution (Future Section)**
-
-* **Schema evolution, migration, backward compatibility** best practices can be addressed in future versions.
+* [Schema Representation](schema-representation.md) — open/closed, keyed/positional, default schema
+* [Schema Data Types](data-types/README.md) — the base types and shortcuts
+* [MemberDef](memberdef.md) — types, constraints, optional/nullable/default
+* [Schema References](../the-definitions/schema-references.md) — reusable `$` schemas and types
+* [Error Model](../parsing-and-errors/error-model.md) — the validation error catalogue
+* [JSON Compatibility](../json-compatibility.md) — mapping to and from JSON Schema
