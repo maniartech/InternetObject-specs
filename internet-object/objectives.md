@@ -1,3 +1,7 @@
+---
+description: The design goals that shape the Internet Object format.
+---
+
 # Objectives
 
 The Internet Object serialization format aims to redefine data interchange on the internet by addressing key challenges and limitations present in existing formats.
@@ -43,3 +47,9 @@ By supporting inline comments, the Internet Object format allows users to docume
 ## Reusability
 
 To increase adaptability, Internet Object SHOULD promote reusability through references and variables. This capability enables customization of data structures and more effective data manipulation.
+
+## See Also
+
+- [Abstract](abstract.md) — the format in one paragraph
+- [Introducing Internet Object](introduction.md) · [Why Internet Object?](why-internet-object.md)
+- [The Poetic Principles](the-zen-of-internet-object.md) — the same goals in verse
