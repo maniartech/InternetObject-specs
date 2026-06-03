@@ -1,39 +1,48 @@
 ---
-description: Raw strings in Internet Object
+description: Raw strings — literal strings where backslashes are not escapes.
 ---
 
-# Raw String
-A **Raw String** in Internet Object is a sequence of Unicode codepoints prefixed with `r` or `R` and enclosed in either single quotes (`' U+0027`) or double quotes (`" U+0022`). Raw strings are ideal for text containing many backslashes, quotes, or structural characters, such as file paths or regular expressions. They do not support escape sequences except for the enclosing quote, which can be represented by doubling the enclosing quote character inside the string.
+# Raw Strings
 
-Raw strings are scalar values. They preserve all content as written, including whitespace, newlines, and Unicode characters.
+A **raw string** is a sequence of Unicode code points prefixed with `r` (or `R`) and enclosed
+in single quotes (`'`, `U+0027`) or double quotes (`"`, `U+0022`). Raw strings suit text with
+many backslashes, quotes, or structural characters — file paths or regular expressions, for
+example. They process no escape sequences except the enclosing quote, which is written by
+doubling it inside the string.
+
+Raw strings are scalar values. They preserve all content as written, including whitespace,
+newlines, and Unicode characters.
 
 ## Syntax
-A raw string is prefixed with `r` or `R` and enclosed in either single or double quotes. The only special rule is that the enclosing quote character inside the string must be represented as two consecutive enclosing quotes.
+
+A raw string is prefixed with `r` or `R` and enclosed in single or double quotes. The only
+special rule is that the enclosing quote, when it appears inside the string, must be written as
+two consecutive enclosing quotes.
 
 ```ebnf
 rawString = "r" (singleQuotedRaw | doubleQuotedRaw)
 singleQuotedRaw = "'" { character | doubleSingleQuote } "'"
 doubleQuotedRaw = '"' { character | doubleDoubleQuote } '"'
-character = any Unicode codepoint except the enclosing quote
-doubleSingleQuote = "''" (represents a single quote inside a single-quoted raw string)
-doubleDoubleQuote = '""' (represents a double quote inside a double-quoted raw string)
+character = any Unicode code point except the enclosing quote
+doubleSingleQuote = "''" (a single quote inside a single-quoted raw string)
+doubleDoubleQuote = '""' (a double quote inside a double-quoted raw string)
 ```
 
-## Structural Characters
+## Structural characters
 
-The following characters are used to structure raw strings:
+| Symbol | Name | Unicode | Description |
+|--------|------|---------|-------------|
+| `r` | Raw prefix | `U+0072` | Marks the string as raw |
+| `'` | Single quote | `U+0027` | Encloses the string; doubled inside to represent itself |
+| `"` | Double quote | `U+0022` | Encloses the string; doubled inside to represent itself |
+| (space, tab, etc.) | Whitespace | Multiple | Preserved as written |
+| Any | Any Unicode code point | Multiple | Allowed, except an unescaped enclosing quote |
 
-| Symbol | Name                 | Unicode   | Description                                 |
-|--------|----------------------|-----------|---------------------------------------------|
-| `r`    | Raw Prefix           | U+0072    | Indicates raw string type                |
-| `'`    | Single Quote         | U+0027    | Encloses string, doubled inside for escape   |
-| `"`    | Double Quote         | U+0022    | Encloses string, doubled inside for escape   |
-| (space, tab, etc.) | Whitespace         | Multiple  | Preserved as written                        |
-| Any    | Any Unicode codepoint| Multiple  | Allowed, except unescaped enclosing quote    |
+> **Backslash is literal.** The reverse solidus (`\`, `U+005C`) is always a literal character
+> in a raw string — there is no backslash escaping.
 
-> **Note:** The reverse solidus (`\\` U+005C) is always treated as a literal character in raw strings—there is no escaping with backslash.
+## Valid forms
 
-## Valid Forms
 Examples of valid raw strings:
 
 ```ruby
@@ -42,41 +51,47 @@ r"C:\program files\example\app.exe"
 r'^(19|20)\d\d([- /.])(0[1-9]|1[012])\2(0[1-9]|[12][0-9]|3[01])$'
 r"^(19|20)\d\d([- /.])(0[1-9]|1[012])\2(0[1-9]|[12][0-9]|3[01])$"
 r'जॉन डो'
-r"Can contain Ucharacters 😃"
-r'A Unicode string (😃) which does not force you to escape\ncharacters like \, \n or anything except a single quote char ''''.'
-r"A Unicode string (😃) which does not force you to escape\ncharacters like \, \n or anything except a double quote char \"\"."
-r'Jonas D''costa'  # Contains a single quote inside
-r"He said, ""Hello!"""  # Contains a double quote inside
+r"Can contain unicode characters 😃"
+r'Jonas D''costa'        # a single quote inside, written as two single quotes
+r"He said, ""Hello!"""   # a double quote inside, written as two double quotes
 ```
 
-## Optional Behaviors
-- **Whitespace**: Leading, trailing, and internal whitespace are preserved.
-- **No Escaping**: No escape sequences are supported except for doubling the enclosing quote to represent it inside the string.
-- **Multiline**: Newline and carriage return characters are preserved.
+## Optional behaviors
+
+- **Whitespace** — leading, trailing, and internal whitespace are preserved.
+- **No escaping** — no escape sequences are processed except doubling the enclosing quote.
+- **Multiline** — newline and carriage-return characters are preserved.
 
 ## Comments
-Comments are not allowed within raw strings, but may appear outside or between values as per Internet Object comment rules.
 
-## Invalid Forms
+Comments are not allowed inside raw strings, but may appear outside or between values, per the
+format's comment rules.
+
+## Invalid forms
+
 Examples of invalid raw strings:
 
-```yaml
-rC:\program files\example\app.exe     # ✗ Missing quotes (should be r'...') or r"..."
-r'Jonas D'costa'                      # ✗ Unescaped single quote inside (should be r'Jonas D''costa')
-r"He said, "Hello!""                  # ✗ Unescaped double quote inside (should be r"He said, ""Hello!"")
-r'Unclosed string                     # ✗ Missing closing quote
-r'Contains \\ escapes'                # ✗ Backslash is not an escape, just literal
+```ruby
+rC:\program files\app.exe    # ✗ missing quotes (use r'...' or r"...")
+r'Jonas D'costa'             # ✗ unescaped single quote inside (use r'Jonas D''costa')
+r"He said, "Hello!""         # ✗ unescaped double quote inside (use r"He said, ""Hello!""")
+r'Unclosed string            # ✗ missing closing quote
 ```
 
-## Preservation of Structure
+## Preservation of structure
+
 Internet Object preserves:
-- All Unicode codepoints and whitespace as written
-- The use of doubled enclosing quotes for embedded quotes
+
+- All Unicode code points and whitespace as written
+- The doubled-quote convention for an embedded enclosing quote
 
 It does **not** interpret or enforce:
+
 - Application-specific constraints
-- Escaping beyond doubled enclosing quotes
+- Any escaping beyond doubled enclosing quotes
+
 ## See Also
-- [String Values Overview](./README.md)
-- [Open String](./open-strings.md)
-- [Regular String](./regular-strings.md)
+
+- [Strings](README.md) — the three string forms
+- [Open Strings](open-strings.md) — the unquoted form
+- [Regular Strings](regular-strings.md) — quoted strings with escaping

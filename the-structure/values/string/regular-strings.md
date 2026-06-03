@@ -1,99 +1,110 @@
 ---
-description: Regular strings in Internet Object
+description: Regular strings — quoted strings with escape sequences.
 ---
 
-# Regular String
+# Regular Strings
 
-A **Regular String** in Internet Object is a sequence of Unicode codepoints enclosed in single quotes (`' U+0027`) or double quotes (`" U+0022`). Regular strings allow any character, including whitespace and structural characters, and support escaping for special codepoints. This makes them suitable for text that requires leading/trailing whitespace, structural characters, or complex escaping.
+A **regular string** is a sequence of Unicode code points enclosed in single quotes
+(`'`, `U+0027`) or double quotes (`"`, `U+0022`). Regular strings allow any character —
+including whitespace and structural characters — and support escape sequences for special code
+points. This makes them suitable for text that needs leading or trailing whitespace, structural
+characters, or escaping.
 
-Regular strings are scalar values. They preserve all content as written, including whitespace and Unicode characters.
+Regular strings are scalar values. They preserve all content as written, including whitespace
+and Unicode characters.
 
 ## Syntax
 
-A regular string is enclosed in single or double quotes and may contain any Unicode codepoint, with support for escape sequences.
+A regular string is enclosed in single or double quotes and may contain any Unicode code point,
+with support for escape sequences.
 
 ```ebnf
-regularString     = '"' { dqChar | escapeSequenceDQ } '"' | '\'' { sqChar | escapeSequenceSQ } '\''
-dqChar            = any Unicode codepoint except '"' or '\\'
-sqChar            = any Unicode codepoint except '\'' or '\\'
-escapeSequenceDQ  = '\\' ( '"' | '\'' | '\\' | 'b' | 'f' | 'r' | 'n' | 't' | unicodeEscape | hexEscape | other )
-escapeSequenceSQ  = '\\' ( '\'' | '"' | '\\' | 'b' | 'f' | 'r' | 'n' | 't' | unicodeEscape | hexEscape | other )
+regularString     = '"' { dqChar | escapeSequenceDQ } '"' | "'" { sqChar | escapeSequenceSQ } "'"
+dqChar            = any Unicode code point except '"' or '\'
+sqChar            = any Unicode code point except "'" or '\'
+escapeSequenceDQ  = '\' ( '"' | "'" | '\' | 'b' | 'f' | 'r' | 'n' | 't' | unicodeEscape | hexEscape | other )
+escapeSequenceSQ  = '\' ( "'" | '"' | '\' | 'b' | 'f' | 'r' | 'n' | 't' | unicodeEscape | hexEscape | other )
 unicodeEscape     = 'u' hex4
 hexEscape         = 'x' hex2
-hex4              = 4 hexadecimal digits (must form a valid Unicode codepoint)
+hex4              = 4 hexadecimal digits (must form a valid Unicode code point)
 hex2              = 2 hexadecimal digits
 other             = any character except 'u' or 'x'
 ```
 
-## Structural Characters
+## Structural characters
 
-| Symbol | Name                 | Unicode   | Description                                 |
-|--------|----------------------|-----------|---------------------------------------------|
-| `"`    | Double Quote         | U+0022    | Encloses the string, must be escaped inside  |
-| `'`    | Single Quote         | U+0027    | Encloses the string, must be escaped inside  |
-| `\\`   | Reverse Solidus      | U+005C    | Escape character                            |
-| (space, tab, etc.) | Whitespace         | Multiple  | Preserved as written                        |
-| Any    | Any Unicode codepoint| Multiple  | Allowed, except unescaped enclosing quote    |
+| Symbol | Name | Unicode | Description |
+|--------|------|---------|-------------|
+| `"` | Double quote | `U+0022` | Encloses the string; must be escaped inside |
+| `'` | Single quote | `U+0027` | Encloses the string; must be escaped inside |
+| `\` | Reverse solidus | `U+005C` | Escape character |
+| (space, tab, etc.) | Whitespace | Multiple | Preserved as written |
+| Any | Any Unicode code point | Multiple | Allowed, except an unescaped enclosing quote |
 
-## Valid Forms
+## Valid forms
+
 Examples of valid regular strings:
 
-```text
-
+```ruby
 "John Doe"
 'John Doe'
-"   John Doe   "
-'   John Doe   '
-"Peter D'mello"
-'Peter D\'mello'  # Escaped single quote inside single-quoted string
+"   John Doe   "                 # leading/trailing whitespace preserved
+"Peter D'mello"                  # single quote needs no escape in a double-quoted string
+'Peter D\'mello'                 # escaped single quote in a single-quoted string
 "जॉन डो"
 'Can contain unicode characters 😃'
-"Lorem ipsum dolor sit amet consetetur sadipscing\nelitr sed diam nonumy eirmod.\n\nTempor invidunt ut labore et dolore magna aliquyam\nerat sed diam voluptua"
-'Lorem ipsum dolor sit amet consetetur sadipscing\nelitr sed diam nonumy eirmod.\n\nTempor invidunt ut labore et dolore magna aliquyam\nerat sed diam voluptua'
-"She said, \"I Love it\""
-'She said, "I Love it"'
-"\x3A"  # Escaped with two-digit hex
-'\x3A'
-"\u00AF" # Escaped with four-digit hex
-'\u00AF'
-"\uD83D\uDE00" # UTF-16 surrogate pair for emoji
-'\uD83D\uDE00'
+"She said, \"I Love it\""        # escaped double quotes
+'She said, "I Love it"'          # double quotes need no escape in a single-quoted string
+"Line one\nLine two"             # \n is interpreted as a newline
+"\x3A"                           # two-digit hex escape -> ":"
+"\u00AF"                         # four-digit unicode escape -> "¯"
+"\uD83D\uDE00"                   # UTF-16 surrogate pair -> "😀"
 ```
 
-## Optional Behaviors
-- **Whitespace**: Leading, trailing, and internal whitespace are preserved.
-- **Escaping**: Only designated escape sequences are interpreted: `\n`, `\"`, `\\`, `\'`, `\b`, `\f`, `\r`, `\t`, `\u` (with exactly 4 hex digits and must be a valid Unicode codepoint), and `\x` (with exactly 2 hex digits). All others (e.g., `\o`) are left as a literal backslash and character. For example, `"hell\\o"` emits `hello`.
-- **Multiline**: Newline and carriage return characters are preserved.
-- **String Comparison**: Escaped and unescaped forms are equivalent if they represent the same Unicode codepoints.
+## Optional behaviors
+
+- **Whitespace** — leading, trailing, and internal whitespace are preserved.
+- **Escaping** — only these escape sequences are interpreted: `\n`, `\"`, `\\`, `\'`, `\b`,
+  `\f`, `\r`, `\t`, `\u` (exactly 4 hex digits, forming a valid code point), and `\x` (exactly
+  2 hex digits). For any other sequence (e.g. `\o`), the backslash is dropped and the following
+  character is kept literally — so `"hell\o"` emits `hello`.
+- **Multiline** — newline and carriage-return characters are preserved.
+- **Equivalence** — escaped and unescaped forms are equal when they represent the same code
+  points.
 
 ## Comments
-Comments are not allowed within regular strings, but may appear outside or between values as per Internet Object comment rules.
 
-## Invalid Forms
+Comments are not allowed inside regular strings, but may appear outside or between values, per
+the format's comment rules.
+
+## Invalid forms
+
 Examples of invalid regular strings:
 
-```yaml
-John Doe         # ✗ Not quoted (should be "John Doe" or 'John Doe')
-"John Doe        # ✗ Missing closing quote
-'John Doe        # ✗ Missing closing quote
-"John Doe""      # ✗ Extra quote at end
-'John Doe''      # ✗ Extra quote at end
-"She said, "I Love it"" # ✗ Unescaped internal quote (should be \"I Love it\")
-'She said, 'I Love it'' # ✗ Unescaped internal quote (should be \'I Love it\')
-"\q"             # ✗ Invalid escape sequence
-'\q'             # ✗ Invalid escape sequence
+```ruby
+John Doe                  # ✗ not quoted (use "John Doe" or 'John Doe')
+"John Doe                 # ✗ missing closing quote
+"She said, "I Love it""   # ✗ unescaped inner quote (use \"I Love it\")
 ```
 
-## Preservation of Structure
+> **Lenient escapes.** An unrecognized escape such as `\q` is *not* an error — the backslash is
+> dropped and the character is kept, so `"\q"` emits `q`. The genuine errors above are an
+> unquoted value, an unterminated string, and an unescaped enclosing quote.
+
+## Preservation of structure
+
 Internet Object preserves:
-- All Unicode codepoints and whitespace as written
+
+- All Unicode code points and whitespace as written
 - Escaped and unescaped forms (syntactic fidelity)
 
 It does **not** interpret or enforce:
+
 - Application-specific constraints
-- Normalization of escape sequences (beyond equivalence)
+- Normalization of escape sequences beyond equivalence
 
 ## See Also
-- [String Values Overview](./README.md)
-- [Open String](./open-strings.md)
-- [Raw String](./raw-strings.md)
+
+- [Strings](README.md) — the three string forms
+- [Open Strings](open-strings.md) — the unquoted form
+- [Raw Strings](raw-strings.md) — literal strings without escape processing

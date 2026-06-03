@@ -1,39 +1,46 @@
 ---
-description: Open strings in Internet Object
+description: Open strings — the unquoted string form.
 ---
 
-# Open String
+# Open Strings
 
-An **Open String** in Internet Object is the simplest string format. It is a sequence of Unicode codepoints not enclosed in any quotes. Open strings are ideal for simple, unstructured text that does not begin or end with whitespace and does not require escaping of special or structural characters.
+An **open string** is the simplest string form: a sequence of Unicode code points with no
+enclosing quotes. Open strings suit simple, unstructured text that does not begin or end with
+whitespace and does not require escaping of special or structural characters.
 
-Open strings are scalar values. They preserve all internal whitespace and Unicode content, but cannot start or end with whitespace.
+Open strings are scalar values. They preserve all internal whitespace and Unicode content, but
+cannot start or end with whitespace.
 
 ## Syntax
-Open strings begin with any non-whitespace codepoint and end at the first whitespace or structural character, or at the end of the document.
+
+An open string begins with any non-whitespace code point and ends at the first whitespace or
+structural character, or at the end of the document.
 
 ```ebnf
 openString    = nonWhitespace (codepoint)*
-nonWhitespace = any Unicode codepoint except whitespace
-codepoint     = any Unicode codepoint except structural characters or document end
+nonWhitespace = any Unicode code point except whitespace
+codepoint     = any Unicode code point except a structural character or document end
 ```
 
-## Structural Characters
-| Symbol | Name                 | Unicode   | Description                                 |
-|--------|----------------------|-----------|---------------------------------------------|
-| (space, tab, etc.) | Whitespace         | Multiple  | Terminates or invalidates open string start/end |
-| `:`    | Colon                | U+003A    | Structural character (terminates string)    |
-| `,`    | Comma                | U+002C    | Structural character (terminates string)    |
-| `{`    | Open Curly Brace     | U+007B    | Structural character (terminates string)    |
-| `}`    | Close Curly Brace    | U+007D    | Structural character (terminates string)    |
-| `[`    | Open Square Bracket  | U+005B    | Structural character (terminates string)    |
-| `]`    | Close Square Bracket | U+005D    | Structural character (terminates string)    |
-| `"`    | Double Quote         | U+0022    | Allowed, does not terminate or need escape  |
-| `'`    | Single Quote         | U+0027    | Allowed, does not terminate or need escape  |
+## Structural characters
 
-## Valid Forms
+| Symbol | Name | Unicode | Description |
+|--------|------|---------|-------------|
+| (space, tab, etc.) | Whitespace | Multiple | Terminates the string; cannot start or end it |
+| `:` | Colon | `U+003A` | Structural character (terminates the string) |
+| `,` | Comma | `U+002C` | Structural character (terminates the string) |
+| `{` | Open curly bracket | `U+007B` | Structural character (terminates the string) |
+| `}` | Close curly bracket | `U+007D` | Structural character (terminates the string) |
+| `[` | Open square bracket | `U+005B` | Structural character (terminates the string) |
+| `]` | Close square bracket | `U+005D` | Structural character (terminates the string) |
+| `"` | Double quote | `U+0022` | Allowed; does not terminate or need escaping |
+| `'` | Single quote | `U+0027` | Allowed; does not terminate or need escaping |
+
+## Valid forms
+
 Examples of valid open strings:
 
-```text
+```ruby
 John Doe
 Peter D'mello
 जॉन डो
@@ -42,12 +49,14 @@ Wow Great
 ```
 
 Multiple open strings in an object:
-```text
+
+```ruby
 जॉन डो, Wow Great, 😃
 ```
 
-Multiline open string (no escaping required):
-```text
+A multiline open string (no escaping required):
+
+```ruby
 Lorem ipsum dolor sit amet consetetur sadipscing elitr sed
 diam nonumy eirmod.
 
@@ -55,35 +64,44 @@ Tempor invidunt ut labore et dolore magna aliquyam erat
 sed diam voluptua
 ```
 
-## Optional Behaviors
-- **Whitespace**: Open strings cannot start or end with whitespace, but preserve all internal whitespace.
-- **No Escaping**: No character escaping is supported. Quotes and other characters are allowed as-is.
-- **Multiline**: Open strings can span multiple lines if not interrupted by structural characters.
+## Optional behaviors
+
+- **Whitespace** — an open string cannot start or end with whitespace, but preserves all
+  internal whitespace.
+- **No escaping** — character escaping is not processed; quotes and other characters appear
+  as-is.
+- **Multiline** — an open string can span multiple lines as long as no structural character
+  interrupts it.
 
 ## Comments
-Comments are not allowed within open strings, but may appear outside or between values as per Internet Object comment rules.
 
-## Invalid Forms
+Comments are not allowed inside open strings, but may appear outside or between values, per the
+format's comment rules.
+
+## Invalid forms
+
 Examples of invalid open strings:
 
-```yaml
- John Doe      # ✗ Starts with whitespace (should be 'John Doe')
-John Doe       # ✗ Ends with whitespace (should be 'John Doe')
-"John Doe"     # ✗ Quoted (should be unquoted for open string)
-.John          # ✗ Starts with a dot (if dot is structural in context)
+```ruby
+ John Doe      # ✗ starts with whitespace (use a regular string: " John Doe")
+"John Doe"     # ✗ quoted (this is a regular string, not an open string)
 ```
 
-## Preservation of Structure
+## Preservation of structure
+
 Internet Object preserves:
-- All Unicode codepoints and internal whitespace as written
+
+- All Unicode code points and internal whitespace as written
 - The unquoted, open form of the string
 
 It does **not** interpret or enforce:
+
 - Escaping or encoding
-- Leading/trailing whitespace (disallowed)
+- Leading or trailing whitespace (which is disallowed)
 - Application-specific constraints
 
 ## See Also
-- [String Values Overview](./README.md)
-- [Regular String](./regular-strings.md)
-- [Raw String](./raw-strings.md)
+
+- [Strings](README.md) — the three string forms
+- [Regular Strings](regular-strings.md) — quoted strings with escaping
+- [Raw Strings](raw-strings.md) — literal strings without escape processing

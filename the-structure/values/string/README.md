@@ -1,34 +1,37 @@
 ---
-description: Strings in Internet Object
+description: The three string forms — open, regular, and raw.
 ---
 
+# Strings
 
-# Strings in Internet Object
+Strings represent sequences of Unicode code points. They carry textual data and preserve
+whitespace and formatting within their boundaries.
 
-Strings in Internet Object represent sequences of Unicode codepoints. They are used for textual data and always preserve whitespace and formatting within their boundaries.
-
-Internet Object supports three distinct string types, each with unique syntax and use cases:
+Internet Object supports three string forms, each with its own syntax and use cases:
 
 ```ebnf
 stringValue = openString | regularString | rawString
 ```
 
-| String Type      |  Description                                                                 | Example Syntax         |
-|------------------|-----------------------------------------------------------------------------|-----------------------|
-| [Open String](./open-strings.md)    | Unquoted, simplest form, ends at structural character or whitespace.         | `John Doe`            |
-| [Regular String](./regular-strings.md) | Quoted with double quotes, supports escaping and structural characters.      | `"John Doe"`          |
-| [Raw String](./raw-strings.md)      | Prefixed with `r`, quoted with single or double quotes, minimal escaping.    | `r'C:\path'` or `r"C:\path"` |
+| Form | Description | Example |
+|------|-------------|---------|
+| [Open string](open-strings.md) | Unquoted; the simplest form; ends at a structural character or whitespace. | `John Doe` |
+| [Regular string](regular-strings.md) | Quoted with single or double quotes; supports escaping. | `"John Doe"` |
+| [Raw string](raw-strings.md) | Prefixed with `r`; quoted; backslashes are literal. | `r'C:\path'` or `r"C:\path"` |
 
-All string types preserve whitespace and Unicode content as written.
+All three forms preserve whitespace and Unicode content as written.
 
-## When to Use Each String Type
+## When to use each form
 
-- **Open String**: For simple, unstructured text without leading/trailing whitespace or special characters.
-- **Regular String**: When you need to include structural characters, whitespace, or require escaping.
-- **Raw String**: For text with many backslashes or quotes (e.g., file paths, regex), with minimal escaping and `r` prefix.
+- **Open string** — simple, unstructured text with no leading or trailing whitespace and no
+  structural characters.
+- **Regular string** — text that needs structural characters, leading/trailing whitespace, or
+  escape sequences.
+- **Raw string** — text with many backslashes or quotes (file paths, regular expressions),
+  where escaping would be cumbersome.
 
-## See also
+## See Also
 
-- [Schema for Strings](../../../schema-definition-language/data-types/string/README.md)
-- [Number Types Overview](../number/README.md)
-- [Values](../values/README.md)
+- [String Types](../../../schema-definition-language/data-types/string/README.md) — schemas for strings
+- [Numeric Values](../number/README.md) — the numeric forms
+- [Value Representations](../README.md) — all value types

@@ -1,94 +1,82 @@
 ---
-description: Base64 byte strings in Internet Object
+description: Binary values written as Base64 byte strings.
 ---
 
-# Base64 Byte String
-A **Base64 Byte String** in Internet Object is a sequence of binary data encoded in Base64 format, prefixed with `b` and enclosed in either single quotes (`' U+0027`) or double quotes (`" U+0022`). Byte strings are ideal for representing binary data such as images, encrypted content, cryptographic keys, or any arbitrary sequence of bytes in a text-based format.
+# Binary
 
-Base64 byte strings are scalar values that represent binary data. The content between the quotes must be valid Base64 encoding according to RFC 4648.
+A **binary value** is a sequence of raw bytes carried as text. It is written as a Base64 byte
+string: the prefix `b` followed by Base64 content in single or double quotes. Binary values
+suit images, encrypted content, cryptographic keys, or any arbitrary byte sequence in an
+otherwise text-based document.
+
+The content between the quotes is Base64 per RFC 4648. *Base64* is the encoding; *binary* is
+the value type.
+
+> **Implementation status (beta).** Binary literals are **not yet available** in the reference
+> implementation: `b'…'` and `b"…"` currently raise a syntax error (`unexpected-token`), and no
+> `binary` schema type is registered. This page documents the intended design; the examples
+> below are illustrative and are not yet executable. Track progress in the
+> [Roadmap](../../roadmap.md).
 
 ## Syntax
-A Base64 byte string is prefixed with `b` and enclosed in either single or double quotes. The content must be valid Base64 encoding.
+
+A binary value is prefixed with `b` and enclosed in single or double quotes; the content must
+be valid Base64.
 
 ```ebnf
-base64String = "b" (singleQuotedBase64 | doubleQuotedBase64)
+binaryValue = "b" (singleQuotedBase64 | doubleQuotedBase64)
 singleQuotedBase64 = "'" base64Content "'"
 doubleQuotedBase64 = '"' base64Content '"'
-base64Content = { base64Character }
-base64Character = "A" | "B" | "C" | ... | "Z" | "a" | "b" | ... | "z" | "0" | "1" | ... | "9" | "+" | "/" | "="
+base64Content   = { base64Character }
+base64Character = "A"…"Z" | "a"…"z" | "0"…"9" | "+" | "/" | "="
 ```
 
-## Structural Characters
+## Structural characters
 
-The following characters are used to structure Base64 byte strings:
+| Symbol | Name | Unicode | Description |
+|--------|------|---------|-------------|
+| `b` | Byte prefix | `U+0062` | Marks the value as a Base64 byte string |
+| `'` | Single quote | `U+0027` | Encloses the Base64 content |
+| `"` | Double quote | `U+0022` | Encloses the Base64 content |
+| `A`–`Z`, `a`–`z`, `0`–`9` | Base64 alphabet | — | Base64 data characters |
+| `+`, `/` | Base64 alphabet | `U+002B`, `U+002F` | Base64 data characters |
+| `=` | Padding | `U+003D` | Base64 padding |
 
-| Symbol | Name                 | Unicode   | Description                                 |
-|--------|----------------------|-----------|---------------------------------------------|
-| `b`    | Byte Prefix          | U+0062    | Indicates Base64 byte string type          |
-| `'`    | Single Quote         | U+0027    | Encloses Base64 content                     |
-| `"`    | Double Quote         | U+0022    | Encloses Base64 content                     |
-| `A-Z`  | Uppercase Letters    | U+0041-U+005A | Base64 alphabet                      |
-| `a-z`  | Lowercase Letters    | U+0061-U+007A | Base64 alphabet                      |
-| `0-9`  | Digits               | U+0030-U+0039 | Base64 alphabet                      |
-| `+`    | Plus Sign            | U+002B    | Base64 alphabet                             |
-| `/`    | Forward Slash        | U+002F    | Base64 alphabet                             |
-| `=`    | Equals Sign          | U+003D    | Base64 padding character                    |
-
-> **Note:** Only valid Base64 characters are allowed within the quotes. Invalid characters will result in a parsing error.
-
-## Valid Forms
-Examples of valid Base64 byte strings:
+## Valid forms
 
 ```ruby
-b'SGVsbG8gV29ybGQ='                    # "Hello World" in Base64
-b"SGVsbG8gV29ybGQ="                    # Same as above with double quotes
-b'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg=='  # PNG image data
-b'QWxhZGRpbjpvcGVuIHNlc2FtZQ=='        # "Aladdin:open sesame" in Base64
-b''                                    # Empty byte string
-b""                                    # Empty byte string (double quotes)
-b'TWFu'                                # "Man" in Base64
-b'TWE='                                # "Ma" in Base64 (with padding)
-b'TQ=='                                # "M" in Base64 (with padding)
+b'SGVsbG8gV29ybGQ='        # "Hello World"
+b"SGVsbG8gV29ybGQ="        # same, with double quotes
+b'QWxhZGRpbjpvcGVuIHNlc2FtZQ=='   # "Aladdin:open sesame"
+b'TWFu'                    # "Man"  (no padding needed)
+b'TWE='                    # "Ma"   (one pad)
+b'TQ=='                    # "M"    (two pads)
+b''                        # empty byte string
 ```
 
-## Optional Behaviors
-- **Whitespace**: Leading and trailing whitespace around the quotes are ignored. Internal whitespace within the Base64 content is not allowed.
-- **Empty Representation**: Empty byte strings are supported (`b''` or `b""`).
-- **Case Sensitivity**: The prefix must be lowercase `b`. The Base64 content is case-sensitive as per RFC 4648.
-- **Padding**: Proper Base64 padding with `=` characters is required for correct decoding.
-- **Validation**: The parser validates that the content is valid Base64 and can be decoded to binary data.
+## Invalid forms
 
-## Invalid Forms
-Examples of invalid Base64 byte strings:
-
-```yaml
-bSGVsbG8=                             # ✗ Missing quotes
-b'SGVsbG8 gV29ybGQ='                  # ✗ Space within Base64 content
-b'SGVsbG8@V29ybGQ='                   # ✗ Invalid character '@' in Base64
-b'SGVsbG8'                            # ✗ Invalid Base64 (missing padding)
-b'SGVsbG8gV29ybGQ'                    # ✗ Invalid Base64 (incomplete)
-B'SGVsbG8gV29ybGQ=                    # ✗ Missing closing quote
-b''SGVsbG8gV29ybGQ=''                 # ✗ Double quotes around content
+```ruby
+bSGVsbG8=                  # ✗ missing quotes
+b'SGVsbG8 gV29ybGQ='       # ✗ space within the Base64 content
+b'SGVsbG8@V29ybGQ='        # ✗ invalid character '@'
+B'SGVsbG8gV29ybGQ='        # ✗ prefix must be lower-case b
 ```
 
-## Preservation of Structure
-Internet Object preserves:
-- The exact Base64 encoding as written
-- The choice of single or double quotes
-- The lowercase `b` prefix
+## Behavior
 
-It does **not** interpret or enforce:
-- The format or structure of the decoded binary data
-- Application-specific constraints on the binary content
-- Compression or encoding within the binary data
+- **Whitespace** — leading and trailing whitespace around the quotes is ignored; whitespace
+  inside the Base64 content is not allowed.
+- **Prefix case** — the prefix must be lower-case `b`; the Base64 content is case-sensitive.
+- **Padding** — standard `=` padding is required for correct decoding.
+- **Decoding** — a parser decodes the content into a byte sequence (commonly a byte array or
+  buffer) and preserves the exact bytes; invalid Base64 is a parse error.
 
-## Decoding Behavior
-When processed by an Internet Object parser:
-- The Base64 content is decoded into a sequence of bytes
-- The resulting binary data is typically represented as a byte array or buffer
-- Invalid Base64 content results in a parsing error
-- The decoded data maintains the exact binary representation
+Internet Object does not interpret the structure of the decoded bytes — any format, compression,
+or application meaning is the application's concern.
 
 ## See Also
-- [Values Overview](./README.md)
-- [Binary Schema](../../schema-definition-language/data-types/binary.md)
+
+- [Value Representations](README.md) — all value types
+- [Binary](../../schema-definition-language/data-types/binary.md) — the binary schema type
+- [Strings](string/README.md) — text values (open, regular, raw)

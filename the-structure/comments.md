@@ -1,46 +1,51 @@
+---
+description: Single-line comments for annotating documents.
+---
+
 # Comments
 
-Internet Object supports **single-line comments** for documenting and annotating data. Comments start with a hash sign (`#`) and continue to the end of the line.
+Internet Object supports **single-line comments** for documenting and annotating data. A
+comment starts with a hash sign (`#`) and runs to the end of the line.
 
 ## Syntax
 
-- **Start Character**: Hash sign (`#` U+0023)
-- **Scope**: Single line only
-- **Placement**: Can appear anywhere in the document
-- **Content**: Everything after `#` on the same line is ignored by the parser
+- **Start character** — the hash sign (`#`, `U+0023`).
+- **Scope** — a single line only.
+- **Placement** — anywhere in the document.
+- **Content** — everything after `#` on the same line is ignored by the parser.
 
 ## Examples
 
 ```ruby
-# Internet Object Document: Personnel Records
+# Internet Object document: personnel records
 
 # Address schema definition
 ~ $address: {street:string, zip:{string, maxLen:5}, city:string}
 
 # Person schema definition
 ~ $schema: {
-    name:string,               # Individual's full name
-    age:int,                   # Age in years
-    homeAddress?: $address,    # Optional home address
-    officeAddress?: $address   # Optional office address
+    name:string,               # individual's full name
+    age:int,                   # age in years
+    homeAddress?: $address,    # optional home address
+    officeAddress?: $address   # optional office address
 }
-
 ---
-# Personnel Records
+# Personnel records
 ~ John Doe, 25, {Queens, "50010", NewYork}, {Bond Street, "50001", NewYork}
 ~ Jane Doe, 20, {Queens, "50010", NewYork}, {Bond Street, "50001", NewYork}
 ```
 
-### Comment Placement
+### Comment placement
+
+A comment can stand on its own line or trail a value:
 
 ```ruby
-# Person data with comments
 {
-    # Person details
-    name: John Doe, # Inline field comment
-    age: 30,        # Another inline comment
+    # person details
+    name: John Doe, # inline comment
+    age: 30,        # another inline comment
 
-    # Contact information
+    # contact information
     contact: {
         email: 'john@example.com',
         phone: '+1-555-0123'
@@ -50,19 +55,20 @@ Internet Object supports **single-line comments** for documenting and annotating
 
 ## Rules
 
-- Comments can appear on any line
-- Can be standalone or inline after data
-- Support full Unicode text
-- Cannot span multiple lines
-- No special escaping needed
+- A comment can appear on any line, standalone or trailing a value.
+- A comment supports full Unicode text.
+- A comment cannot span multiple lines.
+- No escaping is needed inside a comment.
+- A `#` inside a quoted string is literal text, not a comment.
 
-## Best Practices
+## Best practices
 
-- **Be Clear and Concise**: Use simple, direct language
-- **Explain Why, Not What**: Focus on reasoning rather than obvious facts
-- **Keep Comments Updated**: Update comments when data structures change
-- **Use Consistently**: Maintain uniform style throughout documents
+- **Be clear and concise** — use direct language.
+- **Explain why, not what** — focus on reasoning, not the obvious.
+- **Keep comments current** — update them when the data or schema changes.
+- **Stay consistent** — keep a uniform commenting style across documents.
 
 ## See Also
-- **[Internet Object Structure](./README.md)** - Overall document structure
-- **[Encoding](./encoding.md)** - Unicode support in text content
+
+- [Internet Object Document](introduction/README.md) — overall document structure
+- [Encoding](encoding.md) — Unicode support in text content

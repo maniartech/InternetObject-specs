@@ -1,42 +1,41 @@
 ---
-description: Objects in Internet Object
+description: Object value syntax — open and closed objects, keyed and unkeyed values.
 ---
 
 # Objects
 
-Objects are a fundamental element in Internet Object documents, providing a clear and intuitive way to represent structured data.
+Objects are a fundamental element of Internet Object documents, providing a clear, compact way
+to represent structured data.
 
-An object is expressed as **a sequence of values and/or key/value pairs separated by commas** (`,` `U+002C`). For simplicity, clarity, and ease of reading, Internet Object supports two modes for objects:
+An object is **a sequence of values and/or key-value pairs separated by commas** (`,`,
+`U+002C`). For readability and flexibility, the format supports two object modes:
 
-- **Open Objects** — do not require curly braces and are allowed **only at the top level**.
-- **Closed Objects** — are enclosed in `{}` and may appear at any level.
+- **Open objects** — written without curly braces; allowed **only at the top level**.
+- **Closed objects** — enclosed in `{}`; allowed at any level.
 
-Objects may contain:
+An object may contain:
+
 - **Sequential (unkeyed) values**
 - **Inline keyed values** (`key: value`)
 - **Any combination and ordering** of keyed and unkeyed values
 
-All values in an object are accessed by **position** (0-based).
-If a value has a key, it may also be accessed by **key**—especially when a schema is applied.
+All values in an object are accessed by **position** (0-based). A value that has a key may also
+be accessed by **key**, especially when a schema is applied.
 
-🧩 **Design Note:**
-In the early stages of its design, Internet Object was envisioned as a compact, expressive serialization format focused on transmitting structured objects across the internet. The name “Internet Object” was born out of this **object-oriented serialization** model — structurally similar to formats like JSON.
+> **Design note.** Internet Object began as a compact, expressive format for transmitting
+> structured objects across the internet — an object-oriented serialization model structurally
+> similar to JSON. As it evolved, it adopted a document-oriented approach with sections,
+> schemas, metadata, and stream-friendly constructs. The object remains the core unit of
+> structure, and the compact syntax still reflects that original vision.
 
-As the format evolved, it adopted a **document-oriented approach**, enabling richer representation through sections, schemas, metadata, and stream-friendly constructs. However, the object remains the core unit of structure, and the compact syntax continues to reflect its original vision.
-
-⚙️ **Implementation Note:**
-In many programming languages, the term `Object` refers to a built-in or base type. To avoid conflicts, libraries and parsers implementing Internet Object may use a distinct class or type name such as `InternetObject`.
-For example, in JavaScript:
-
-```js
-const obj = new InternetObject()
-```
-
-Here, `obj` is an instance of a class that represents an Internet Object — conforming fully to the object syntax and behavior defined in this specification.
+> **Implementation note.** In many programming languages, "object" is a built-in or base type.
+> To avoid clashes, an implementation MAY expose the Internet Object value under a distinct
+> name (for example, `InternetObject`) while conforming fully to the object syntax and behavior
+> defined here.
 
 ## Syntax
 
-### Closed Object
+### Closed object
 
 ```ebnf
 object         = "{" [ objectEntries ] "}"
@@ -50,28 +49,27 @@ key            = string
 value          = any valid Internet Object value
 ```
 
-### Open Object
+### Open object
 
 ```ebnf
 objectOpen = objectEntries
 ```
 
-> Keys must be valid [strings](../string.md).
-> Values must be valid [Internet Object values](../values/README.md).
-> Keyed and unkeyed values can appear in any order.
+> Keys must be valid [strings](string/README.md). Values must be valid
+> [Internet Object values](README.md). Keyed and unkeyed values may appear in any order.
 
-## Structural Characters
+## Structural characters
 
 | Symbol | Name                | Unicode  | Description                           |
 | ------ | ------------------- | -------- | ------------------------------------- |
-| `{`    | Open Curly Bracket  | `U+007B` | Begins a closed object                |
-| `}`    | Close Curly Bracket | `U+007D` | Ends a closed object                  |
-| `:`    | Colon               | `U+003A` | Separates keys from values            |
-| `,`    | Comma               | `U+002C` | Separates values or key–value entries |
+| `{`    | Open curly bracket  | `U+007B` | Begins a closed object                |
+| `}`    | Close curly bracket | `U+007D` | Ends a closed object                  |
+| `:`    | Colon               | `U+003A` | Separates a key from its value        |
+| `,`    | Comma               | `U+002C` | Separates values or key-value entries |
 
-## Valid Forms
+## Valid forms
 
-### Open Object with Unkeyed and Keyed Values (Any Order)
+### Open object with unkeyed and keyed values (any order)
 
 ```ruby
 name: John, Doe, 25
@@ -80,7 +78,7 @@ name: John, age: 25, gender: M, T
 John Doe, 25, T
 ```
 
-### Closed Object with Mixed Values
+### Closed object with mixed values
 
 ```ruby
 {name: John, Doe, 25}
@@ -89,9 +87,9 @@ John Doe, 25, T
 {John Doe, 25, T}
 ```
 
-### Fully Keyed Object
+### Fully keyed object
 
-```yaml
+```ruby
 {
   name: John Doe,
   age: 25,
@@ -100,9 +98,9 @@ John Doe, 25, T
 }
 ```
 
-### Keys as Strings (Quoted Forms)
+### Keys as strings (quoted forms)
 
-```yaml
+```ruby
 {
   "name": John Doe,
   'isActive': T,
@@ -110,7 +108,7 @@ John Doe, 25, T
 }
 ```
 
-### JSON-Compatible Object Example
+### JSON-compatible object
 
 The following Internet Object is also a valid JSON object:
 
@@ -119,20 +117,19 @@ The following Internet Object is also a valid JSON object:
 ```
 
 > Keys are double-quoted strings and all values use standard JSON types.
-> **Child objects must always be enclosed in curly braces `{}`.**
-> Only the top-level object may use the open form. All nested or embedded objects must use **closed object syntax**.
+> **Child objects must always be enclosed in curly braces `{}`.** Only the top-level object may
+> use the open form; every nested or embedded object must use the closed form.
 
-## Invalid Forms
+## Invalid forms
 
 ```ruby
-# ✗ Missing commas between values
-{name: John Doe 25}
-{John age: 25 gender: M}
+{name: John Doe 25}        # ✗ missing commas between values
+{John age: 25 gender: M}   # ✗ missing commas between values
 ```
 
-## Optional Behaviors
+## Optional behaviors
 
-### Whitespace and Formatting
+### Whitespace and formatting
 
 Whitespace is allowed and ignored:
 
@@ -140,13 +137,13 @@ Whitespace is allowed and ignored:
 { name : John , age : 25 }
 ```
 
-### Empty Objects
+### Empty objects
 
 ```ruby
-{}     # ✅ Valid
+{}     # ✓ valid
 ```
 
-### Empty Values
+### Empty values
 
 Empty value positions (via `,,`) are valid:
 
@@ -154,7 +151,7 @@ Empty value positions (via `,,`) are valid:
 John Doe,,true,,{NY}
 ```
 
-### Trailing Commas
+### Trailing commas
 
 Trailing commas are allowed and ignored:
 
@@ -176,14 +173,14 @@ Comments are allowed between entries or alongside values:
 
 > Comments must not appear inside string literals or values.
 
-## Access Semantics
+## Access semantics
 
-- All values are accessed by their **position** (0-based).
-- If a key is provided, the value **may also be accessed via key**, especially when schema is applied.
-- Keys do not affect the value's index position.
+- All values are accessed by **position** (0-based).
+- A keyed value **may also be accessed by key**, especially when a schema is applied.
+- Keys do not affect a value's index position.
 - Keys are optional but must be **well-formed strings**.
 
-## Preservation of Structure
+## Preservation of structure
 
 Internet Object preserves:
 
@@ -194,13 +191,13 @@ Internet Object preserves:
 It does **not** enforce:
 
 - Key uniqueness
-- Key-based access without schema
-- Required presence of keys
+- Key-based access without a schema
+- The required presence of any key
 
 ## See Also
 
-- [Values](../values/README.md)
-- [Strings (Keys)](./string/README.md)
-- [Schema for Objects](../../schema-definition-language/data-types/object.md)
-- [Comments](../syntax/comments.md)
-- [JSON Compatibility](../../json-compatibility.md)
+- [Value Representations](README.md) — all value types
+- [Strings](string/README.md) — valid keys and string values
+- [Object (SchemaDef)](../../schema-definition-language/data-types/object.md) — schemas for objects
+- [Comments](../comments.md) — comment syntax
+- [JSON Compatibility](../../json-compatibility.md) — round-tripping with JSON

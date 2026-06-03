@@ -1,117 +1,96 @@
 ---
-description: Fixed-precision decimal values for financial and high-precision computations
+description: Fixed-precision decimal values for exact, financial-grade arithmetic.
 ---
 
 # Decimal
 
-A **Decimal** in Internet Object represents fixed-precision decimal values designed for applications that require exact numeric calculations, especially financial computations where floating-point precision issues could lead to significant errors. Decimal is a scalar primitive that stores exact numeric values with a defined precision and scale.
+A **Decimal** is a fixed-precision decimal value for cases that demand exact numbers —
+especially financial calculations, where floating-point approximation can introduce errors. A
+Decimal stores an exact value with a defined precision and scale.
 
-Unlike standard floating-point numbers (which may suffer from approximation issues), Decimal values maintain exact precision throughout arithmetic operations, ensuring accurate and predictable results.
+Unlike a standard floating-point Number, a Decimal does not approximate: `0.1m` is exactly
+one-tenth, not the nearest binary fraction.
 
 ## Syntax
 
-A Decimal value is expressed as a number with the `m` suffix:
+A Decimal is written as a number with the `m` suffix. It requires a leading digit and, if a
+decimal point is present, at least one digit after it. Scientific notation is **not** supported.
 
 ```ebnf
-decimal = decimalValue | scientificDecimal
-
-decimalValue = ["-" | "+"] digit+ ["." digit+] "m"
-scientificDecimal = decimalValue ("e" | "E") ["-" | "+"] digit+
+decimal = ["-" | "+"] digit+ [ "." digit+ ] "m"
 
 digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
 ```
 
-## Structural Characters
+## Structural characters
 
-| Symbol | Name           | Unicode  | Description                    |
-| ------ | -------------- | -------- | ------------------------------ |
-| `m`    | Decimal Suffix | `U+006D` | Identifies value as Decimal    |
-| `0-9`  | Digits         | Multiple | Standard decimal digits        |
-| `.`    | Decimal Point  | `U+002E` | Separates integer and fraction |
-| `-`    | Minus Sign     | `U+002D` | Indicates negative numbers     |
-| `e`/`E`| Exponent       | Multiple | Scientific notation exponent   |
+| Symbol | Name | Unicode | Description |
+| ------ | ---- | ------- | ----------- |
+| `m` | Decimal suffix | `U+006D` | Marks the value as a Decimal |
+| `0`–`9` | Digits | Multiple | Decimal digits |
+| `.` | Decimal point | `U+002E` | Separates the integer and fractional parts |
+| `-` | Minus sign | `U+002D` | Negative value |
 
-## Valid Forms
-
-### Basic Decimal Values
+## Valid forms
 
 ```ruby
-123.45m              # Fractional decimal
-123m                 # Integer decimal
-0.001m               # Leading zeros
--789.01m             # Negative decimal
+---
+123.45m, 123m, 0.001m, -789.01m, 0m, 0.0m
 ```
 
-### Scientific Notation
+- `123.45m` — fractional decimal
+- `123m` — integer decimal
+- `0.001m` — leading zeros preserved
+- `-789.01m` — negative decimal
+- `0m`, `0.0m` — zero, with and without a scale
+
+## Precision and scale
+
+Each Decimal carries a **precision** (the total number of significant digits) and a **scale**
+(the number of digits after the decimal point):
 
 ```ruby
-1.23e2m              # Equivalent to 123m
-1.23e-2m             # Equivalent to 0.0123m
-5e3m                 # Equivalent to 5000m
+123.45m              # precision 5, scale 2
+0.000123m            # precision 6, scale 6
 ```
 
-## Optional Behaviors
+A schema can constrain these; see [Decimal](../../../schema-definition-language/data-types/number/decimal.md).
 
-### Fixed-Precision Arithmetic
+## Invalid forms
 
-Decimal values maintain their precision throughout operations:
+A Decimal requires a leading digit and, with a decimal point, a trailing digit. Scientific
+notation is rejected:
 
 ```ruby
-0.1m + 0.2m          # 0.3m (exact representation)
-# Compare with floating-point: 0.1 + 0.2 ≈ 0.30000000000000004
+---
+1.23e2m              # ✗ scientific notation is not supported for Decimal
 ```
-
-### Precision and Scale
-
-Each Decimal value is defined by:
-- **Precision**: Total number of significant digits
-- **Scale**: Number of digits after the decimal point
 
 ```ruby
-123.45m              # Precision: 5, Scale: 2
-0.000123m            # Precision: 6, Scale: 6
+.45m                 # ✗ missing leading digit (use 0.45m)
+123.m                # ✗ missing trailing digit (use 123.0m or 123m)
+123.45mm             # ✗ duplicated suffix
 ```
 
-### Empty Representation
+> A plain `123.45` (no `m`) is a valid **Number**, not a Decimal — the `m` suffix is what
+> selects fixed precision.
 
-Zero as a decimal:
-
-```ruby
-0m                   # Zero decimal
-0.0m                 # Zero with scale
-```
-
-
-## Invalid Forms
-
-```ruby
-123.45               # ❌ Missing 'm' suffix (should be 123.45m)
-123.45mm             # ❌ Multiple suffixes not allowed (should be 123.45m)
-m123.45              # ❌ Suffix must be at the end (should be 123.45m)
-.45m                 # ❌ Must have leading digit (should be 0.45m)
-123.m                # ❌ Must have trailing digit if decimal point used (should be 123.0m or 123m)
-```
-
-## Preservation of Structure
-
+## Preservation of structure
 
 Internet Object preserves:
 
 - Exact decimal precision and scale
-- The chosen representation form (standard vs scientific notation)
-- Syntactic fidelity (as written, except that an explicit plus sign is not preserved)
+- Syntactic fidelity as written, except that an explicit `+` sign is not preserved
 
-However, it does **not** interpret:
+It does **not** interpret:
 
-* Rounding behavior for operations
-* Domain-specific precision requirements
-* Currency or unit semantics
+- Rounding behavior for operations
+- Currency or unit semantics
 
-Such semantics are the responsibility of the **schema layer**, **validators**, or **application logic**.
+Those semantics belong to the schema, the validator, or the application.
 
 ## See Also
 
-- [Number Types Overview](./README.md) - Launcher for all number types and formats
-- [Number](./number.md) - For standard floating-point numbers
-- [BigInt](./bigint.md) - For arbitrary-precision integers
-- [Values](../../values/README.md)
+- [Numeric Values](README.md) — all numeric forms
+- [Number](number.md) — standard floating-point numbers
+- [BigInt](bigint.md) — arbitrary-precision integers

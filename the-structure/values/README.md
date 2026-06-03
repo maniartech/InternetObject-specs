@@ -1,80 +1,81 @@
 ---
-description: Overview of value types in Internet Object
+description: Overview of the value types Internet Object can represent.
 ---
 
-# Values
+# Value Representations
 
-Internet Object supports a rich set of **value types** that represent different kinds of data. Values are the fundamental building blocks of Internet Object documents, ranging from simple scalar values like numbers and strings to complex structured values like objects and arrays.
+Internet Object supports a rich set of **value types**, from simple scalars such as numbers and
+strings to structured values such as objects and arrays. Values are the fundamental building
+blocks of every document.
 
-All values in Internet Object are designed to be:
-- **Human-readable**: Easy to read and write by humans
-- **Machine-parseable**: Efficiently processed by computers
-- **Type-safe**: Clear distinction between different data types
-- **Expressive**: Rich enough to represent complex data structures
+All values are designed to be:
 
-## Value Categories
+- **Human-readable** — easy to read and write by hand.
+- **Machine-parseable** — efficient to process.
+- **Type-clear** — each value has an unambiguous type.
+- **Expressive** — rich enough to model complex data.
 
-Internet Object values are organized into several categories:
+## Value categories
 
-### Scalar Values
-Scalar values represent single, atomic pieces of data:
+### Scalar values
 
-- **[Numbers](./number/)** - Numeric values including integers, floats, and special numeric types
-- **[Strings](./string/)** - Text data with various encoding and formatting options
-- **[Booleans](./booleans.md)** - True/false values
-- **[Null](./null.md)** - Absence of value
-- **[Binary Byte Strings](./binary.md)** - Binary data encoded as Base64
-- **[Date and Time](./date-and-time.md)** - Temporal values with ISO 8601 compatibility
+Scalar values represent single, atomic data:
 
-### Structured Values
-Structured values contain other values and provide organization:
+- [Numbers](number/README.md) — integers, floating-point, and special numeric values
+- [Strings](string/README.md) — text in open, regular, and raw forms
+- [Booleans](booleans.md) — true / false values
+- [Nulls](null.md) — the absence of a value
+- [Binary](binary.md) — binary data encoded as Base64
+- [Date and Time](date-and-time.md) — temporal values with ISO 8601 compatibility
 
-- **[Objects](./object.md)** - Key-value pairs representing entities
-- **[Arrays](./array.md)** - Ordered collections of values
+### Structured values
 
-## String Types
+Structured values contain other values:
 
-Internet Object provides several [string types](./string/) to handle different text scenarios:
+- [Objects](object.md) — key-value pairs representing entities
+- [Arrays](array.md) — ordered collections of values
 
-| Type | Syntax | Description | Use Cases |
-|------|--------|-------------|-----------|
-| **[Regular Strings](./string/regular-strings.md)** | `"text"` or `'text'` | Standard quoted strings with escape sequences | General text, user input, formatted content |
-| **[Open Strings](./string/open-strings.md)** | `unquoted text` | Strings without quotes | Simple identifiers, natural language |
-| **[Raw Strings](./string/raw-strings.md)** | `r"text"` or `r'text'` | Literal strings without escape processing | File paths, regex patterns, code snippets |
+## String types
 
-## Numeric Types
+Internet Object provides three [string forms](string/README.md) for different text scenarios:
 
-Internet Object supports various [numeric types](./number/) for different precision and range requirements:
+| Form | Syntax | Description | Typical use |
+|------|--------|-------------|-------------|
+| [Regular string](string/regular-strings.md) | `"text"` or `'text'` | Quoted string with escape sequences | General text, user input |
+| [Open string](string/open-strings.md) | `unquoted text` | Unquoted string | Simple identifiers, plain words |
+| [Raw string](string/raw-strings.md) | `r"text"` or `r'text'` | Literal string, no escape processing | File paths, regex, code |
 
-| Type | Syntax | Description | Range |
+## Numeric types
+
+Internet Object supports several [numeric forms](number/README.md) for different precision and
+range needs:
+
+| Form | Syntax | Description | Range |
 |------|--------|-------------|-------|
-| **[Numbers](./number/number.md)** | `42`, `3.14`, `1e10` | Standard floating-point numbers | IEEE 754 double precision |
-| **[BigInt](./number/bigint.md)** | `42n`, `0x1ABn` | Arbitrary precision integers | Unlimited |
-| **[Decimal](./number/decimal.md)** | `42.5m`, `3.14159m` | High-precision decimal numbers | Configurable precision |
-| **[Special Values](./number/nan-and-infinity.md)** | `NaN`, `Inf`, `-Inf` | Non-finite numeric values | IEEE 754 special values |
+| [Number](number/number.md) | `42`, `3.14`, `1e10` | Standard floating-point number | IEEE 754 double precision |
+| [BigInt](number/bigint.md) | `42n`, `0x1ABn` | Arbitrary-precision integer | Unbounded |
+| [Decimal](number/decimal.md) | `42.5m`, `3.14159m` | High-precision decimal | Configurable precision |
+| [Special values](number/nan-and-infinity.md) | `NaN`, `Inf`, `-Inf` | Non-finite numeric values | IEEE 754 special values |
 
-## Temporal Types
+## Temporal types
 
-Internet Object provides built-in support for [date and time values](./date-and-time.md):
+Internet Object has built-in [date and time values](date-and-time.md):
 
-| Type | Syntax | Description | Example |
+| Form | Syntax | Description | Example |
 |------|--------|-------------|---------|
-| **Date** | `d'2024-03-20'` | Date-only values | `d'2024-03-20'`, `d'2024'` |
-| **Time** | `t'14:30:45'` | Time-only values | `t'14:30:45.123'`, `t'09:00'` |
-| **DateTime** | `dt'2024-03-20T14:30:45Z'` | Combined date and time | `dt'2024-03-20T14:30:45.123Z'` |
+| Date | `d'2024-03-20'` | Date only | `d'2024-03-20'`, `d'2024'` |
+| Time | `t'14:30:45'` | Time only | `t'14:30:45.123'`, `t'09:00'` |
+| DateTime | `dt'2024-03-20T14:30:45Z'` | Combined date and time | `dt'2024-03-20T14:30:45.123Z'` |
 
-## Binary Data
+## Binary data
 
-For binary data representation, Internet Object uses:
+For binary data, Internet Object uses a [Base64 byte string](binary.md) (`b'SGVsbG8='`), an
+efficient way to carry bytes as text.
 
-- **[Binary Byte Strings](./binary.md)** (`b'SGVsbG8='`) - Efficient encoding of binary data as text
-
-## Value Syntax Overview
-
-Here's a quick reference of value syntax in Internet Object:
+## Value syntax at a glance
 
 ```ruby
-# Scalar Values
+# Scalar values
 42                                     # Number
 "Hello, World!"                        # Regular string
 'Single quotes work too'               # Regular string
@@ -88,32 +89,22 @@ d'2024-03-20'                          # Date
 t'14:30:45'                            # Time
 dt'2024-03-20T14:30:45Z'               # DateTime
 
-# Structured Values
-{                                      # Object
-  name: "John Doe",
-  age: 30,
-  active: true
-}
-
-[1, 2, 3, "four", true]                # Array
+# Structured values
+{ name: "John Doe", age: 30, active: true }   # Object
+[1, 2, 3, "four", true]                       # Array
 ```
 
-## Type Coercion and Conversion
+## Type handling
 
 Internet Object maintains strict type boundaries:
 
-- **No implicit conversion**: Values retain their declared types
-- **Explicit parsing**: Type conversion happens during parsing based on syntax
-- **Validation**: Type constraints are enforced during processing
-- **Preservation**: Original format and type information is maintained
+- **No implicit conversion** — values keep their declared types.
+- **Syntax-driven typing** — a value's type follows from how it is written.
+- **Validation** — type constraints are enforced during validation, against the schema.
 
-## Comments and Whitespace
+## Comments and whitespace
 
-Values can be accompanied by:
-
-- **Comments**: `# This is a comment`
-- **Whitespace**: Flexible spacing and indentation
-- **Line breaks**: Multi-line value formatting
+Values can be annotated with comments and laid out with whitespace for readability:
 
 ```ruby
 {
@@ -126,31 +117,8 @@ Values can be accompanied by:
 }
 ```
 
-## Encoding and Character Support
-
-Internet Object values support:
-
-- **Unicode**: Full Unicode character set (UTF-8 encoding)
-- **Escape sequences**: Standard escape codes in regular strings
-- **Raw representation**: Literal character preservation in raw strings
-- **Normalization**: Unicode normalization for consistent processing
-
-## Navigation
-
-### Quick Links
-- **Scalar Types**: [Numbers](./number/) • [Strings](./string/) • [Booleans](./booleans.md) • [Null](./null.md) • [Binary Data](./binary.md) • [Date & Time](./date-and-time.md)
-- **Structured Types**: [Objects](./object.md) • [Arrays](./array.md)
-
-### By Use Case
-- **Text Data**: [String Types](./string/) - Regular, Open, and Raw strings
-- **Numeric Data**: [Number Types](./number/) - Standard, BigInt, Decimal, and Special values
-- **Temporal Data**: [Date and Time](./date-and-time.md) - Dates, times, and datetimes
-- **Binary Data**: [Binary Byte Strings](./binary.md) - Encoded binary content
-- **Logical Data**: [Booleans](./booleans.md) and [Null](./null.md)
-- **Complex Data**: [Objects](./object.md) and [Arrays](./array.md)
-
 ## See Also
 
-- **[Internet Object Structure Overview](../)** - Understanding the overall document structure
-- **[Schema Definition Language](../../schema-definition-language/)** - Type definitions and validation
-- **[Best Practices](../../best-practices.md)** - Guidelines for effective Internet Object usage
+- [Internet Object Document](../introduction/README.md) — the overall document structure
+- [Schema Data Types](../../schema-definition-language/data-types/README.md) — typing and validation
+- [Best Practices & Guidelines](../../best-practices.md) — effective use of the format

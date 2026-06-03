@@ -1,94 +1,72 @@
 ---
-description: Special numeric values NaN and Infinity in Internet Object
+description: The special numeric values NaN and Infinity.
 ---
 
 # NaN and Infinity
 
-Special numeric values in Internet Object represent mathematical concepts of "Not a Number" and infinite values. These are used to handle edge cases in numerical computations, such as division by zero or invalid mathematical operations. These values follow IEEE 754 standards and provide a way to represent undefined or infinite results within numeric operations.
+The special numeric values represent "Not a Number" and infinite quantities, following IEEE
+754. They model the edge cases of numeric computation — an undefined result, or a value beyond
+the finite range. Only the Number form supports them; BigInt and Decimal do not.
 
 ## Syntax
 
-Special numeric values are expressed as literal keywords:
+The special values are written as fixed keywords:
 
 ```ebnf
-specialValue = nanValue | infinityValue
-nanValue = "NaN"
+specialValue  = nanValue | infinityValue
+nanValue      = "NaN"
 infinityValue = ["+" | "-"] "Inf"
 ```
 
-## Structural Characters
+## Structural elements
 
-| Symbol | Name         | Unicode  | Description                       |
-| ------ | ------------ | -------- | --------------------------------- |
-| `NaN`  | Not a Number | Multiple | Represents invalid numeric result |
-| `Inf`  | Infinity     | Multiple | Represents infinite value         |
-| `-`    | Minus Sign   | `U+002D` | Indicates negative infinity       |
-| `+`    | Plus Sign    | `U+002B` | Optional positive indicator       |
+| Token | Name | Description |
+| ----- | ---- | ----------- |
+| `NaN` | Not a Number | An undefined or unrepresentable numeric result |
+| `Inf` | Infinity | A value beyond the finite range |
+| `-` | Minus sign | Negative infinity (`-Inf`) |
+| `+` | Plus sign | Explicit positive infinity (`+Inf`); not preserved |
 
-## Valid Forms
+## Valid forms
 
 ```ruby
 NaN                  # Not a Number
-Inf                  # Positive infinity
--Inf                 # Negative infinity
-+Inf                 # Positive infinity (explicit)
+Inf                  # positive infinity
+-Inf                 # negative infinity
++Inf                 # positive infinity (explicit sign, not preserved)
 ```
 
-## Optional Behaviors
+## Not the special value
 
-### Literal and Alternate Forms
-
-Special values have fixed representations:
+The special values are **case-sensitive and spelled exactly**. Any other spelling is not an
+error — it is simply parsed as an open string (text), so it is *not* the numeric special value:
 
 ```ruby
-NaN                  # ✅ Standard form
-Inf                  # ✅ Positive infinity
--Inf                 # ✅ Negative infinity
-+Inf                 # ✅ Explicit positive infinity
+nan                  # open string "nan", not NaN
+INF                  # open string "INF", not Inf
+infinity             # open string "infinity", not Inf
+-NaN                 # open string "-NaN" — NaN cannot be signed
 ```
 
-### Mathematical Behavior
+> To store one of these as a number, write it exactly: `NaN`, `Inf`, `-Inf`, or `+Inf`. To
+> store the word as text, quote it: `"infinity"`.
 
-Special values follow IEEE 754 semantics:
-
-```ruby
-# NaN comparisons always return false
-NaN == NaN           # false
-NaN != NaN           # true
-
-# Infinity comparisons
-Inf > 100            # true
--Inf < 0             # true
-```
-
-## Invalid Forms
-
-```ruby
-nan                  # ❌ Lowercase not allowed
-NAN                  # ❌ All caps not allowed
-inf                  # ❌ Lowercase not allowed
-INF                  # ❌ All caps not allowed
-infinity             # ❌ Full word not supported
--NaN                 # ❌ NaN cannot be signed
-```
-
-## Preservation of Structure
+## Preservation of structure
 
 Internet Object preserves:
 
-* The exact representation of special values
-* Negative sign for negative infinity
-* Syntactic fidelity (as written, except that an explicit plus sign is not preserved)
+- The exact special value written
+- The sign of negative infinity
+- Syntactic fidelity as written, except that an explicit `+` sign is not preserved
 
-However, it does **not** interpret:
+It does **not** interpret:
 
-* The mathematical operations that led to these values
-* Domain-specific handling of special cases
-* Comparison or equality semantics
+- The operations that produced these values
+- Comparison or equality semantics (for example, that `NaN` equals nothing, including itself)
 
-Such semantics are the responsibility of the **schema layer**, **validators**, or **application logic**.
+Those semantics belong to the application.
 
 ## See Also
 
-* [Number](number.md) - For standard floating-point numbers
-* [Values](../)
+- [Number](number.md) — standard floating-point numbers
+- [Numeric Values](README.md) — all numeric forms

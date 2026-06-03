@@ -1,72 +1,64 @@
 ---
-description: Nulls in Internet Object
+description: The null value — an explicit absence of a value.
 ---
 
-# Null
+# Nulls
 
-A **Null** in Internet Object represents the absence of a value or an explicitly undefined state. Null is a scalar primitive used to indicate missing, unknown, or intentionally empty data.
-
-Null values in Internet Object support both compact and verbose representations to balance readability and space efficiency.
+A **null** represents the absence of a value — data that is missing, unknown, or intentionally
+empty. Null is a scalar value with a compact and a verbose form.
 
 ## Syntax
 
-A null value can be expressed in two forms:
-
 ```ebnf
-null = compactNull | verboseNull
+null        = compactNull | verboseNull
 compactNull = "N"
 verboseNull = "null"
 ```
 
-## Structural Characters
+## Structural elements
 
-| Symbol | Name         | Unicode  | Description                    |
-| ------ | ------------ | -------- | ------------------------------ |
-| `N`    | Uppercase N  | `U+004E` | Compact representation of null |
-| `null` | Keyword null | Multiple | Verbose representation of null |
+| Token | Name | Description |
+| ----- | ---- | ----------- |
+| `N` | Compact null | `null` in compact form |
+| `null` | Verbose null | the verbose null keyword |
 
-## Valid Forms
+## Valid forms
 
-```ruby
-N                    # Compact null
-null                 # Verbose null
-```
-
-## Optional Behaviors
-
-### Literal and Alternate Forms
-
-Internet Object supports two equivalent representations for null values:
-
-- **Compact form**: `N` (recommended)
-- **Verbose form**: `null`
+The compact and verbose forms are equivalent; the compact form is recommended for terse data.
 
 ```ruby
-N        # ✅ Recommended compact form
-null     # ✅ Verbose form (equivalent to N)
+---
+N, null
 ```
 
-### Empty Representation
+## Null versus empty
 
-Null explicitly represents the absence of a value, distinct from empty strings or empty arrays.
+Null is the *absence* of a value, distinct from an empty string or an empty array:
 
 ```ruby
-N        # Null value
-""       # Empty string (different from null)
-[]       # Empty array (different from null)
+N        # null — no value
+""       # an empty string (a value)
+[]       # an empty array (a value)
 ```
 
-## Invalid Forms
+## Not null
+
+Null keywords are **case-sensitive and spelled exactly**. Any other token is not an error — it
+is parsed as an open string, so it is *not* null:
 
 ```ruby
-n         # ❌ Lowercase not allowed
-NULL      # ❌ All caps not allowed
-Null      # ❌ Mixed case not allowed
-nil       # ❌ Alternative keywords not allowed
-undefined # ❌ Alternative keywords not allowed
+n                    # open string "n", not null
+NULL                 # open string "NULL", not null
+Null                 # open string "Null", not null
+nil                  # open string "nil", not null
+undefined            # open string "undefined", not null
 ```
+
+> To store one of these as text, that is exactly what happens. To express the absence of a
+> value, write `N` or `null`.
 
 ## See Also
 
-* [Values](../values/README.md)
-* [Schema for Null Handling](../../schema-definition-language/)
+- [Value Representations](README.md) — all value types
+- [Booleans](booleans.md) — true and false
+- [Optional & nullable members](../../schema-definition-language/memberdef.md) — `?` and `*` in schemas
