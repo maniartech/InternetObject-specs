@@ -1,26 +1,30 @@
+---
+description: A guided walkthrough of Internet Object and how it compares to JSON.
+---
+
 # Introducing Internet Object
 
 Internet Object (IO) is a document-oriented data serialization format designed to optimize data transmission over networks. This specification introduces IO as an alternative to existing formats such as JSON, offering a structured approach to data representation and exchange.
 
-### Core structure
+## Core structure
 
 The fundamental structure of IO is an ordered collection of values, analogous to CSV (Comma-Separated Values) but with extended capabilities. These capabilities include support for nested objects, arrays, and inline keys, providing enhanced expressiveness and flexibility.
 
-### Key features
+## Key features
 
-* **Document-Oriented Design**: In contrast to value-oriented formats, IO adopts a document-centric approach, facilitating the separation of data from definitions to enhance clarity and maintainability.
-* **Ordered Collection with Extended Functionality**: IO's core structure maintains an ordered collection of values while supporting complex data structures such as nested objects and arrays.
-* **Schema-First Approach**: IO emphasizes schema-first design to ensure data consistency and predictability. While schemas are optional, their inclusion significantly enhances data integrity and validation.
-* **Concise Syntax**: The syntax of IO is optimized for readability and efficiency, minimizing data size without compromising clarity.
-* **Metadata Integration**: IO documents can incorporate metadata, variables, and multiple schemas within the header section, providing comprehensive context for the data.
+* **Document-oriented design**: In contrast to value-oriented formats, IO adopts a document-centric approach, facilitating the separation of data from definitions to enhance clarity and maintainability.
+* **Ordered collection with extended functionality**: IO's core structure maintains an ordered collection of values while supporting complex data structures such as nested objects and arrays.
+* **Schema-first approach**: IO emphasizes schema-first design to ensure data consistency and predictability. While schemas are optional, their inclusion significantly enhances data integrity and validation.
+* **Concise syntax**: The syntax of IO is optimized for readability and efficiency, minimizing data size without compromising clarity.
+* **Metadata integration**: IO documents can incorporate metadata, variables, and multiple schemas within the header section, providing comprehensive context for the data.
 
-### Illustrative examples
+## Illustrative examples
 
-#### Basic IO document structure <a href="#basic-io-document-structure" id="basic-io-document-structure"></a>
+### Basic IO document structure
 
 The following example demonstrates a basic IO document structure:
 
-```io
+```ruby
 name, age, active, address: {street, city}
 ---
 John Doe, 25, T, {Bond Street, New York}
@@ -40,11 +44,11 @@ This structure illustrates IO's concise syntax and inherent schema support. For 
 }
 ```
 
-#### IO document with collections and data types <a href="#io-document-with-collections-and-data-types" id="io-document-with-collections-and-data-types"></a>
+### IO document with collections and data types
 
 IO supports collections and various data types, as demonstrated in the following example:
 
-```io
+```ruby
 name:string, age:int, active:bool, address: {street:string, city:string}
 ---
 ~ John Doe, 25, T, {Bond Street, New York}
@@ -85,20 +89,20 @@ The equivalent JSON representation would be:
 
 This comparison demonstrates IO's capacity to represent structured data collections efficiently, offering a compact and readable format while maintaining an ordered structure.
 
-### Advanced examples <a href="#advanced-examples" id="advanced-examples"></a>
+## Advanced examples
 
-#### Separate schema and document with collection <a href="#separate-schema-and-document-with-collection" id="separate-schema-and-document-with-collection"></a>
+### Separate schema and document with collection
 
 In many scenarios, it is beneficial to define schemas separately from the data. This approach allows for schema reuse, versioning, and easier maintenance. Here is an example of a separate schema followed by a document using that schema:
 
-1. Separate schema (person.io)
+First, the schema, defined on its own (for example, in a file named `person.io`):
 
 ```ruby
 # Person schema
 name:string, age:int, active:bool, address: {street:string, city:string}, skills:[string]
 ```
 
-2. Document with collection and metadata
+Then, a document that carries metadata in its header and a collection of records below:
 
 ```ruby
 ~ schemaUrl: "https://example.com/schemas/person.io"
@@ -113,7 +117,7 @@ name:string, age:int, active:bool, address: {street:string, city:string}, skills
 
 In this example:
 
-* The schema is defined separately, potentially in a file named "person.io".
+* The schema is defined separately, potentially in a file named `person.io`.
 * The document references the schema URL in its metadata.
 * The document includes additional metadata such as record count and pagination information.
 * The collection contains multiple records, each prefixed with `~`.
@@ -121,7 +125,7 @@ In this example:
 
 This structure allows for efficient data transmission, as the schema only needs to be sent once and can be cached by the receiving system. It also facilitates updates to the schema without necessarily changing the data format.
 
-### Conclusion <a href="#conclusion" id="conclusion"></a>
+## Conclusion
 
 Internet Object represents a significant advancement in data serialization technology. By combining the simplicity of ordered collections with the robustness of schema-based validation, Internet Object offers a powerful yet accessible solution for modern data exchange needs. Its key strengths include:
 
@@ -132,6 +136,10 @@ Internet Object represents a significant advancement in data serialization techn
 
 These attributes make Internet Object suitable for a wide range of applications, from web-based and networked environments to data storage and interchange in diverse domains such as IoT, cloud computing, and enterprise systems.
 
-The subsequent sections of this specification provide comprehensive details on Internet Object's syntax, schema definition language, supported data types, and advanced features. This information will enable developers, system architects, and data engineers to fully leverage the capabilities of Internet Object in their projects and applications.
+The subsequent sections of this specification provide comprehensive details on Internet Object's syntax, schema definition language, supported data types, and advanced features. This information enables developers, system architects, and data engineers to fully leverage the capabilities of Internet Object in their projects and applications.
 
-As data exchange continues to play a crucial role in our interconnected world, Internet Object stands poised to address current challenges and anticipate future needs in data serialization and transmission.
+## See Also
+
+- [Getting Started](getting-started.md) — a five-minute tour in pure Internet Object
+- [Why Internet Object?](why-internet-object.md) — how it compares to JSON, CSV, and YAML
+- [Internet Object Document](../the-structure/introduction/README.md) — the structure in depth

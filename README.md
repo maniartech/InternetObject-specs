@@ -23,7 +23,23 @@ layout:
 
 # Internet Object 1.0
 
-This document aims to provide the Internet Object 1.0 specification and showcase various aspects of the subject.
+**Internet Object** is a text-based, schema-first, document-oriented data interchange format —
+JSON's readability without its repeated keys, missing schema, absent comments, or lack of
+streaming. This site is the official specification and serves as the format's reference
+documentation.
+
+> **Status.** This is the **1.0 Draft** of the specification, published alongside the public
+> beta of the reference implementation. The specification and the implementation are still
+> converging, so some pages note behavior that is ahead of the current implementation.
+> Implementations version independently and declare the specification version they conform to.
+
+## Start here
+
+* [Why Internet Object?](internet-object/why-internet-object.md) — how it compares to JSON, CSV, and YAML
+* [Getting Started](internet-object/getting-started.md) — a five-minute tour in pure Internet Object
+* [Internet Object Document](the-structure/introduction/README.md) — the structure of a document
+* [Schema Definition Language](schema-definition-language/internet-object-schema.md) — types, constraints, and validation
+* [Conformance Requirements](conformance/requirements.md) — what a conformant implementation must do
 
 | Field                 | Value                                                              |
 | --------------------- | ------------------------------------------------------------------ |
