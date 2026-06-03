@@ -5,8 +5,8 @@ description: The bigint type — arbitrary-precision integers.
 # BigInt
 
 The **`bigint`** type validates an arbitrary-precision integer — values too large for the
-double-based [`number`](README.md) family. In data it is written with an `n` suffix: `123n`,
-`0xFFn`.
+double-based `number` family (see [Numeric Types](README.md)). In data it is written with an
+`n` suffix: `123n`, `0xFFn`.
 
 > For the literal syntax, see [BigInt values](../../../the-structure/values/number/bigint.md).
 

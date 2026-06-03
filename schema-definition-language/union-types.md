@@ -5,8 +5,8 @@ description: Members that accept more than one type, via anyOf.
 # Union Types (anyOf)
 
 When a field must accept values of **more than one type**, use the `anyOf` constraint on the
-[`any`](data-types/any.md) type. A value is valid if it matches **any one** of the listed
-alternatives.
+`any` type (see [Any](data-types/any.md)). A value is valid if it matches **any one** of the
+listed alternatives.
 
 ```ruby
 id: { any, anyOf: [string, int] }

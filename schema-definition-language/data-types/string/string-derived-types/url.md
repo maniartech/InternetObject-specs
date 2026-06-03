@@ -4,8 +4,8 @@ description: The url type — a string validated as a URL.
 
 # URL
 
-`url` is a [`string`](../README.md) shortcut whose value MUST be a valid URL. It shares the
-string [MemberDef](../../../memberdef.md) and adds URL-format validation.
+`url` is a `string` shortcut (see [String Types](../README.md)) whose value MUST be a valid URL.
+It shares the string [MemberDef](../../../memberdef.md) and adds URL-format validation.
 
 > **Quote URL values.** A URL contains `:` and `/`, which end an unquoted (open) string, so
 > URLs must be written as quoted strings.

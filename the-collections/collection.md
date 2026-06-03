@@ -4,9 +4,8 @@ description: The structure of a collection — an ordered sequence of records in
 
 # Collection
 
-A **collection** is an ordered sequence of **records** within a
-[data section](../the-structure/introduction/data.md) of a document. Each record is an object,
-written on its own line and introduced by a tilde `~`. Collections
+A **collection** is an ordered sequence of **records** within a data section of a document.
+Each record is an object, written on its own line and introduced by a tilde `~`. Collections
 make it efficient to serialize, batch, and stream many objects — datasets, tables, event logs
 — in a concise, uniform form.
 
@@ -183,5 +182,5 @@ governed by the schema — or, without a schema, by positional index.
 * [Creating Collections](creating-collection.md) — collections with and without a schema
 * [Collection Rules](collection-rules.md) — validation, empty records, and error handling
 * [Data Streaming](data-streaming.md) — collections produced and consumed over time
-* [Internet Object Document](../the-structure/introduction/README.md) — header and data sections
+* [Data Sections](../the-structure/introduction/data.md) — where a collection sits in a document
 * [Schema Definition Language](../schema-definition-language/internet-object-schema.md) — validating records

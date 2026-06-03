@@ -4,9 +4,8 @@ description: The header's definition section — metadata, variables, and refere
 
 # Definitions
 
-Besides the schema, an Internet Object document's
-[**header**](../the-structure/introduction/header.md) can hold *definitions*. A definition is a
-key–value pair on its own line, introduced by a tilde `~`:
+Besides the schema, an Internet Object document's **header** can hold *definitions*. A
+definition is a key–value pair on its own line, introduced by a tilde `~`:
 
 ```ruby
 ~ key: value

@@ -4,9 +4,9 @@ description: The email type — a string validated as an email address.
 
 # Email
 
-`email` is a [`string`](../README.md) shortcut whose value MUST be a valid email address. It
-shares the string [MemberDef](../../../memberdef.md) (`choices`, `pattern`, `minLen`, …) and
-adds email-format validation.
+`email` is a `string` shortcut (see [String Types](../README.md)) whose value MUST be a valid
+email address. It shares the string [MemberDef](../../../memberdef.md) (`choices`, `pattern`,
+`minLen`, …) and adds email-format validation.
 
 ```ruby
 userEmail: email

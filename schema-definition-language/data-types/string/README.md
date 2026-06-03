@@ -5,8 +5,8 @@ description: The string type and its email and url shortcuts.
 # String Types
 
 The **`string`** type validates text. It has two **predefined shortcuts** that are `string`
-with a built-in pattern: [`email`](string-derived-types/email.md) and
-[`url`](string-derived-types/url.md).
+with a built-in pattern: [Email](string-derived-types/email.md) and
+[URL](string-derived-types/url.md).
 
 > `date`, `time`, and `datetime` are **not** string subtypes — they are their own types with
 > their own values. See [Date and Time](../date-and-time.md).
