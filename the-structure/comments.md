@@ -15,7 +15,7 @@ Internet Object supports **single-line comments** for documenting and annotating
 # Internet Object Document: Personnel Records
 
 # Address schema definition
-~ $address: {street:string, zip:{string, maxLength:5}, city:string}
+~ $address: {street:string, zip:{string, maxLen:5}, city:string}
 
 # Person schema definition
 ~ $schema: {
@@ -27,8 +27,8 @@ Internet Object supports **single-line comments** for documenting and annotating
 
 ---
 # Personnel Records
-~ John Doe, 25, {Queens, 50010, NewYork}, {Bond Street, 50001, NewYork}
-~ Jane Doe, 20, {Queens, 50010, NewYork}, {Bond Street, 50001, NewYork}
+~ John Doe, 25, {Queens, "50010", NewYork}, {Bond Street, "50001", NewYork}
+~ Jane Doe, 20, {Queens, "50010", NewYork}, {Bond Street, "50001", NewYork}
 ```
 
 ### Comment Placement
