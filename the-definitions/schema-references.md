@@ -31,9 +31,13 @@ Define an object shape once, reuse it across fields and schemas:
 
 ## Resolution rules
 
-- A ref MUST be defined before it is used (no forward references).
-- Refs are resolved when the data is validated, not when the header is parsed.
+- Refs are resolved after the **entire header** has been read, so order within the header is
+  not significant — a ref MAY appear before the definition it targets. For readability, you
+  SHOULD still define a ref before you use it.
+- A ref to a name that is never defined is an error (`schema-not-defined`).
 - Reusing a ref many times keeps a document small and consistent.
+
+See [Error Handling in Definitions](error-handling.md) for the resolution errors.
 
 ## Type references
 
@@ -48,8 +52,10 @@ named shortcut, the document-local counterpart of built-ins like `uint8` or `ema
 ```
 
 > **Implementation status (beta).** Type references are being added. Today a top-level `$`
-> definition is always compiled as an *object schema*, so a constrained-type ref such as
-> `$percent` does not yet validate as a number. Schema references (object shapes) work today.
+> definition is compiled as an *object schema* (a SchemaDef), so its braces are read as an
+> object shape — a constrained-type body such as `{ number, min: 0, max: 100 }` is not yet
+> interpreted as a reusable number type. The forms above show the target syntax. Schema
+> references (object shapes) work today.
 
 ## See Also
 
