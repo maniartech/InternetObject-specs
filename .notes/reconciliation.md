@@ -255,6 +255,21 @@ through io-js2, using `# ✗ <code>` annotations as assertions. First run on exi
 - string: `invalid-min-length`, `invalid-pattern`, `invalid-choice`, `invalid-email`.
 - bool: `not-a-bool` (category runtime). datetime ok for date/time/datetime literals.
 
+### J5. Value-level date/time behavior (verified) — refines value page `date-and-time.md`
+- **Binary literal still unsupported (re-confirms J3/A5):** `b'…'`, `b"…"`, `b''` → THROW
+  `unexpected-token`. Value page must be design + *Implementation status*; examples no `---`.
+- **DateTime drops seconds (re-confirms J1):** `dt'2024-03-20T14:30:45Z'` → `…T14:30:00.000Z`;
+  `…:45.123Z` → `…:30:00.123Z` (ms kept). **Time-only keeps seconds:** `t'14:30:45'` →
+  `…14:30:45.000Z`. So the bug is datetime-specific. Spec documents seconds as part of the
+  value; *Implementation status* notes the reference impl currently drops the datetime seconds.
+- **Error code for bad temporals = `invalid-datetime`** (stable, returned as an error node, not
+  thrown): `d'2024-13-20'`, `t'25:00:00'`, `t'12:60:00'`, `dt'… 14:30:00'` (missing `T`),
+  `dt'…+25:00'` (bad offset). Use this code in `# ✗ invalid-datetime` assertions.
+- **Lenient (NOT errors) — flag as bugs:** `d'2024-02-30'` → normalizes to `2024-03-01`
+  (overflow date not rejected); `dt'…:00.123456'` (6 ms digits) → truncates to `.123`. A
+  conformant parser SHOULD reject impossible calendar dates and over-long fractions.
+- Partial-date defaults verified: `d'2024'`→Jan 1; `d'2024-03'`→Mar 1; `d'20240320'`→Mar 20.
+
 ## K. Rollout status — schema data-type pages (A+ template applied + verified)
 
 **Done & verified (examples pass `tools/check-examples.ts`):** number, array, bool, string,
@@ -290,10 +305,46 @@ octal `0c`). Current code uses `r'...'`/`r"..."` and `0o`. Audit published pages
 surviving stale syntax.
 
 ### C1. Octal prefix — verify
-- Confirm published number docs use `0o` (code) not legacy `0c`/`0C`.
+- Confirm published number docs use `0o` (code) not legacy `0c`/`0C`. **VERIFIED:** code
+  accepts `0o`/`0O` (not `0c`). `number/number.md` uses `0o`. OK.
+
+### C3. Numeric leniency: stale "invalid forms" + malformed-number fallbacks — `[spec-as-truth]` (flag code)
+**Runtime-verified** (`---\n<value>` through io-js2 parser), correcting `number/number.md`:
+- **Actually VALID (page wrongly listed invalid):** `.5` → `0.5`; `5.` → `5`. Leading/trailing
+  dot is accepted. EBNF in the page (`digit+ ["." digit+]`) is wrong; should allow
+  `digit+ ["." digit*] | "." digit+`.
+- **Lenient / likely bugs:** `1e` → `1`; `1e+` → `1` (incomplete exponent silently accepted).
+- **Malformed numerics fall back to OPEN STRING (no error):** `0b12` → `"0b12"`; `1.2.3` →
+  `"1.2.3"`; `1.23ee4` → `"1.23ee4"`. A token that starts numeric but is ill-formed is emitted
+  as a string instead of erroring.
+- **Genuine syntax errors (throw):** `0b`, `0x` (empty digits), `0o89`, `0xGH` (invalid digit),
+  `0b 1010` (space after prefix).
+- **Resolution:** code = source of truth for now, so document `.5`/`5.` as valid and fix the
+  EBNF. The lenient cases (`1e`, `1.2.3`→string, etc.) are flagged as code bugs: a conformant
+  parser SHOULD reject incomplete/ill-formed numerics rather than coerce to string or truncate.
+  Spec marks these under *Implementation status (beta)*; do not present them as valid forms.
 
 ### C2. Raw string delimiter — verify
 - Confirm published string docs use `r'...'`/`r"..."` (code) not legacy `@"..."`.
+
+### C4. BigInt / Decimal / NaN-Inf value-form accuracy — `[code-as-truth]` + flags
+**Runtime-verified** (`---\n<value>`), correcting the value pages:
+- **Decimal — scientific NOT supported:** `1.23e2m`, `1.23e-2m`, `5e3m` → **throw `DecimalError`**.
+  The decimal page wrongly documented scientific decimals as valid. Remove that section and the
+  `scientificDecimal` EBNF. Leading/trailing-dot decimals also error (correctly): `.45m`,
+  `123.m` → `DecimalError`. Valid: `123.45m`, `123m`, `0.001m`, `-789.01m`, `0m`, `0.0m`.
+- **BigInt:** genuine errors (throw `SyntaxError`): `123.45n` (no fraction), `0xn`, `0bn` (no
+  digits). Lenient fallbacks to open string (NO error): `123nn` → `"123nn"`, `n123` → `"n123"`.
+  Valid: `42n`, `-42n`, `0n`, and base forms `0b…n`/`0o…n`/`0x…n` (e.g. `0x2An` == `42n`).
+- **NaN/Inf:** only exact `NaN`, `Inf`, `-Inf`, `+Inf` yield the special numeric values. Other
+  spellings are **open strings, not errors**: `nan`, `NAN`, `inf`, `INF`, `infinity`, `-NaN`
+  all parse as text. The pages' "invalid forms" must be reframed: these are not errors, they
+  are simply parsed as strings (so they are *not* the numeric special value).
+- **Spec authoring:** document the verified valid forms; reframe "invalid forms" to separate
+  genuine syntax errors from lenient string fallbacks; mark lenient fallbacks under
+  *Implementation status*. Remove all arithmetic/comparison "examples" from the value pages —
+  Internet Object is a data format with no operators (`5n + 3n`, `0.1m + 0.2m`, `NaN == NaN`
+  are not IO and must be deleted).
 
 ---
 
