@@ -1,167 +1,104 @@
-# MemberDef (with Object Schema Comparison)
+---
+description: MemberDef — defining one member's type, constraints, and optional/nullable/default behavior.
+---
 
-A **MemberDef** (Member Definition) is the core way to define the type, validation rules, and constraints for a single value in an Internet Object schema. With MemberDefs, you can precisely control how each field is validated, using concise and powerful Internet Object syntax.
+# MemberDef
 
-Every MemberDef is strictly validated against its type's [TypeDef](typedef.md), ensuring schema correctness and interoperability.
+A **MemberDef** (member definition) defines a single member of a schema: its type and the
+constraints on its value. It is an Internet Object object whose first value is the type,
+optionally followed by a default and choices, then keyed options. Every MemberDef is validated
+against its type's [TypeDef](typedef.md), so only the options that type defines are allowed.
 
-## What is a MemberDef?
+## Writing a MemberDef
 
-A **MemberDef** is an IO object that defines:
-
-* The **type** of a value (e.g., `number`, `string`, `object`, `array`)
-* Any **validation rules, constraints, or options** for that value (e.g., `min`, `max`, `choices`, etc.)
-* Optional **default value**, **nullability**, or **optionality** (using positional values and conventions)
-
-**Only options and positional values defined in the** [**TypeDef**](typedef.md) **for that type are valid in MemberDefs.**
-
-## MemberDef Syntax and Usage
-
-A MemberDef is always a `{ ... }` object in Internet Object format, typically with:
-
-* **Type** as the first value (by position or as a `type:` key)
-* **Positional values** (like default or choices, if supported by the TypeDef)
-* **Keyed options** (like `min:`, `max:`, `pattern:`, etc.)
-
-**Examples:**
+The first value is the type; a default and `choices` may follow positionally; all other options
+are keyed:
 
 ```ruby
-# Type: number, min/max range
-age: {number, min: 10, max: 99}
-
-# Type: number, default: 20 (positional)
-age: {number, 20}
-
-# Type: int16, default 20, choices [10,20,30]
-age: {int16, 20, [10, 20, 30]}
-
-# Type: string, regex pattern
-name: {string, pattern: "^[A-Za-z]+$"}
-
-# Type: object with nested schema
-meta: {object, schema: {
-    author: string,
-    version: {int, min: 1}
-  }, default: {author: "Unknown", version: 1}}
+~ $schema: {
+    age:    { number, min: 0, max: 120 },        # type + keyed options
+    level:  { int16, 1, [1, 2, 3] },             # type + default + choices
+    name:   { string, pattern: "^[A-Za-z]+$" },  # type + keyed option
+    tags:   { array, of: string, minLen: 1 }     # container type + options
+}
+---
+~ 30, 2, John, [a, b]
 ```
 
-### Optional, Nullable, and Default Values
+A member can also be just a type (`age: int`) or just a name (`age`, which defaults to `any`).
+The positions and options each type accepts are listed in its
+[Schema Data Types](data-types/README.md) page.
 
-* Add `?` for optional: `age?: {number, min: 10}`
-* Combine: `score?*: {number, min: 0}`
-* Use positional values for default and choices if the TypeDef for that type supports it.
+## Validation against the TypeDef
 
-## How MemberDefs Are Validated
-
-* **Always** against the official [TypeDef](typedef.md) for the type.
-* **Only keys and positions listed in the TypeDef are valid.**
-* If you use an invalid key or value, validation fails.
-
-### Valid MemberDefs
+A MemberDef may use only the options its type defines. An unknown option is rejected with
+`unknown-member`:
 
 ```ruby
-# Valid MemberDefs with various types and constraints
-age: {number, min: 10, max: 99}
-
-# With 20 as default value
-age: {number, 20}
-
-# With choices [10,20,30,40,50] and default 20
-age: {int16, 20, [10, 20, 30, 40, 50]}
-
-# With constraints and nullability set specifically
-age: {number, min: 10, max: 99, null: T}
+age: { number, minimum: 10 }
+---
+42                       # ✗ unknown-member — number has no option "minimum" (use min)
 ```
 
-### Invalid MemberDefs
+## Optional, nullable, and default
+
+- **Optional** (`?` on the key) — the member may be omitted: `age?: { number, min: 0 }`.
+- **Nullable** (`*` on the key) — the value may be `null`: `age*: number`.
+- **Both** (`?*`) — `score?*: { number, min: 0 }`.
+- **Default** — the second positional value (or keyed `default:`) supplies a value when the
+  member is omitted: `role?: { string, guest }`.
 
 ```ruby
-age: {number, minimum: 10, maximum: 99}  # ❌ 'minimum'/'maximum' not valid for number
-age: {number, length: 10}                # ❌ 'length' not valid for number
+~ $schema: { name: string, role?: { string, guest }, nickname?*: string }
+---
+~ John                       # role → "guest"; nickname omitted
+~ Mary, admin, N             # role "admin"; nickname null
 ```
 
-> **Tip:** Always consult the [TypeDef reference](typedef.md) before adding constraints/options.
+> **Use the `*` suffix for nullability.** The keyed `null:` option is part of each TypeDef but is
+> not yet honored by the reference implementation — see *Implementation status*.
 
-## Advanced: MemberDef with Nested Schema
+## MemberDef vs. SchemaDef
 
-Use the `schema:` key to define validation for nested object or array types:
+Both use `{ … }`, which makes them easy to confuse, but they serve different purposes:
+
+- A **MemberDef** validates one value — it has a *type* and constraints.
+- A **SchemaDef** describes an object's *shape* — a map of field names to types or MemberDefs.
+
+The parser tells them apart by the first entry:
+
+1. **Is the first value a known type?** → it is a **MemberDef**.
+2. **Otherwise** (the first entry is a `key: …` pair, or a bare field name) → it is a **SchemaDef**.
 
 ```ruby
-meta: {object, schema: {author: string, version: int}}
-tags: {array, of: string, minLen: 1}
+~ $schema: {
+    address: { street: string, city: string },   # SchemaDef — a nested object shape
+    age:     { int, min: 0, max: 120 }            # MemberDef — a type with constraints
+}
+---
+~ { Main St, NYC }, 30
 ```
 
-## Comparison: MemberDef vs Object Schema
+Here `address` declares fields (`street`, `city`), while `age` declares a type with a range.
 
-While Object Schemas and MemberDefs share `{ ... }` syntax, their purpose and parsing are different:
+## Nested shapes
 
-* **MemberDef**: Validates a single value or field using type and constraints (the focus of this page)
-* **Object Schema**: Defines the _shape_ of an object (what keys/fields it has, not how a value is validated)
-
-### Brief Object Schema Definition
-
-An **Object Schema** is a map of field names to types or MemberDefs, specifying the _shape_ of objects, e.g.:
+For a nested object, write the shape inline (`{ … }`). The explicit `{ object, schema: { … } }`
+form is equivalent and documented on [Object (SchemaDef)](data-types/object.md):
 
 ```ruby
-address: { street: string, city: string }
+~ $schema: { name: string, meta: { author: string, version: { int, min: 1 } } }
+---
+~ John, { Jane, 2 }
 ```
 
-> Object Schemas do _not_ add constraints to individual values—they define what fields exist and their types or schemas.
+## Implementation status (beta)
 
-## Why This Is Confusing (And How To Tell the Difference)
-
-Because both use `{ ... }` syntax, it's easy to mix them up. Let's look at two lines:
-
-```ruby
-address: { street: string, city: string }           # Object Schema (declares fields/shape)
-age: { int, min: 0, max: 120 }                      # MemberDef (type and constraints)
-```
-
-**Key distinction:**
-
-* **MemberDef**: If first value is a type, or if `type`/`schema` is a member, it's a MemberDef.
-* **Object Schema**: Otherwise, it's just a field map.
-
-#### Quick Rules
-
-1. **Is the first value a known data type?** → **Yes:** MemberDef → **No:** Go to 2
-2. **Contains `type` or `schema` as a member?** → **Yes:** MemberDef → **No:** Object Schema
-
-#### Flowchart
-
-```mermaid
-flowchart TD
-    A["{ ... }"] --> B{Is first value a known data type?}
-    B -- Yes --> C[MemberDef]
-    B -- No --> D{Contains 'type' or 'schema' as member?}
-    D -- Yes --> E[MemberDef]
-    D -- No --> F[Object Schema]
-```
-
-## Common Mistakes and How to Avoid Them
-
-* **Using options not in the TypeDef:** Wrong: `age: {number, minimum: 10}`
-* **Mixing constraints with object schemas:** Wrong: `{username: string, maxLen: 16}` (ambiguous!) Right: `username: {string, maxLen: 16}` inside an object schema
-* **Omitting the type:** Always start with the type in a MemberDef
-
-## Best Practices
-
-* Use MemberDefs for all fields needing type and/or validation.
-* Use Object Schemas to describe the field structure of nested objects only.
-* Use positional values (default, choices) only if defined in the TypeDef for the type.
-* Always cross-reference the [TypeDef reference](typedef.md).
-
-## FAQ
-
-**Q: Can I use both forms together?** A: Yes—use Object Schema for nested structure, MemberDef for each field (even nested).
-
-**Q: What if my MemberDef contains a nested schema?** A: Use `schema: { ... }` inside the MemberDef for deep validation.
-
-**Q: What error do I get if I use the wrong form or invalid key?** A: Validation fails, usually with a "type mismatch" or "unexpected/invalid field" error, depending on context and TypeDef.
-
-**Q: Where do I find all valid options for each type?** A: See the [TypeDef reference](typedef.md).
+- Keyed `optional:` works; keyed `null:` is not yet honored — use the `*` suffix for nullability.
 
 ## See Also
 
-* [TypeDef documentation](typedef.md) — all allowed options for each type
-* [Internet Object Schema Spec](schema.md)
-* [IO Object Syntax](object.md)
+* [TypeDef](typedef.md) — the allowed options for each type
+* [Overview](internet-object-schema.md) — how schemas are built
+* [Object (SchemaDef)](data-types/object.md) — declaring object shapes
+* [Schema References](../the-definitions/schema-references.md) — reusing shapes with `$`

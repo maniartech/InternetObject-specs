@@ -46,7 +46,9 @@ Here `members` is an array whose element type is the `$person` schema.
 
 ## Guidance
 
-- Define a shape **before** it is referenced (no forward references).
+- For readability, define a shape **before** you reference it. Order within the header is not
+  significant — references resolve after the whole header is read (see
+  [Schema References](../the-definitions/schema-references.md)).
 - Reuse keeps documents consistent and small; change a shape once, everywhere updates.
 
 ## See Also
