@@ -4,11 +4,23 @@ structure:
   readme: README.md
   summary: SUMMARY.md
 
-# Redirects preserve old URLs after the v1 ToC restructure file renames.
-# Format: <new-path>: <old-path>  (paths are URL paths, no .md extension)
+# Redirects preserve old URLs after restructures and file renames.
+# GitBook format: <old-url-path>: <new-file-path.md>  (source page -> target file).
 redirects:
-  the-structure/values/binary: the-structure/values/base64
-  the-definitions/schema-references: the-definitions/complex-schema
-  the-collections/collection-rules: the-collections/validation-rules
-  schema-definition-language/dynamic-schema: schema-definition-language/validation-rules
-  schema-definition-language/data-types/binary: schema-definition-language/data-types/base64
+  # v1 ToC restructure renames
+  the-structure/values/base64: the-structure/values/binary.md
+  the-definitions/complex-schema: the-definitions/schema-references.md
+  the-collections/validation-rules: the-collections/collection-rules.md
+  schema-definition-language/validation-rules: schema-definition-language/dynamic-schema.md
+  schema-definition-language/data-types/base64: schema-definition-language/data-types/binary.md
+  # 4b-ii: temporal types are not string subtypes -> consolidated into date-and-time
+  schema-definition-language/data-types/string/string-derived-types/date: schema-definition-language/data-types/date-and-time.md
+  schema-definition-language/data-types/string/string-derived-types/time: schema-definition-language/data-types/date-and-time.md
+  schema-definition-language/data-types/string/string-derived-types/datetime: schema-definition-language/data-types/date-and-time.md
+  schema-definition-language/data-types/string/string-derived-types: schema-definition-language/data-types/string/README.md
+  # 4b-ii: numeric shortcuts consolidated into Numeric Types
+  schema-definition-language/data-types/number/derived-types: schema-definition-language/data-types/number/README.md
+  schema-definition-language/data-types/number/derived-types/byte: schema-definition-language/data-types/number/README.md
+  schema-definition-language/data-types/number/derived-types/int16: schema-definition-language/data-types/number/README.md
+  schema-definition-language/data-types/number/derived-types/int32: schema-definition-language/data-types/number/README.md
+  schema-definition-language/data-types/number/derived-types/integer: schema-definition-language/data-types/number/README.md
