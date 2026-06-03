@@ -1,73 +1,58 @@
 ---
-description: Booleans in Internet Object
+description: Boolean values — true and false, in compact and verbose forms.
 ---
 
-# Boolean
+# Booleans
 
-A **Boolean** in Internet Object represents a logical value that can be either true or false. Boolean values are scalar primitives used to express binary states, flags, or conditional logic.
+A **boolean** is a logical value, either true or false. Booleans are scalar values used for
+flags, binary states, and conditions.
 
-Boolean values in Internet Object support both compact and verbose representations to balance readability and space efficiency.
-
+Each value has a compact and a verbose form, letting you trade brevity for explicitness.
 
 ## Syntax
 
-A boolean value can be expressed in two forms:
-
 ```ebnf
-boolean = compactBoolean | verboseBoolean
+boolean        = compactBoolean | verboseBoolean
 compactBoolean = "T" | "F"
 verboseBoolean = "true" | "false"
 ```
 
-## Structural Characters
+## Structural elements
 
-| Symbol | Name            | Unicode  | Description                    |
-| ------ | --------------- | -------- | ------------------------------ |
-| `T`    | Uppercase T     | `U+0054` | Compact representation of true |
-| `F`    | Uppercase F     | `U+0046` | Compact representation of false|
-| `true` | Keyword true    | Multiple | Verbose representation of true |
-| `false`| Keyword false   | Multiple | Verbose representation of false|
+| Token | Name | Description |
+| ----- | ---- | ----------- |
+| `T` | Compact true | `true` in compact form |
+| `F` | Compact false | `false` in compact form |
+| `true` | Verbose true | the verbose true keyword |
+| `false` | Verbose false | the verbose false keyword |
 
-## Valid Forms
+## Valid forms
 
-```ruby
-T                    # Compact true
-F                    # Compact false
-true                 # Verbose true
-false                # Verbose false
-```
-
-## Optional Behaviors
-
-### Literal and Alternate Forms
-
-Internet Object supports two equivalent representations for each boolean value:
-
-- **Compact form**: `T` for true, `F` for false (recommended)
-- **Verbose form**: `true` for true, `false` for false
+The compact and verbose forms are equivalent; the compact form is recommended for terse data.
 
 ```ruby
-T        # ✅ Recommended compact form
-true     # ✅ Verbose form (equivalent to T)
-F        # ✅ Recommended compact form
-false    # ✅ Verbose form (equivalent to F)
+---
+T, F, true, false
 ```
 
-## Invalid Forms
+## Not a boolean
+
+Boolean keywords are **case-sensitive and spelled exactly**. Any other token is not an error —
+it is parsed as a different value type, so it is *not* a boolean:
 
 ```ruby
-t        # ❌ Lowercase not allowed
-f        # ❌ Lowercase not allowed
-TRUE     # ❌ All caps not allowed
-FALSE    # ❌ All caps not allowed
-True     # ❌ Mixed case not allowed
-False    # ❌ Mixed case not allowed
-1        # ❌ Numeric representation not allowed
-0        # ❌ Numeric representation not allowed
+t                    # open string "t", not true
+TRUE                 # open string "TRUE", not true
+True                 # open string "True", not true
+1                    # the number 1, not true
+0                    # the number 0, not false
 ```
+
+> Under a `bool` schema, a non-boolean value fails validation with `not-a-bool`. Without a
+> schema, the values above are simply kept as their parsed type (string or number).
 
 ## See Also
 
-* [Schema for Booleans](../../schema-definition-language/data-types/bool.md)
-* [Values](../values/README.md)
-
+- [Value Representations](README.md) — all value types
+- [Nulls](null.md) — the absence of a value
+- [Bool](../../schema-definition-language/data-types/bool.md) — the boolean schema type

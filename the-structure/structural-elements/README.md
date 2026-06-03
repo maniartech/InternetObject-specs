@@ -1,15 +1,25 @@
+---
+description: The characters and tokens that structure and delimit an Internet Object document.
+---
+
 # Structural Elements
 
-The Internet Object format includes several structural characters, literals, and other special characters that are used to structure and delimit data within a document. These characters are used in conjunction with objects, strings, arrays, numbers, and whitespace to create complex and flexible data structures.
+The Internet Object format uses a small set of structural characters, literals, and other
+special characters to structure and delimit data. Working together with objects, strings,
+arrays, numbers, and whitespace, these elements compose the format's grammar and let documents
+express complex, flexible data structures.
 
 ## Categories
 
-- **[Structural Characters](./structural-characters-n-keywords.md)** - Core syntax characters that define data organization
-- **[Literals](./literals.md)** - Predefined constant values (booleans, null, special numbers)
-- **[Other Special Characters](./other-special-characters.md)** - Functional modifiers for variables, schemas, and values
-- **[Whitespaces](./whitespaces.md)** - Comprehensive Unicode whitespace character support
+- [Structural Characters & Separators](structural-characters-n-keywords.md) — core syntax
+  characters that organize data
+- [Literals](literals.md) — predefined constant values (booleans, null, special numbers)
+- [Other Special Characters](other-special-characters.md) — functional modifiers for
+  variables, schemas, and values
+- [Whitespace & Indentation](whitespaces.md) — recognized Unicode whitespace and its handling
 
 ## See Also
-- **[Values](../values/)** - Data types and value representation
-- **[Comments](../comments.md)** - Comment syntax and usage
-- **[Encoding](../encoding.md)** - Character encoding and Unicode support
+
+- [Value Representations](../values/README.md) — data types and how values are written
+- [Comments](../comments.md) — comment syntax and usage
+- [Encoding](../encoding.md) — character encoding and Unicode support

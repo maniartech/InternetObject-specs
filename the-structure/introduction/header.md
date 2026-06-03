@@ -1,33 +1,43 @@
+---
+description: The header section — schemas, definitions, variables, and metadata.
+---
+
 # Header
 
-The header of an Internet Object document is positioned at the beginning of the document and serves a crucial role in defining the schema or associated definitions for the data it contains. This section includes essential metadata, context, variables, and schema references for the document's content. It plays an important role in ensuring that the data is presented in a consistent format and provides the necessary information for accurate interpretation and processing.
+The header sits at the beginning of an Internet Object document and defines the schema and
+definitions for the data that follows. It carries the metadata, context, variables, and schema
+references needed to interpret the data consistently. By stating this information once, up
+front, the header keeps the data section compact and unambiguous.
 
-\[ Header Image Placeholder ]
+## Default schema
 
-### Default Schema
-
-The schema is a fundamental component of the Internet Object format, defining the structure and semantics of the data within an Internet Object document. When the header contains only a schema, it is referred to as a "default schema." This schema is typically used to outline the structure of the data included in the document, separating the structure definition from the data itself. This separation makes the data more compact, readable, and easier to process. For more detailed information about schemas, refer to [the Schema](../../schema-definition-language/internet-object-schema.md).
+A schema defines the structure and meaning of the data in a document. When the header contains
+only a schema — with no other definitions — that schema is the document's *default schema*. It
+describes the shape of the data while keeping the structure separate from the data itself,
+which makes the data more compact and easier to process.
 
 ```ruby
-name, age:int, address, isActive?, remark
+name, age: int, address, isActive?, remark
 ---
 ```
 
-In this schema example, five keys are defined with additional details:
+This header declares five members:
 
-1. **`name`**: Represents a standard key, expected to contain a value such as a string.
-2. **`age:int`**: Specifies that the `age` key should contain an integer value, indicating the data type explicitly.
-3. **`address`**: Another standard key, which could hold a more complex value like a string or an object, depending on the context.
-4. **`isActive?`**: The question mark (`?`) signifies that the `isActive` key is optional, meaning it may or may not be present in the data.
-5. **`remark`**: Represents a standard key, expected to contain a value, likely a string, which could hold additional comments or notes.
+1. **`name`** — an untyped member, typically a string.
+2. **`age: int`** — an explicitly typed member that must hold an integer.
+3. **`address`** — an untyped member that may hold a string or a nested object.
+4. **`isActive?`** — the `?` suffix marks the member as optional; it may be omitted from the data.
+5. **`remark`** — an untyped member, typically a free-text note.
 
-This schema not only defines the structure but also includes type annotations and optionality, enhancing the clarity and robustness of the data model. By using this schema, the document can ensure consistent and accurate data representation, making it easier to process and interpret across different systems.
+Alongside the structure, the schema records type annotations and optionality, which sharpens
+validation and documents the data model in one place. For the full schema syntax, see
+[the Internet Object schema](../../schema-definition-language/internet-object-schema.md).
 
-See this page for more information about [the Schema](../../schema-definition-language/internet-object-schema.md).
+## Definitions
 
-### Definitions
-
-Definitions, at their core, are collections of key-value pairs used to declare metadata, variables, complex schemas, and other key-value pairs within the header of an Internet Object document.
+Definitions are key-value pairs declared in the header to hold metadata, variables, reusable
+schemas, and other shared values. Each definition is written on its own line, prefixed with
+`~`.
 
 ```ruby
 ~ pageSize: 1
@@ -38,6 +48,15 @@ Definitions, at their core, are collections of key-value pairs used to declare m
 ---
 ```
 
-In this example, the header contains response metadata and schema details presented as Definitions, rather than using a Default Schema as seen in the previous example. The Definitions provide metadata that specify the page size (`pageSize`), the current page number (`currentPage`), and the total record count (`recordCount`). Additionally, more complex structures are defined, such as an address schema (`$address`) with nested keys (`street`, `city`, `state`) and a higher-level schema (`$schema`) that references both simple and complex data types. The `$schema` is a reserved key used to define the default schema for the document.
+Here the header mixes response metadata with schema definitions instead of using a default
+schema. The metadata records the page size (`pageSize`), the current page (`currentPage`), and
+the total record count (`recordCount`). It also defines a reusable address shape (`$address`)
+with the members `street`, `city`, and `state`, and a top-level schema (`$schema`) that
+references it. The `$schema` key is reserved: it names the default schema applied to the data
+section.
 
-For further information about [the Definitions](../../the-definitions/definitions.md), click the link.
+## See Also
+
+- [Data Sections](data.md) — what follows the `---` separator
+- [Definitions](../../the-definitions/definitions.md) — variables and schema references in depth
+- [Internet Object Schema](../../schema-definition-language/internet-object-schema.md) — the schema language

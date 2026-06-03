@@ -30,8 +30,18 @@ Because the schema lives in the header, the data stays terse. See
 ## Sections
 
 A document may contain multiple named **sections**, each with its own schema — useful for
-bundling related datasets (e.g. `books` and `subscribers`) in one document. Each section
-begins with its own `---` separator.
+bundling related datasets (e.g. `people` and `addresses`) in one document. Each section
+begins with its own `---` separator, optionally naming the schema it uses:
+
+```ruby
+~ $person: { name, age: int }
+~ $address: { street, city }
+--- $person
+~ John, 30
+~ Jane, 25
+--- $address
+~ Main St, NYC
+```
 
 ## Why it matters
 

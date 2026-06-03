@@ -1,19 +1,25 @@
+---
+description: Predefined constant values — booleans, null, and special numbers.
+---
+
 # Literals
 
-Literals are predefined constant values in Internet Object that represent common data states and special values. They provide a concise way to express boolean values, null states, and special numeric values without requiring quotes or additional syntax.
+Literals are predefined constant values that represent common data states and special values.
+They offer a concise way to express boolean values, null states, and special numeric values
+without quotes or extra syntax.
 
-## Supported Literals
+## Supported literals
 
-Internet Object supports the following literal values:
+Internet Object supports the following literals:
 
-| Literal | Type | Represents | Case Sensitive |
+| Literal | Type | Represents | Case sensitive |
 |---------|------|------------|----------------|
 | `true` | Boolean | True value | Yes |
 | `T` | Boolean | True value (short form) | Yes |
 | `false` | Boolean | False value | Yes |
 | `F` | Boolean | False value (short form) | Yes |
-| `null` | Null | Null/empty value | Yes |
-| `N` | Null | Null/empty value (short form) | Yes |
+| `null` | Null | Null / empty value | Yes |
+| `N` | Null | Null / empty value (short form) | Yes |
 | `Inf` | Number | Positive infinity | Yes |
 | `-Inf` | Number | Negative infinity | Yes |
 | `NaN` | Number | Not a Number | Yes |
@@ -33,11 +39,13 @@ Internet Object supports the following literal values:
 
 ## Rules
 
-- **Case Sensitive**: All literals must use exact case (`True`, `FALSE`, `NULL` are invalid)
-- **No Quotes**: Literals are written without quotes
-- **Short Forms**: Single-letter shortcuts available for brevity
+- **Case sensitive** — literals must use exact case; `True`, `FALSE`, and `NULL` are invalid.
+- **No quotes** — literals are written without quotes; quoting one makes it an ordinary string.
+- **Short forms** — `T`, `F`, and `N` are single-letter shortcuts for `true`, `false`, and
+  `null`.
 
 ## See Also
-- **[Boolean Values](../values/booleans.md)** - Detailed boolean type specification
-- **[Null Values](../values/null.md)** - Null type and optional values
-- **[Number Literals](../values/number/nan-and-infinity.md)** - Numeric types including special values
+
+- [Booleans](../values/booleans.md) — the boolean type in detail
+- [Nulls](../values/null.md) — null and optional values
+- [NaN and Infinity](../values/number/nan-and-infinity.md) — special numeric values

@@ -1,65 +1,65 @@
 ---
-description: Numbers in Internet Object
+description: The numeric value forms — Number, BigInt, and Decimal.
 ---
 
-# Numbers
+# Numeric Values
 
-**Numbers** in Internet Object provide accurate numerical representation for various applications, from simple counting to complex financial calculations. Internet Object supports three distinct numeric data types—**Number**, **BigInt**, and **Decimal**—each designed to meet different numerical requirements in modern applications.
+Internet Object provides accurate numeric representation for everything from simple counting to
+exact financial arithmetic. It supports three numeric forms — **Number**, **BigInt**, and
+**Decimal** — each suited to a different requirement.
 
-## Number Types
+## Numeric forms
 
-- **[Number](./number.md)** (64-bit floating-point): Standard IEEE 754 double-precision numbers, ideal for general-purpose calculations and fractional values.
-- **[BigInt](./bigint.md)**: Arbitrary-precision integers for extremely large whole numbers that exceed 64-bit limitations.
-- **[Decimal](./decimal.md)**: Fixed-precision decimal values with exact arithmetic, essential for financial calculations and applications requiring precise decimal representation.
+- [Number](number.md) — a 64-bit IEEE 754 double-precision value, for general-purpose
+  calculations and fractional values.
+- [BigInt](bigint.md) — an arbitrary-precision integer, for whole numbers beyond the 64-bit
+  range.
+- [Decimal](decimal.md) — a fixed-precision decimal with exact arithmetic, for financial
+  values and other cases that require precise decimal representation.
 
-## Number Formats
+## Number bases and notations
 
-Internet Object supports various number formats. The table below distinguishes between decimal integers and regular (floating-point) numbers, and provides recommendations:
+Internet Object accepts several notations. The table distinguishes integer-only bases from
+fractional notations and gives a recommendation.
 
-> **Note:** Bases other than decimal (base 10)—that is, binary (base 2), octal (base 8), and hexadecimal (base 16)—can only represent integers, not fractional or decimal values. For non-integer values, use decimal (base 10) or scientific notation.
+> **Integer-only bases.** Binary (base 2), octal (base 8), and hexadecimal (base 16) can
+> represent only integers. For fractional values, use base-10 decimal or scientific notation.
 
-| Format                      | Supported Types           | Recommendation/Use Case                                                    |
-|-----------------------------|--------------------------|----------------------------------------------------------------------------|
-| Decimal integer (base 10)   | Number, BigInt           | BigInt: large integers, Number: general-purpose integers                   |
-| Decimal (floating-point)    | Number, Decimal          | Decimal: financial/precise decimals, Number: general-purpose decimals      |
-| Binary (base 2)             | Number, BigInt           | BigInt: large binary integers, Number: general binary values               |
-| Octal (base 8)              | Number, BigInt           | BigInt: large octal integers, Number: general octal values                 |
-| Hexadecimal (base 16)       | Number, BigInt           | BigInt: large hex integers, Number: general hex values                     |
-| Scientific notation         | Number, Decimal          | Decimal: precise scientific/financial, Number: general scientific          |
-| Special values              | Number only              | [NaN and Infinity](./nan-and-infinity.md) for undefined/infinite results   |
+| Notation | Supported forms | Recommendation |
+|----------|-----------------|----------------|
+| Decimal integer (base 10) | Number, BigInt | BigInt for large integers; Number for general use |
+| Decimal fractional | Number, Decimal | Decimal for exact/financial values; Number otherwise |
+| Binary (base 2) | Number, BigInt | BigInt for large binary integers; Number otherwise |
+| Octal (base 8) | Number, BigInt | BigInt for large octal integers; Number otherwise |
+| Hexadecimal (base 16) | Number, BigInt | BigInt for large hex integers; Number otherwise |
+| Scientific notation | Number, Decimal | Decimal for precise values; Number otherwise |
+| Special values | Number only | [NaN and Infinity](nan-and-infinity.md) for undefined/infinite results |
 
-## Type Identification
+## Distinguishing the forms
 
-Each number type uses a distinct suffix for identification:
+Each form is identified by a distinct suffix (Number has none):
 
 ```ruby
-42          # Number (standard floating-point)
-42n         # BigInt (arbitrary-precision integer)
+42          # Number  (standard floating-point)
+42n         # BigInt  (arbitrary-precision integer)
 42.50m      # Decimal (fixed-precision decimal)
 ```
 
+> **Two senses of "decimal".** *Decimal (base 10)* is the common numeral system used by all
+> forms. *Decimal (the form)* is the fixed-precision type for exact arithmetic.
 
-## Special Numeric Values
+## Choosing a form
 
-See **[Special Numeric Values: NaN and Infinity](./nan-and-infinity.md)** for details on undefined and infinite results (supported only by Number).
-
-> **Note**: Alternative base formats (binary, octal, hexadecimal) are documented within each number type specification.
-
-## Type Selection Guide
-
-| Use Case | Recommended Type | Reason |
-|----------|------------------|---------|
+| Use case | Recommended form | Reason |
+|----------|------------------|--------|
 | General calculations | Number | Standard performance and compatibility |
-| Financial amounts | Decimal | Exact precision, no rounding errors |
-| Large counters/IDs | BigInt | No precision limits for integers |
+| Financial amounts | Decimal | Exact precision, no rounding error |
+| Large counters or IDs | BigInt | No precision limit for integers |
 | Scientific notation | Number | Built-in floating-point support |
 | Cryptographic values | BigInt | Handles arbitrarily large integers |
 
-> **Note**: The term "decimal" is used in two contexts:
-> - **Decimal (base-10)**: The common numeral system used by all number types
-> - **Decimal (data type)**: A specific fixed-precision type for exact arithmetic
-
 ## See Also
 
-* [Values](../README.md) - Overview of all Internet Object value types
-* [Schema for Numbers](../../../schema-definition-language/data-types/number/README.md) - Number validation and constraints
+- [Value Representations](../README.md) — all value types
+- [NaN and Infinity](nan-and-infinity.md) — special numeric values (Number only)
+- [Numeric Types](../../../schema-definition-language/data-types/number/README.md) — numeric schemas and constraints
