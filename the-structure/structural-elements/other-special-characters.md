@@ -22,13 +22,12 @@ Special characters are used in conjunction with structural characters and litera
 ~ @g: green
 ~ @b: blue
 
-# Schema definitions using variables
-~ $color: {string, choices: [@r, @g, @b]}
+# Schema using variables in an inline constraint
 ~ $schema: {
     name: string,
     email: email,
     joiningDt: date,
-    color: $color
+    color: {string, choices: [@r, @g, @b]}
 }
 
 ---

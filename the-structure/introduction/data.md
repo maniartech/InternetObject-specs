@@ -44,26 +44,29 @@ It is the simplest form of the separator line. It will use the default section n
 
 Here the section name is `employee`. The schema will be the default schema set for the document.
 
+<!-- io:test skip -->
 ```ruby
 --- employee
 ~ John Doe, 25, Male, {Bond Street, New York, NY}, [agile, swift]
-~ Jane Doe, 20, Male, {Duke Street, New York, NY]
+~ Jane Doe, 20, Male, {Duke Street, New York, NY}
 ```
 
 #### Separator Line with Section Name and Applicable Schema
 
 Here the section name and schema are both are explicitly mentioned as `employee` and `$employee` respectively.
 
+<!-- io:test skip -->
 ```ruby
 --- employee : $employee
 ~ John Doe, 25, Male, {Bond Street, New York, NY}, [agile, swift]
-~ Jane Doe, 20, Male, {Duke Street, New York, NY]
+~ Jane Doe, 20, Male, {Duke Street, New York, NY}
 ```
 
 #### Separator Line with Only Schema
 
 Here only the schema is mentioned. The section name will be derived from the schema name (employee). However, if the document the section name is already used, then it will be an error.
 
+<!-- io:test skip -->
 ```ruby
 --- $employee
 ~ John Doe, 25, Male, {Bond Street, New York, NY}, [agile, swift]
@@ -126,6 +129,7 @@ It is not necessary to have a section separator for an entirely empty document.
 
 An Internet Object Document can include multiple sections, each with its own data:
 
+<!-- io:test skip -->
 ```ruby
 --- $library
 # Bookville Library
