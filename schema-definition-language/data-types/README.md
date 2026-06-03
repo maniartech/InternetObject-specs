@@ -1,61 +1,72 @@
-# Data Types
+---
+description: The Internet Object schema type system — base types, shortcuts, and TypeDefs.
+---
 
-The internet object schema defines six data types that include [string](string/), [number](number/), [int](number/derived-types/integer.md), [int32](number/derived-types/int32.md), [int16](number/derived-types/int16.md), [byte](number/derived-types/byte.md), [email](string/string-derived-types/email.md), [url](string/string-derived-types/url.md), [datetime](string/string-derived-types/datetime.md), [date](string/string-derived-types/date.md), [time](string/string-derived-types/time.md), [bool](bool.md), [object](object.md), [array ](array.md)or [any](any.md).
+# Schema Data Types
 
-![Internet Object Data Types](https://documents.app.lucidchart.com/documents/076b4f9c-b79d-410c-8002-1ac23fdbb786/pages/SUfm\_UR89EBD?a=22456\&x=2657\&y=1364\&w=946\&h=792\&store=1\&accept=image%2F\*\&auth=LCA%20cf2ec801d5bc4f25cf66c288efe8e9b1d4d1069e-ts%3D1610795059)
+A schema constrains each member to a **type**. The type system is small by design: a handful of
+**base types**, plus a closed set of **shortcuts** — names that stand for a base type with preset
+constraints baked in. Every type is configured through its **TypeDef**, the fixed set of options
+it accepts.
 
-{% hint style="info" %}
-The types string and number have subtypes. The email, url, datetime, date and time are subtypes of string. The int, int32, int16, byte are subtypes of number.
-{% endhint %}
+## Base types
 
-### TypeDefs
+| Type | Validates | Reference |
+|------|-----------|-----------|
+| `string` | Text | [String Types](string/README.md) |
+| `number` | An IEEE-754 number | [Numeric Types](number/README.md) |
+| `bigint` | An arbitrary-precision integer (`123n`) | [BigInt](number/bigint.md) |
+| `decimal` | A fixed-precision decimal (`123.45m`) | [Decimal](number/decimal.md) |
+| `bool` | `true` / `false` | [Bool](bool.md) |
+| `date`, `time`, `datetime` | Temporal values (`d'…'`, `t'…'`, `dt'…'`) | [Date and Time](date-and-time.md) |
+| `binary` | Byte data, written as base64 (`b'…'`) | [Binary](binary.md) |
+| `object` | A structured shape (a SchemaDef) | [Object (SchemaDef)](object.md) |
+| `array` | An ordered list of values | [Array](array.md) |
+| `any` | Any value; the default when no type is given | [Any](any.md) |
 
-Typedefs are a memberdef schema for the specified type. They define the constraints for the particular data type. The following example&#x20;
+A member written without a type defaults to `any`, so `name, age` declares two `any` members.
 
+> `date`, `time`, and `datetime` are **their own types**, not subtypes of `string`. Earlier
+> drafts described them as string-derived; they are temporal types with their own literal
+> values. See [Date and Time](date-and-time.md).
 
+## Shortcuts
 
-{% tabs %}
-{% tab title="The $type definition" %}
-```yaml
-type: { string, choices: [
-    string, email, url, datetime, date, time,
-    number, int, int32, int16, byte,
-    object, array, bool
-  ]
-}
-```
-{% endtab %}
-{% endtabs %}
+A **shortcut** is a built-in name equal to a base type plus preset constraints. It is not a new
+type — it is a convenient, validated configuration of a base type. A conformant validator MUST
+recognize every shortcut name.
 
-{% tabs %}
-{% tab title="The String TypeDef" %}
+| Base | Shortcuts | Each shortcut is… |
+|------|-----------|-------------------|
+| `string` | `email`, `url` | `string` with a built-in pattern |
+| `number` | `int`, `uint`, `int8`, `int16`, `int32`, `uint8` (`byte`), `uint16`, `uint32` | `number` restricted to whole values in a fixed range |
+
+See [Numeric Types](number/README.md) for the full numeric family and ranges, and
+[String Types](string/README.md) for `email` and `url`.
+
+> **Reserved.** `int64`, `uint64`, `float32`, and `float64` are reserved for future use and are
+> not yet validated by the reference implementation.
+
+## TypeDef and MemberDef
+
+Each type defines a **TypeDef** — the exact set of options it accepts (for example, `string`
+accepts `pattern`, `minLen`, `maxLen`; `number` accepts `min`, `max`, `multipleOf`). Supplying a
+type together with chosen options produces a **MemberDef**, the definition of a single member:
+
 ```ruby
-type      : {string, choices: [string, email, url, datetime, date, time]},
-default?  : string,
-choices?  : [string],
-pattern?  : string,
-maxLen?   : {int, min:0},
-len?      : {int, min:0},
-optional? : {bool, F},
-null?     : {bool, F}
-```
-{% endtab %}
-{% endtabs %}
-
-Some of the valid String MemberDef values are...
-
-```ruby
-# The name is string and default value is ""
-name: {string, ""}
-
-# The website is of url type!
-website: {url, optional:T} 
-
-# The rgb's default is red, and choices are red, green, blue
-rgb: {string, red, [red, green, blue]}
-
-# The description is string that can have maximum length of 500 characters 
-description: {string, maxLen:500} # 
+name:  { string, minLen: 1, maxLen: 100 },   # a string MemberDef
+score: { int, min: 0, max: 100 }             # a number MemberDef
+---
+~ John, 85
 ```
 
-As shown in the example above, Objects, Numbers, Arrays, Boolean, and Any have their respective TypeDef. &#x20;
+The first value in a MemberDef is the type; the second is the default; the third is `choices`.
+Remaining options are written as `key: value` pairs. An option a type does not define is
+rejected. Each type page lists its TypeDef in full.
+
+## See Also
+
+* [Overview](../internet-object-schema.md) — how schemas are built
+* [TypeDef](../typedef.md) — the option-contract model
+* [MemberDef](../memberdef.md) — types, constraints, optional/nullable/default
+* [Numeric Types](number/README.md) · [String Types](string/README.md) · [Date and Time](date-and-time.md)
