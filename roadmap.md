@@ -23,7 +23,7 @@ during the 1.0 Draft period.
 - **Settle the numeric type set.** Confirm the final list of numeric shortcuts and their
   ranges, and mark any that remain reserved.
 - **Finalize streaming.** Specify the framing and collection-merge rules for
-  [streaming](streaming/README.md) once the model stabilizes.
+  [streaming collections](the-collections/data-streaming.md) once the model stabilizes.
 
 ## Conformance
 

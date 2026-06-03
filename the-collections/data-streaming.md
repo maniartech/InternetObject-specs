@@ -20,10 +20,10 @@ merges them into the same collection. Each record is validated on its own, so a 
 record does not interrupt the stream.
 
 > **Streaming is evolving.** The detailed streaming model (framing, readers/writers,
-> backpressure, mid-stream schema changes) is under active development and documented
-> separately — see [Streaming](../streaming/README.md).
+> backpressure, mid-stream schema changes) is under active development; the implementation
+> currently leads the specification, and this section will be expanded as the design stabilizes.
 
 ## See Also
 
 * [Collection](collection.md) · [Collection Rules](collection-rules.md)
-* [Streaming](../streaming/README.md)
+* [Creating Collections](creating-collection.md)

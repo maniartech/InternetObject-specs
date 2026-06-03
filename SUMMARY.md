@@ -62,10 +62,6 @@
 * [Collection Rules](the-collections/collection-rules.md)
 * [Data Streaming](the-collections/data-streaming.md)
 
-## Streaming
-
-* [Streaming (Overview)](streaming/README.md)
-
 ## Schema Definition Language
 
 * [Overview](schema-definition-language/internet-object-schema.md)

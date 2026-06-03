@@ -55,6 +55,9 @@ with the members `street`, `city`, and `state`, and a top-level schema (`$schema
 references it. The `$schema` key is reserved: it names the default schema applied to the data
 section.
 
+For the full treatment of metadata, value variables (`@`), and references (`$`) — including
+how they are resolved — see the [Definitions](../../the-definitions/definitions.md) chapter.
+
 ## See Also
 
 - [Data Sections](data.md) — what follows the `---` separator

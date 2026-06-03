@@ -4,8 +4,9 @@ description: The structure of a collection — an ordered sequence of records in
 
 # Collection
 
-A **collection** is an ordered sequence of **records** within a data section of a document.
-Each record is an object, written on its own line and introduced by a tilde `~`. Collections
+A **collection** is an ordered sequence of **records** within a
+[data section](../the-structure/introduction/data.md) of a document. Each record is an object,
+written on its own line and introduced by a tilde `~`. Collections
 make it efficient to serialize, batch, and stream many objects — datasets, tables, event logs
 — in a concise, uniform form.
 

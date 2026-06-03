@@ -103,7 +103,8 @@ curly braces `{}` and may contain nested objects or other values, forming a hier
 
 Collections are lists of objects, allowing multiple records within one data section. Each
 object in a collection is written the same way as a standalone object but belongs to the
-broader collection.
+broader collection. See the [Collections](../../the-collections/collection.md) chapter for
+record syntax, type promotion, and validation rules.
 
 ### Examples of data
 
