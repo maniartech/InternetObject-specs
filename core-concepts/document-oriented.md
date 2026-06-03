@@ -4,6 +4,42 @@ description: Header/data separation; documents and records.
 
 # Document-Oriented Nature
 
-> **Status: Draft stub.** Part of the Internet Object 1.0 specification restructure; full content is being written.
->
-> **Scope:** Header/data separation; documents and records.
+Internet Object is **document-oriented**: a document is a self-contained unit with two parts —
+a **header** and **data** — separated by `---`.
+
+```ruby
+~ count: 2
+~ $schema: { name: string, age: int }
+---
+~ John, 30
+~ Jane, 25
+```
+
+## Header
+
+The header carries everything *about* the data: the **schema**, reusable **definitions**
+(variables `@` and references `$`), and document **metadata**. It is parsed once and applies
+to the data that follows. See [Definitions](../the-definitions/definitions.md).
+
+## Data
+
+The data section holds the actual values — a **single object** or a **collection** of records.
+Because the schema lives in the header, the data stays terse. See
+[Data Sections](../the-structure/introduction/data.md).
+
+## Sections
+
+A document may contain multiple named **sections**, each with its own schema — useful for
+bundling related datasets (e.g. `books` and `subscribers`) in one document. Each section
+begins with its own `---` separator.
+
+## Why it matters
+
+- **Separation of concerns** — structure and metadata are stated once, apart from the data.
+- **Compactness** — records repeat values, not keys.
+- **Streaming** — records after the header can be produced and consumed incrementally.
+
+## See Also
+
+- [Internet Object Document](../the-structure/introduction/README.md)
+- [Schema-First Design](schema-first.md)
