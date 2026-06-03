@@ -17,9 +17,15 @@ Raised while tokenizing or parsing, before any schema is applied. They describe 
 | ---- | --------- |
 | `expecting-bracket` | a `{`, `}`, `[`, or `]` is missing |
 | `unexpected-token` | a token appears where the grammar does not allow it |
-| `expecting-value` | a value was required but none was found |
-| `unclosed-string` | a quoted string has no closing quote |
-| `invalid-number` / `invalid-datetime` | a literal is malformed |
+| `unexpected-positional-member` | a positional value follows a keyed one in an object |
+| `unknown-member` | a MemberDef uses an option the declared type does not define |
+| `string-not-closed` | a quoted string has no closing quote |
+| `value-required` | a value was expected (e.g. a key with no value) but none was found |
+| `invalid-datetime` | a date/time literal is malformed |
+
+> A conformant parser SHOULD report a malformed **numeric** literal (such as `0o89` or `0xGH`)
+> as a coded syntax error. The reference implementation currently raises an uncoded internal
+> error for some of these — a known gap.
 
 ## Validation errors
 
@@ -29,6 +35,7 @@ schema. Representative codes:
 | Code | Condition |
 | ---- | --------- |
 | `invalid-type` | value is not of the declared type |
+| `not-a-bool` / `not-a-string` | value is not a boolean / string for that field |
 | `invalid-range` | number/date outside `min`/`max` |
 | `out-of-range` / `invalid-length` | array/string length outside `minLen`/`maxLen`/`len` |
 | `invalid-min-length` | string/array shorter than the minimum |

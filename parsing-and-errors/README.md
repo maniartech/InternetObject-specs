@@ -2,7 +2,7 @@
 description: Overview of the parsing pipeline and the two error classes.
 ---
 
-# Parsing & Errors
+# Overview
 
 Turning Internet Object text into validated data happens in stages:
 

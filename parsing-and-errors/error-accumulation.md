@@ -36,7 +36,7 @@ example, editor markers at each error's position).
 
 ## Duplicate section names
 
-When two sections share a name, the duplicate is reported and **automatically renamed**
+When two sections share a name, the duplicate is **automatically renamed**
 (`users` → `users_2` → `users_3`), so the rest of the document still loads.
 
 ## See Also
