@@ -44,9 +44,10 @@ RFC 2119. This section states the duties of a conformant implementation. Interne
 
 ## Reference implementation
 
-The TypeScript/JavaScript library [`io-js2`](https://github.com/maniartech) serves as a
-reference implementation. Where this specification and an implementation disagree during the
-draft period, the discrepancy is tracked and resolved case by case; the specification is the
+The official TypeScript/JavaScript implementation,
+[`internet-object`](https://github.com/maniartech/InternetObject-js), serves as a reference
+implementation. Where this specification and an implementation disagree during the draft
+period, the discrepancy is tracked and resolved case by case; the specification is the
 intended source of truth as it stabilizes.
 
 ## See Also

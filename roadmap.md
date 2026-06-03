@@ -1,70 +1,46 @@
-# Internet Object Specification Revamp — Roadmap
-
-> **Goal:** Finalize existing structure and content first, then iteratively fill in the gaps. This roadmap is designed to be milestone-based and GitHub-issue-friendly.
-
+---
+description: Planned directions for the Internet Object specification and ecosystem.
 ---
 
-## ✅ Phase 1: Finalize Existing Content (Top Priority)
+# Roadmap
 
-### 🔹 Milestone: Lock Down Core Specs
-- [ ] Review and refine all **data type specs** (null, bool, number, string, object, array, etc.)
-- [ ] Finalize **document structure**: data section, header section
-- [ ] Complete **definitions and collections** section
-- [ ] Ensure **schema basics and rules** are finalized
-- [ ] Normalize **frontmatter and titles** for all stable pages
-- [ ] Ensure all folders have clear `README.md` as index
+This page outlines the direction of the Internet Object specification and its surrounding
+ecosystem. It is **informative**, not normative: it describes intended work, not guaranteed
+features or dates. Items may change as the format and its reference implementation converge
+during the 1.0 Draft period.
 
-✅ Outcome: Core of the specification is "publishable and stable."
+## Specification
 
----
+- **Converge the spec and the reference implementation.** Where the specification currently
+  describes behavior ahead of the implementation (noted on the affected pages), close the gap
+  in one direction or the other and remove the qualifier.
+- **Finalize the formal grammar.** Fold the remaining lexical edge cases — precise open-string
+  termination, the full escape-sequence set, and date/time sub-formats — into the
+  [EBNF grammar](appendices/grammar.md) so it is complete and self-contained.
+- **Complete the error catalogue.** Give every malformed literal and structural failure a
+  stable, documented [error code](parsing-and-errors/error-model.md), so tooling can branch on
+  codes for all failures rather than most.
+- **Settle the numeric type set.** Confirm the final list of numeric shortcuts and their
+  ranges, and mark any that remain reserved.
+- **Finalize streaming.** Specify the framing and collection-merge rules for
+  [streaming](streaming/README.md) once the model stabilizes.
 
-## 🟡 Phase 2: Add Placeholders for Known Gaps
+## Conformance
 
-### 🔹 Milestone: Define All Spec Sections
-- [ ] Add **stub page** for "Schema Composition" (e.g., `schema-composition.md`)
-- [ ] Add **stub page** for "Error Reporting Format"
-- [ ] Add **stub page** for `$ref` and aliasing rules
-- [ ] Add **stub glossary**
-- [ ] Add **EBNF Grammar placeholder**
-- [ ] Add **real-world examples** page
-- [ ] Add **how to write schema** (step-by-step doc)
-- [ ] Add **streaming examples** placeholder
-- [ ] Add **conformance** placeholder
+- **Publish a conformance test suite.** A language-independent set of documents and expected
+  outcomes (valid data, error codes, positions) that any implementation can run to demonstrate
+  conformance with the [requirements](conformance/requirements.md).
 
-📌 Use headings, comment blocks, or `<!-- TODO -->` to label these as “Coming Soon” or “Draft”.
+## Implementations and tooling
 
----
+- **Reference implementation to 1.0.** Track the TypeScript/JavaScript implementation to a
+  stable 1.0 aligned with the finalized specification.
+- **Implementations in more languages.** Support community libraries for additional languages,
+  each declaring the specification version it conforms to.
+- **Authoring tooling.** Encourage formatters, linters, editor support (syntax highlighting,
+  schema-aware completion), and converters to and from JSON, CSV, and YAML.
 
-## 🔵 Phase 3: Expand Developer-Facing Docs
+## See Also
 
-### 🔹 Milestone: Guide for Adoption & Usage
-- [ ] How to write a schema from scratch
-- [ ] Best practices for schema design
-- [ ] Tips for tool authors (parsers, validators, linters)
-- [ ] Examples for:
-  - API requests/responses
-  - Config files
-  - Live data streaming
-
----
-
-## 🔘 Phase 4: Final Touches & Publishing
-
-### 🔹 Milestone: Prepare for Finalization
-- [ ] Add revision history
-- [ ] Add GitBook/Docusaurus-compatible navigation (`SUMMARY.md`)
-- [ ] Tag stable pages with frontmatter status (`status: stable`)
-- [ ] Write top-level `README.md` and contribution guide
-- [ ] Final review/edit pass
-
----
-
-## 🧩 Suggested Labels for GitHub Issues
-
-| Label | Use |
-|-------|-----|
-| `spec:stable` | Pages that are finalized |
-| `spec:draft` | Incomplete but structured pages |
-| `needs:content` | Placeholder exists, content missing |
-| `priority:high` | Core to spec stability |
-| `editorial` | Fix naming, navigation, formatting |
+- [Version History](appendices/version-history.md) · [Conformance Requirements](conformance/requirements.md)
+- [Contributors](contributors.md) · [FAQs](faqs-1.md)

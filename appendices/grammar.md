@@ -86,19 +86,21 @@ regularString   = '"' { char | escape } '"' | "'" { char | escape } "'" ;
 rawString       = "r" ( '"' { rawChar } '"' | "'" { rawChar } "'" ) ;
 openString      = unquotedChar { unquotedChar } ;          (* ends at a structural char *)
 
-number          = [ sign ] ( decInt | hex | octal | binaryNum ) [ frac ] [ exp ] ;
-hex             = "0x" hexDigit { hexDigit } ;
-octal           = "0o" octDigit { octDigit } ;
-binaryNum       = "0b" ( "0" | "1" ) { "0" | "1" } ;
+number          = [ sign ] ( decInt [ frac ] [ exp ]    (* frac/exp: base-10 only *)
+                           | frac [ exp ]               (* leading-dot form, e.g. .5 *)
+                           | hex | octal | binaryNum ) ;
+hex             = ( "0x" | "0X" ) hexDigit { hexDigit } ;
+octal           = ( "0o" | "0O" ) octDigit { octDigit } ;
+binaryNum       = ( "0b" | "0B" ) ( "0" | "1" ) { "0" | "1" } ;
 bigint          = [ sign ] ( decInt | hex | octal | binaryNum ) "n" ;
-decimal         = [ sign ] decInt [ frac ] "m" ;
+decimal         = [ sign ] ( decInt [ frac ] | frac ) "m" ;
 
 datetime        = "dt" quoted | "d" quoted | "t" quoted ;  (* ISO-8601 inside quotes *)
 binary          = "b" quoted ;                              (* base64 inside quotes *)
 
 boolean         = "T" | "F" | "true" | "false" ;
 null            = "N" | "null" ;
-specialNumber   = "NaN" | "Inf" | "-Inf" ;
+specialNumber   = "NaN" | "Inf" | "+Inf" | "-Inf" ;
 
 comment         = "#" { anyCharExceptNewline } ;
 ws              = ? Unicode whitespace ? ;

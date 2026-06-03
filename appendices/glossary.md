@@ -40,6 +40,10 @@ use. Defined by the specification, not by authors.
 **Type** — A named kind of value (`string`, `int`, `decimal`, …). Built-in types form a closed
 set; some are shortcuts (e.g. `uint8`, `email`) over a base type plus constraints.
 
+**Shortcut** — A built-in name that stands for a base type plus preset constraints (`int8` is
+`int` with an 8-bit range; `email` is `string` with an email `pattern`). A true 1:1 rename
+(e.g. `byte` for `uint8`) is an **alias**.
+
 **Definition** — A header entry `~ key: value` — metadata, a variable, or a reference.
 
 **Variable** — A reusable value defined with `@name` and used as `@name`.

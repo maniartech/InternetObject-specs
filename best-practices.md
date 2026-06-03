@@ -2,7 +2,7 @@
 description: Practical guidance for authoring Internet Object documents and schemas.
 ---
 
-# Best Practices
+# Best Practices & Guidelines
 
 ## Schemas
 
