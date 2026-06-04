@@ -4,11 +4,12 @@ description: The schema-first philosophy — same-syntax schemas, progressive ty
 
 # Schema-First Design
 
-Internet Object is **schema-first**: you declare the shape of the data up front, in the header,
-and the data conforms to it. Where some formats leave structure implicit (JSON infers it from
-each value) or external (JSON Schema lives in a separate file and language), Internet Object
-makes the schema part of the document — and writes it in the **same object syntax as the data**.
-There is no second language to learn: if you can write the data, you can write its schema.
+Internet Object is **schema-first**: you declare the shape of the data up front and the data
+conforms to it. Where some formats leave structure implicit (JSON infers it from each value) or
+external (JSON Schema lives in a separate file and language), Internet Object writes the schema
+in the **same object syntax as the data** — there is no second language to learn: if you can
+write the data, you can write its schema. That schema can travel inside the document or be
+shared between endpoints (see [Where the schema lives](#where-the-schema-lives)).
 
 Declaring the shape first is the idea that makes the rest of the format possible. Once the
 **structure** — the keys and their types — lives in the schema, the data no longer has to carry
@@ -76,11 +77,14 @@ prototyping; move to typed and constrained schemas for production — the data y
 keeps working. The full rules live in [MemberDef](../schema-definition-language/memberdef.md)
 and [TypeDef](../schema-definition-language/typedef.md).
 
-## The schema travels with the data
+## Where the schema lives
 
-Because the schema is part of the document (or a shared header reused across documents),
-validation does **not** depend on an out-of-band contract. A receiver validates exactly what
-the sender described, and can report exactly where a value goes wrong:
+A schema-first format does **not** require the schema to be embedded in every document. Two
+deployment modes are both first-class, and you choose per use case.
+
+**Embedded (self-contained).** The schema sits in the document header, so the document is
+self-describing and self-validating — a receiver validates exactly what was sent, with no prior
+agreement. Best for storage, archival, logs, and APIs where the shape can vary.
 
 ```ruby
 ~ $schema: { name: string, age: { int, min: 0, max: 120 } }
@@ -89,9 +93,24 @@ the sender described, and can report exactly where a value goes wrong:
 ~ Mary, 200     # ✗ invalid-range
 ```
 
-Each record is validated independently, so one bad record does not invalidate the others — the
-processor reports the failure and keeps going. See the
-[Validation Model](../conformance/validation-model.md) for the parse → validate → load pipeline.
+**Shared (out-of-band).** A publisher and a subscriber can agree on the schema once, at their
+endpoints, and then move only **data** on the wire. Each message carries just its data section;
+its header, if present, holds metadata and definitions — but not the schema — and the consumer
+validates against the schema it already holds. This is the most compact mode and suits
+high-volume streaming between known parties.
+
+```ruby
+~ count: 2
+---
+~ John, 30
+~ Mary, 25
+```
+
+Either way the data conforms to the *same* schema, written in the same syntax; only its location
+differs. And in both modes each record is validated **independently**, so one bad record does
+not invalidate the others — the processor reports the failure and keeps going. See the
+[Validation Model](../conformance/validation-model.md) for the parse → validate → load pipeline,
+and [Data Streaming](../the-collections/data-streaming.md) for the streaming case.
 
 ## Reuse and composition
 
