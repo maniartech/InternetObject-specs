@@ -10,6 +10,13 @@ each value) or external (JSON Schema lives in a separate file and language), Int
 makes the schema part of the document — and writes it in the **same object syntax as the data**.
 There is no second language to learn: if you can write the data, you can write its schema.
 
+Declaring the shape first is the idea that makes the rest of the format possible. Once the
+**structure** — the keys and their types — lives in the schema, the data no longer has to carry
+it: each record holds only **values**, while the names and types stay in one place. And because
+every value now has a declared type and constraints, the format can **validate** the data
+against that shape. Separating the data from its structure and validating it are not two
+unrelated features — they are both direct consequences of putting the schema first.
+
 ## Why declare a schema first
 
 Putting the shape first changes what the format can do for you:
