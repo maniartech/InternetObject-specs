@@ -124,5 +124,5 @@
 * [FAQs](faqs-1.md)
 * [Roadmap](roadmap.md)
 * [Version History](appendices/version-history.md)
-* [Contributors](contributors.md)
+* [Acknowledgments](contributors.md)
 * [License](license.md)

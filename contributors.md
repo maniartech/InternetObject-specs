@@ -1,18 +1,21 @@
 ---
-description: People who have contributed to the Internet Object specification.
+description: The author of the Internet Object specification and the ManiarTech team who helped produce it.
 ---
 
-# Contributors
+# Acknowledgments
 
-Internet Object is shaped by the people who write, review, and refine it. The following
-contributors have helped develop this specification.
+Internet Object was researched, created, and authored by **Mohamed Aamir Maniar** (ManiarTech®),
+who maintains the specification.
 
-| Contributor         | Contribution                   |
+Its development has been supported by the **ManiarTech® team**:
+
+| Team member         | Contribution                   |
 | ------------------- | ------------------------------ |
-| Ujwala Mhashakhetri | Document drafting              |
 | Kabir Maniar        | Document drafting and diagrams |
+| Ujwala Mhashakhetri | Document drafting              |
 
-Want to join them? See the ways to help in the [FAQs](faqs-1.md).
+Internet Object also welcomes contributions from the wider community — see the ways to help in
+the [FAQs](faqs-1.md).
 
 ## See Also
 

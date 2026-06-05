@@ -61,4 +61,4 @@ Contributions are welcome in many forms:
 ## See Also
 
 - [Why Internet Object?](internet-object/why-internet-object.md) · [Getting Started](internet-object/getting-started.md)
-- [JSON Compatibility](json-compatibility.md) · [Contributors](contributors.md)
+- [JSON Compatibility](json-compatibility.md) · [Acknowledgments](contributors.md)

@@ -43,4 +43,4 @@ during the 1.0 Draft period.
 ## See Also
 
 - [Version History](appendices/version-history.md) · [Conformance Requirements](conformance/requirements.md)
-- [Contributors](contributors.md) · [FAQs](faqs-1.md)
+- [Acknowledgments](contributors.md) · [FAQs](faqs-1.md)
