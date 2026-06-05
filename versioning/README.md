@@ -8,8 +8,8 @@ description: How the Internet Object specification is versioned, and the stabili
 This page defines how the **Internet Object specification** is versioned and how the stability of
 each feature is governed, so the specification can be published and evolve continuously without
 being a perpetual draft. It follows the model used by mature standards (CSS module levels, TC39
-stages, Kubernetes alpha/beta/GA): a written policy plus a per-feature status index, with stability
-tracked per feature rather than as one global label. For where each feature currently stands, see
+stages, Kubernetes alpha/beta/GA): a written policy plus a per-page status index, with stability
+tracked per page rather than as one global label. For where each page currently stands, see
 [Feature Status](feature-status.md).
 
 ## What is versioned

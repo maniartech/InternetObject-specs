@@ -1,33 +1,26 @@
 ---
 status: informative
-description: Changes to the Internet Object specification.
+description: How specification changes are recorded; the change log begins at the first 1.0 release.
 ---
 
 # Version History
 
-This page records notable changes to the **specification**. Implementations
-(e.g. `io-js2`) version independently and declare the spec version they conform to.
+This page records notable changes to the **specification**, newest first, once versioned releases
+begin. Implementations (such as `io-js2`) version independently under their own SemVer and declare
+which specification version they conform to.
 
-## 1.0 Draft (in progress)
+## 1.0 Draft — in progress
 
-The first complete specification of Internet Object. Highlights:
+The specification is in its **1.0 Draft**: it is still being authored, most features are at
+**Candidate** maturity, and it may change without a version bump until 1.0 is finalized.
 
-- Document model: header + data, multiple named sections.
-- Values: open/regular/raw strings; `number` family with hex/octal/binary/scientific
-  notation; `bigint` and `decimal`; `date`/`time`/`datetime`; `binary`; booleans and null.
-- Schema language: SchemaDef (object shapes) and MemberDef (typed, constrained fields), each
-  built-in type governed by a fixed TypeDef.
-- Definitions: metadata, value variables (`@`), and references (`$`), including the `$schema`
-  default and reusable schema/type refs.
-- Collections and streaming of records.
-- Open and dynamic schemas via `*`; union types via `anyOf`.
-- A two-class error model (syntax and validation) with boundary-bounded recovery and error
-  accumulation.
-- Conformance requirements and a formal EBNF grammar.
+There are **no released versions yet** — the first entry here will be **1.0**, recorded when the
+draft is finalized. Until then:
 
-> The specification is a work in progress during the 1.0 Draft period; sections may change as
-> the format and its reference implementation converge.
+- for the current maturity of each feature, see [Feature Status](feature-status.md);
+- for how versions and stability work, see the [Versioning Policy](README.md);
+- for planned direction, see the [Roadmap](../roadmap.md).
 
 ## See Also
 
-- [Conformance Requirements](../conformance/requirements.md) · [Roadmap](../roadmap.md)
+- [Versioning Policy](README.md) · [Feature Status](feature-status.md) · [Roadmap](../roadmap.md)
