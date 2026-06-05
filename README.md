@@ -35,6 +35,7 @@ documentation.
 
 ## Start here
 
+* [Manifesto](internet-object/manifesto.md) — the convictions behind the format, and why it exists
 * [Why Internet Object?](internet-object/why-internet-object.md) — how it compares to JSON, CSV, and YAML
 * [Getting Started](internet-object/getting-started.md) — a five-minute tour in pure Internet Object
 * [Internet Object Document](the-structure/introduction/README.md) — the structure of a document

@@ -8,7 +8,7 @@ Data is the substance of the Internet, and we still move it wastefully.
 
 JSON proved that humans must be able to read their data — and then it stayed wasteful, lossy, and
 schemaless by default. The binary formats proved that the wire must be small — and then they made
-data unreadable and forked every schema into a separate toolchain. Both were half-right. We
+data unreadable and forked their schemas into a separate toolchain. Both were half-right. We
 accepted the choice between them for twenty years. We don't have to anymore.
 
 Internet Object begins from a refusal: **we will not choose between readable and efficient,
@@ -42,7 +42,7 @@ data, and enforced as a property of the format itself.
 who often already agree on its shape. Documents, collections, and streaming are first-class — not
 features bolted onto a format that assumed everything fits in memory at once.
 
-**7. Owned by no one. Open to everyone.** Internet Object is an openly specified contract on the
+**7. Open to all. Locked to none.** Internet Object is an openly specified contract on the
 wire, not a library in a language or a product from a vendor. Anyone can implement it; no one can
 lock you into it. Data you store today will still be understood long after the tools that wrote it
 are gone.
