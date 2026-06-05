@@ -50,3 +50,4 @@ documentation.
 | Last updated          | `2026-06-05` |
 | Website               | [https://internetobject.org](https://internetobject.org) |
 | Docs                  | [https://github.com/maniartech/InternetObject-specs](https://github.com/maniartech/InternetObject-specs) |
+| License               | Spec: [CC BY-ND 4.0](license.md) · Examples: CC0 · Libraries: Apache-2.0 |
