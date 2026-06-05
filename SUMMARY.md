@@ -108,6 +108,11 @@
 * [Validation Model](conformance/validation-model.md)
 * [Conformance Requirements](conformance/requirements.md)
 
+## Versioning & Stability
+
+* [Versioning Policy](versioning/README.md)
+* [Feature Status](versioning/feature-status.md)
+
 ## Interoperability
 
 * [JSON Compatibility](json-compatibility.md)
