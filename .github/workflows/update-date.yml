@@ -1,0 +1,46 @@
+name: Update last-updated date
+
+# On every push to the gitbook branch, refresh the "Last updated" date in README.md to today
+# (UTC) and commit it back — so the published date always reflects the latest change with no
+# manual edit. The bump commit carries [skip ci]; combined with the fact that pushes made with
+# GITHUB_TOKEN do not trigger new workflow runs, this cannot loop. If the date is already today,
+# the script makes no change and nothing is committed.
+
+on:
+  push:
+    branches: [gitbook]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-readme-date
+  cancel-in-progress: false
+
+jobs:
+  update-date:
+    if: ${{ github.actor != 'github-actions[bot]' && !contains(github.event.head_commit.message, '[skip ci]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gitbook
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Set README last-updated date to today
+        run: npx --yes tsx tools/update-readme-date.ts
+
+      - name: Commit and push if the date changed
+        run: |
+          if git diff --quiet -- README.md; then
+            echo "No date change; nothing to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git commit -m "chore: update last-updated date [skip ci]"
+          git push origin HEAD:gitbook
