@@ -111,6 +111,7 @@
 ## Versioning & Stability
 
 * [Versioning Policy](versioning/README.md)
+* [Version History](versioning/version-history.md)
 * [Feature Status](versioning/feature-status.md)
 
 ## Interoperability
@@ -128,6 +129,5 @@
 * [Glossary](appendices/glossary.md)
 * [FAQs](faqs-1.md)
 * [Roadmap](roadmap.md)
-* [Version History](appendices/version-history.md)
 * [Acknowledgments](contributors.md)
 * [License](license.md)

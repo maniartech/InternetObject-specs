@@ -1,5 +1,5 @@
 ---
-status: candidate
+status: informative
 description: Why choose Internet Object over JSON, CSV, YAML, and binary formats.
 ---
 

@@ -1,5 +1,5 @@
 ---
-status: candidate
+status: informative
 description: The author of the Internet Object specification and the ManiarTech team who helped produce it.
 ---
 

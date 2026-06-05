@@ -99,7 +99,7 @@ This is **Streaming Protocol v1**. The two-kind item model, the framing rules, a
 model are frozen for v1. Additive, optional metadata MAY be introduced without a version bump;
 breaking changes require a new major version. The protocol is versioned independently of any
 implementation, and an implementation declares which protocol version it implements. See the
-[Version History](../appendices/version-history.md).
+[Version History](../versioning/version-history.md).
 
 ## See Also
 

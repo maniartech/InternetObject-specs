@@ -1,5 +1,5 @@
 ---
-status: candidate
+status: informative
 description: Planned directions for the Internet Object specification and ecosystem.
 ---
 
@@ -43,5 +43,5 @@ during the 1.0 Draft period.
 
 ## See Also
 
-- [Version History](appendices/version-history.md) · [Conformance Requirements](conformance/requirements.md)
+- [Version History](versioning/version-history.md) · [Conformance Requirements](conformance/requirements.md)
 - [Acknowledgments](contributors.md) · [FAQs](faqs-1.md)

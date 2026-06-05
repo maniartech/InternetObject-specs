@@ -1,5 +1,5 @@
 ---
-status: candidate
+status: informative
 description: Changes to the Internet Object specification.
 ---
 

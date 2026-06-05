@@ -1,5 +1,5 @@
 ---
-status: candidate
+status: informative
 description: >-
   Frequently asked questions about Internet Object — what it is, its features,
   interoperability, size and performance, status, and how to take part.

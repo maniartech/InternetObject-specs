@@ -1,5 +1,5 @@
 ---
-status: candidate
+status: informative
 description: How the Internet Object specification is versioned, and the stability tiers that govern each feature.
 ---
 
@@ -87,12 +87,12 @@ Declare a specification major (such as 1.0) final when:
 ## Changelog
 
 Specification changes — especially anything affecting a Stable feature, and every feature
-graduation — MUST be recorded in the [Version History](../appendices/version-history.md).
+graduation — MUST be recorded in the [Version History](version-history.md).
 Day-to-day finalization work is tracked in the [Roadmap](../roadmap.md).
 
 ## See Also
 
 - [Feature Status](feature-status.md) — the current tier of each feature
 - [Roadmap](../roadmap.md) — the finalization plan
-- [Version History](../appendices/version-history.md) — the specification changelog
+- [Version History](version-history.md) — the specification changelog
 - [Conformance Requirements](../conformance/requirements.md) — what a conformant implementation must do

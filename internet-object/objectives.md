@@ -1,5 +1,5 @@
 ---
-status: candidate
+status: informative
 description: The design goals that shape the Internet Object format.
 ---
 

@@ -96,18 +96,21 @@ function injectStatus(absPath: string): boolean {
 
 /** Build the generated feature-status.md content from the live statuses. */
 function generate(entries: Entry[], statusOf: (e: Entry) => string): string {
+  // The dashboard grades only normative features; informative pages are omitted.
+  const features = entries.filter((e) => statusOf(e) !== 'informative')
+  const informativeCount = entries.length - features.length
+
   const counts: Record<string, number> = {}
-  for (const e of entries) counts[statusOf(e)] = (counts[statusOf(e)] || 0) + 1
-  const order = Object.keys(STATUSES)
-  const summary = order
+  for (const e of features) counts[statusOf(e)] = (counts[statusOf(e)] || 0) + 1
+  const summary = Object.keys(STATUSES)
     .filter((s) => counts[s])
     .map((s) => `${counts[s]} ${STATUSES[s]}`)
     .join(' · ')
 
   const out: string[] = []
   out.push('---')
-  out.push('description: Generated overview of every specification page and its maturity status.')
-  out.push(`status: ${DEFAULT_STATUS}`)
+  out.push('description: Generated overview of specification features and their maturity status.')
+  out.push('status: informative')
   out.push('---')
   out.push('')
   out.push('# Feature Status')
@@ -117,14 +120,15 @@ function generate(entries: Entry[], statusOf: (e: Entry) => string): string {
   out.push('> `status:` field and regenerate with `npm run status:write`.')
   out.push('')
   out.push('**Maturity levels:** `Stable` (frozen contract) · `Candidate` (feature-complete, under')
-  out.push('review) · `Draft` (still evolving) · `Deprecated` · `Reserved` · `Informative`')
-  out.push('(non-normative). Defined in the [Versioning Policy](README.md).')
+  out.push('review) · `Draft` (still evolving) · `Deprecated` · `Reserved`. Defined in the')
+  out.push('[Versioning Policy](README.md). Non-normative pages are marked `Informative` and are not')
+  out.push('graded here.')
   out.push('')
   out.push(`**Totals:** ${summary}.`)
   out.push('')
 
   let currentSection = ''
-  for (const e of entries) {
+  for (const e of features) {
     if (e.section !== currentSection) {
       if (currentSection !== '') out.push('') // blank line closes the previous table
       currentSection = e.section
@@ -133,14 +137,16 @@ function generate(entries: Entry[], statusOf: (e: Entry) => string): string {
       out.push('| Page | Status |')
       out.push('| ---- | ------ |')
     }
-    const href = e.path === GENERATED ? 'feature-status.md' : `../${e.path}`
-    out.push(`| [${e.title}](${href}) | ${STATUSES[statusOf(e)]} |`)
+    out.push(`| [${e.title}](../${e.path}) | ${STATUSES[statusOf(e)]} |`)
   }
+  out.push('')
+  out.push(`_${informativeCount} informative (non-normative) pages — guides, rationale, appendices,`)
+  out.push('and these versioning pages — are not graded for maturity and are omitted above._')
   out.push('')
   out.push('## See Also')
   out.push('')
   out.push('- [Versioning Policy](README.md) — the maturity levels and rules behind this table')
-  out.push('- [Roadmap](../roadmap.md) · [Version History](../appendices/version-history.md)')
+  out.push('- [Roadmap](../roadmap.md) · [Version History](version-history.md)')
   out.push('')
   return out.join('\n')
 }
@@ -159,7 +165,7 @@ function main() {
 
   for (const e of entries) {
     if (e.path === GENERATED) {
-      statusCache.set(e.path, DEFAULT_STATUS)
+      statusCache.set(e.path, 'informative')
       continue
     }
     const abs = join(DOCS_ROOT, e.path)

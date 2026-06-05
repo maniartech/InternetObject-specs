@@ -1,5 +1,5 @@
 ---
-status: candidate
+status: informative
 description: >-
   This poem encapsulates the core guiding principles that shape the design and
   objectives of the Internet Object format.

@@ -1,5 +1,5 @@
 ---
-status: candidate
+status: informative
 description: A text-based, schema-first, document-oriented, streamable data interchange format.
 ---
 

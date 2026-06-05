@@ -1,6 +1,6 @@
 ---
-description: Generated overview of every specification page and its maturity status.
-status: candidate
+description: Generated overview of specification features and their maturity status.
+status: informative
 ---
 
 # Feature Status
@@ -10,29 +10,11 @@ status: candidate
 > `status:` field and regenerate with `npm run status:write`.
 
 **Maturity levels:** `Stable` (frozen contract) · `Candidate` (feature-complete, under
-review) · `Draft` (still evolving) · `Deprecated` · `Reserved` · `Informative`
-(non-normative). Defined in the [Versioning Policy](README.md).
+review) · `Draft` (still evolving) · `Deprecated` · `Reserved`. Defined in the
+[Versioning Policy](README.md). Non-normative pages are marked `Informative` and are not
+graded here.
 
-**Totals:** 90 Candidate.
-
-## Internet Object
-
-| Page | Status |
-| ---- | ------ |
-| [Manifesto](../internet-object/manifesto.md) | Candidate |
-| [Abstract](../internet-object/abstract.md) | Candidate |
-| [The Poetic Principles](../internet-object/the-zen-of-internet-object.md) | Candidate |
-| [Objectives](../internet-object/objectives.md) | Candidate |
-| [Introducing Internet Object](../internet-object/introduction.md) | Candidate |
-| [Why Internet Object?](../internet-object/why-internet-object.md) | Candidate |
-| [Getting Started](../internet-object/getting-started.md) | Candidate |
-
-## Core Concepts
-
-| Page | Status |
-| ---- | ------ |
-| [Document-Oriented Nature](../core-concepts/document-oriented.md) | Candidate |
-| [Schema-First Design](../core-concepts/schema-first.md) | Candidate |
+**Totals:** 72 Candidate.
 
 ## Structure and Syntax
 
@@ -138,13 +120,6 @@ review) · `Draft` (still evolving) · `Deprecated` · `Reserved` · `Informativ
 | [Validation Model](../conformance/validation-model.md) | Candidate |
 | [Conformance Requirements](../conformance/requirements.md) | Candidate |
 
-## Versioning & Stability
-
-| Page | Status |
-| ---- | ------ |
-| [Versioning Policy](../versioning/README.md) | Candidate |
-| [Feature Status](feature-status.md) | Candidate |
-
 ## Interoperability
 
 | Page | Status |
@@ -152,25 +127,16 @@ review) · `Draft` (still evolving) · `Deprecated` · `Reserved` · `Informativ
 | [JSON Compatibility](../json-compatibility.md) | Candidate |
 | [Converting To/From Other Formats](../interoperability/conversions.md) | Candidate |
 
-## Best Practices
-
-| Page | Status |
-| ---- | ------ |
-| [Best Practices & Guidelines](../best-practices.md) | Candidate |
-
 ## Appendices
 
 | Page | Status |
 | ---- | ------ |
 | [Formal Grammar (EBNF)](../appendices/grammar.md) | Candidate |
-| [Glossary](../appendices/glossary.md) | Candidate |
-| [FAQs](../faqs-1.md) | Candidate |
-| [Roadmap](../roadmap.md) | Candidate |
-| [Version History](../appendices/version-history.md) | Candidate |
-| [Acknowledgments](../contributors.md) | Candidate |
-| [License](../license.md) | Candidate |
+
+_18 informative (non-normative) pages — guides, rationale, appendices,
+and these versioning pages — are not graded for maturity and are omitted above._
 
 ## See Also
 
 - [Versioning Policy](README.md) — the maturity levels and rules behind this table
-- [Roadmap](../roadmap.md) · [Version History](../appendices/version-history.md)
+- [Roadmap](../roadmap.md) · [Version History](version-history.md)

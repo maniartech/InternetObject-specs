@@ -1,5 +1,5 @@
 ---
-status: candidate
+status: informative
 description: Definitions of key Internet Object terms.
 ---
 

@@ -1,5 +1,5 @@
 ---
-status: candidate
+status: informative
 description: The document as the unit of exchange — header, data, and sections.
 ---
 

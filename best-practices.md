@@ -1,5 +1,5 @@
 ---
-status: candidate
+status: informative
 description: Practical guidance for authoring Internet Object documents and schemas.
 ---
 

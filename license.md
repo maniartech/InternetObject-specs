@@ -1,5 +1,5 @@
 ---
-status: candidate
+status: informative
 description: Licensing terms for the Internet Object Specification, its examples, and its implementations.
 ---
 

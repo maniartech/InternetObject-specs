@@ -7,6 +7,8 @@ structure:
 # Redirects preserve old URLs after restructures and file renames.
 # GitBook format: <old-url-path>: <new-file-path.md>  (source page -> target file).
 redirects:
+  # Version History relocated into the Versioning & Stability section
+  appendices/version-history: versioning/version-history.md
   # v1 ToC restructure renames
   the-structure/values/base64: the-structure/values/binary.md
   the-definitions/complex-schema: the-definitions/schema-references.md
