@@ -19,11 +19,13 @@ Further records for the same collection can be sent later in additional batches;
 merges them into the same collection. Each record is validated on its own, so a malformed
 record does not interrupt the stream.
 
-> **Streaming is evolving.** The detailed streaming model (framing, readers/writers,
-> backpressure, mid-stream schema changes) is under active development; the implementation
-> currently leads the specification, and this section will be expanded as the design stabilizes.
+> **The full protocol lives in its own chapter.** Framing, the stream-item model, schema and
+> state, the error model, and reader and writer obligations are specified normatively in the
+> [Streaming](../streaming/README.md) chapter. This page only shows why a collection is
+> streamable; the contract is there.
 
 ## See Also
 
+* [Streaming](../streaming/README.md) — the normative, platform-agnostic streaming protocol
 * [Collection](collection.md) · [Collection Rules](collection-rules.md)
 * [Creating Collections](creating-collection.md)

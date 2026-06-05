@@ -47,6 +47,6 @@ documentation.
 | Contact               | aamir@internetobject.org |
 | Version               | `1.0 Draft` |
 | Status                | `Work-in-Progress` `Draft` |
-| Last updated          | `2026-06-04` |
+| Last updated          | `2026-06-05` |
 | Website               | [https://internetobject.org](https://internetobject.org) |
 | Docs                  | [https://github.com/maniartech/InternetObject-specs](https://github.com/maniartech/InternetObject-specs) |

@@ -18,8 +18,6 @@ redirects:
   schema-definition-language/data-types/string/string-derived-types/time: schema-definition-language/data-types/date-and-time.md
   schema-definition-language/data-types/string/string-derived-types/datetime: schema-definition-language/data-types/date-and-time.md
   schema-definition-language/data-types/string/string-derived-types: schema-definition-language/data-types/string/README.md
-  # Streaming placeholder folded into the Collections chapter
-  streaming: the-collections/data-streaming.md
   # 4b-ii: numeric shortcuts consolidated into Numeric Types
   schema-definition-language/data-types/number/derived-types: schema-definition-language/data-types/number/README.md
   schema-definition-language/data-types/number/derived-types/byte: schema-definition-language/data-types/number/README.md

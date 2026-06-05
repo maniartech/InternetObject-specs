@@ -86,6 +86,15 @@
   * [Union Types (anyOf)](schema-definition-language/union-types.md)
   * [Composition & Reuse](schema-definition-language/composition.md)
 
+## Streaming
+
+* [Streaming](streaming/README.md)
+  * [Wire Format & Framing](streaming/wire-format.md)
+  * [Stream Items](streaming/stream-items.md)
+  * [Schema & State](streaming/schema-and-state.md)
+  * [Streaming Error Model](streaming/error-model.md)
+  * [Readers & Writers](streaming/readers-and-writers.md)
+
 ## Parsing & Errors
 
 * [Overview](parsing-and-errors/README.md)
