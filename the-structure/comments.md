@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: Single-line comments for annotating documents.
 ---
 

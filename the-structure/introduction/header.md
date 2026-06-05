@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: The header section — schemas, definitions, variables, and metadata.
 ---
 

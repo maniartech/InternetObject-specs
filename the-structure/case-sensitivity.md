@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: Case sensitivity for keys, keywords, and type names.
 ---
 

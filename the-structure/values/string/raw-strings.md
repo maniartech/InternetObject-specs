@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: Raw strings — literal strings where backslashes are not escapes.
 ---
 

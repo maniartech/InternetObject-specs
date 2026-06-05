@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: Functional modifiers — variable, schema, optional, nullable, and sign characters.
 ---
 

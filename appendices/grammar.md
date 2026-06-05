@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: The grammar of Internet Object in EBNF.
 ---
 

@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: Array value syntax — ordered, comma-separated collections of values.
 ---
 

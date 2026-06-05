@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: The data section — section separators, objects, and collections.
 ---
 

@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: Object value syntax — open and closed objects, keyed and unkeyed values.
 ---
 

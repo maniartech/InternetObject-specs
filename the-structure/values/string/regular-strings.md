@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: Regular strings — quoted strings with escape sequences.
 ---
 

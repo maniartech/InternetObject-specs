@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: TypeDef — the fixed option contract that every MemberDef of a type is validated against.
 ---
 

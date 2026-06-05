@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: Errors that arise from header definitions and references.
 ---
 

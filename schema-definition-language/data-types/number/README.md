@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: The number type and its family of integer, unsigned, and float shortcuts.
 ---
 

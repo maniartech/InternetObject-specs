@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: Boundary-bounded syntax-error recovery and processing options.
 ---
 

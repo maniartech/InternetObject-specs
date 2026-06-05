@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: Definitions of key Internet Object terms.
 ---
 

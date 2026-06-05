@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: Common syntax errors and how the parser recovers.
 ---
 

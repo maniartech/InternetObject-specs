@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: Accumulating per-object validation errors and per-region syntax errors.
 ---
 

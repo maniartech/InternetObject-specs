@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: Reusable schemas and types referenced with $.
 ---
 

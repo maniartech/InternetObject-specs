@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: The any type — accepts any value, optionally constrained by anyOf or choices.
 ---
 

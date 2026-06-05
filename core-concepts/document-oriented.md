@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: The document as the unit of exchange — header, data, and sections.
 ---
 

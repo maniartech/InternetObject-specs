@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: Value variables — reusable values referenced with @.
 ---
 

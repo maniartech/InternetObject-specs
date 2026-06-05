@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: The parse, validate, load, and stringify pipeline.
 ---
 

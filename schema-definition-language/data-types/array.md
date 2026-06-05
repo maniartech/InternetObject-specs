@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: The array type — ordered, typed collections of values.
 ---
 

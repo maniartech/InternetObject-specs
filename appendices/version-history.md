@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: Changes to the Internet Object specification.
 ---
 

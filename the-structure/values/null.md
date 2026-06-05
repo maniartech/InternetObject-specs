@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: The null value — an explicit absence of a value.
 ---
 

@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: Fixed-precision decimal values for exact, financial-grade arithmetic.
 ---
 

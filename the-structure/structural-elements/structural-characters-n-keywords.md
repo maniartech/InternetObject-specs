@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: The core characters that organize and delimit data in an Internet Object document.
 ---
 

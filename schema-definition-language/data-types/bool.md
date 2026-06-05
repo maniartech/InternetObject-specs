@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: The bool type — true/false values.
 ---
 

@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: Converting Internet Object to and from JSON and other formats.
 ---
 

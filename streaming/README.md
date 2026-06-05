@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: Streaming — an incremental, record-oriented transport over the Internet Object data model.
 ---
 

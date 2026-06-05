@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: Syntax vs validation errors; categories, codes, and conditions.
 ---
 

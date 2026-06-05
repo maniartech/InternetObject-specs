@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: Overview of the value types Internet Object can represent.
 ---
 

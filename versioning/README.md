@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: How the Internet Object specification is versioned, and the stability tiers that govern each feature.
 ---
 
@@ -28,45 +29,47 @@ release.
 
 | Tier | Meaning | May change |
 | ---- | ------- | ---------- |
-| Experimental | Provisional; under active design. Use at your own risk. | At any time |
-| Beta | Feature-complete and under review; intended to become Stable. Not yet part of the frozen contract. | With notice, before it graduates |
 | Stable | Part of the frozen specification contract. | Only in a new specification major |
+| Candidate | Feature-complete and under review; intended to become Stable. Not yet part of the frozen contract. | With notice, before it graduates |
+| Draft | Provisional; still evolving. Use at your own risk. | At any time |
 | Deprecated | Still specified; scheduled for removal. | Removed in the next specification major |
 | Reserved | Syntax or semantics reserved for future definition; not yet specified. | May be defined at any time |
+| Informative | A non-normative page (guides, rationale, appendices); carries no maturity guarantee. | n/a |
 
-As analogues: Experimental is close to TC39 Stage 1–2 or Kubernetes alpha; Beta to Stage 3
+As analogues: Draft is close to TC39 Stage 1–2 or Kubernetes alpha; Candidate to Stage 3
 (candidate) or beta; Stable to Stage 4 or GA.
 
 ## Core rules
 
 - A **Stable** feature MUST NOT change incompatibly except in a new specification major.
-- A **Beta** feature is feature-complete and SHOULD be treated as near-final, but MAY still change
-  — with a changelog notice — before graduating to Stable.
-- An **Experimental** feature MAY change or be removed at any time and MUST be clearly marked.
+- A **Candidate** feature is feature-complete and SHOULD be treated as near-final, but MAY still
+  change — with a changelog notice — before graduating to Stable.
+- A **Draft** feature MAY change or be removed at any time and MUST be clearly marked.
 - A feature MUST be **Deprecated** for at least one major cycle before removal.
-- Each feature's tier SHOULD be stated inline on its page (a "Stability:" line) in addition to the
-  index in [Feature Status](feature-status.md), so readers see maturity at the point of use.
+- Each page declares its tier in a `status:` field in its front matter; the
+  [Feature Status](feature-status.md) page is generated from those fields, so the dashboard never
+  drifts from the pages. To change a status, edit the page's `status:` and regenerate.
 
 ## Graduation and deprecation lifecycle
 
 ```text
-(proposed) → Experimental → Beta → Stable → Deprecated → Removed
-                  │            │
-                  └────────────┴── may still change while Experimental or Beta
+(proposed) → Draft → Candidate → Stable → Deprecated → Removed
+                │         │
+                └─────────┴── may still change while Draft or Candidate
 ```
 
-- **Experimental → Beta:** the design is complete and reviewed.
-- **Beta → Stable:** behavior is final and consistent across implementations; graduation is
+- **Draft → Candidate:** the design is complete and reviewed.
+- **Candidate → Stable:** behavior is final and consistent across implementations; graduation is
   announced in the changelog.
 - **Stable → Deprecated → Removed:** with a replacement and a target major.
 
 ## Relationship to implementations
 
-- An implementation MAY implement Experimental or Beta features but SHOULD mark them as such in its
+- An implementation MAY implement Candidate or Draft features but SHOULD mark them as such in its
   own API (for example, SemVer-exempt or `@experimental`).
 - A feature is normally promoted to **Stable** only once it is interoperably implemented and
-  verified — for example, by a shared conformance suite. Until then it stays Beta.
-- Implementations declare the specification version and which Experimental or Beta features they
+  verified — for example, by a shared conformance suite. Until then it stays Candidate.
+- Implementations declare the specification version and which Candidate or Draft features they
   include.
 
 ## 1.0 readiness checklist
@@ -76,7 +79,7 @@ Declare a specification major (such as 1.0) final when:
 - [ ] The Stable surface (structure, core values and types, collections, core schema and
       validation) is one the specification will commit to keeping until 2.0.
 - [ ] Each Stable feature is interoperably implemented and verified.
-- [ ] All not-yet-final features are explicitly marked Experimental or Beta, not silently shipped
+- [ ] All not-yet-final features are explicitly marked Draft or Candidate, not silently shipped
       as Stable.
 - [ ] [Feature Status](feature-status.md) is complete and reviewed.
 - [ ] The deprecation and breaking-change process here is adopted.

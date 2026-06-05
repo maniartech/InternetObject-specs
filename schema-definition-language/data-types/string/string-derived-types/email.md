@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: The email type — a string validated as an email address.
 ---
 

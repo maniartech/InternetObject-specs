@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: Obligations of the reader and writer roles, plus adapters, transports, backpressure, and conformance.
 ---
 

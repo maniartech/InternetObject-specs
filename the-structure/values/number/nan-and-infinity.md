@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: The special numeric values NaN and Infinity.
 ---
 

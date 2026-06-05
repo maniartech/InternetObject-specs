@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: Planned directions for the Internet Object specification and ecosystem.
 ---
 

@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: MemberDef — defining one member's type, constraints, and optional/nullable/default behavior.
 ---
 

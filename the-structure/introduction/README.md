@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: The two-part structure of an Internet Object document — header and data.
 ---
 

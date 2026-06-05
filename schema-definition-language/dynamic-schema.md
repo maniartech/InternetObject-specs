@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: Open and dynamic schemas — accepting extra fields with the * marker.
 ---
 

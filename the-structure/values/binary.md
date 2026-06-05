@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: Binary values written as Base64 byte strings.
 ---
 

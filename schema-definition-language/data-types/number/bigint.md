@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: The bigint type — arbitrary-precision integers.
 ---
 

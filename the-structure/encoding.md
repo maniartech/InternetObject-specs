@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: Character encoding — UTF-8 is mandatory; Unicode, BOM, and line endings.
 ---
 

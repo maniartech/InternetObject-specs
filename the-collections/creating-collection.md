@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: Creating collections, with or without a schema.
 ---
 

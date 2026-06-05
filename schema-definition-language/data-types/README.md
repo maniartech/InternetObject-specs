@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: The Internet Object schema type system — base types, shortcuts, and TypeDefs.
 ---
 

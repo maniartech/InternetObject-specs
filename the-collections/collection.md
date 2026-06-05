@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: The structure of a collection — an ordered sequence of records in a data section.
 ---
 

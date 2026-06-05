@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: How Internet Object schemas describe the shape of data, and the pieces that make them up.
 ---
 

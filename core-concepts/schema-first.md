@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: The schema-first philosophy — same-syntax schemas, progressive typing, and reuse.
 ---
 

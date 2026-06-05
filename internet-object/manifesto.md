@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: A declaration of the convictions behind Internet Object — why it exists and what it refuses to compromise.
 ---
 

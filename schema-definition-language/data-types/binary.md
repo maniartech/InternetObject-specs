@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: The binary type — byte data written as base64.
 ---
 

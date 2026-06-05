@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: The string type and its email and url shortcuts.
 ---
 

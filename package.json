@@ -5,7 +5,9 @@
   "description": "The Internet Object 1.0 specification.",
   "type": "module",
   "scripts": {
-    "check:examples": "tsx tools/check-examples.ts"
+    "check:examples": "tsx tools/check-examples.ts",
+    "status": "tsx tools/status-report.ts",
+    "status:write": "tsx tools/status-report.ts --write"
   },
   "devDependencies": {
     "internet-object": "file:../io-js2",

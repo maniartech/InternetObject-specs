@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: A guided walkthrough of Internet Object and how it compares to JSON.
 ---
 

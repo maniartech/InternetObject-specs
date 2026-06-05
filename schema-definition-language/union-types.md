@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: Members that accept more than one type, via anyOf.
 ---
 

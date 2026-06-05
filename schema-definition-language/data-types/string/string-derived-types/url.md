@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: The url type — a string validated as a URL.
 ---
 

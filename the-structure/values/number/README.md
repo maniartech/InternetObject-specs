@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: The numeric value forms — Number, BigInt, and Decimal.
 ---
 

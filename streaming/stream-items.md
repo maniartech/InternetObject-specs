@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: The two-kind stream-item model the reader emits, record indexing rules, and degenerate inputs.
 ---
 

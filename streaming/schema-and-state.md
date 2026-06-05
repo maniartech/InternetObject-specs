@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: How a stream resolves definitions atomically, selects schemas, and applies precedence with preloaded state.
 ---
 

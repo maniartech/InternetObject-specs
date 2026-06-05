@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: Composing and reusing schemas through references.
 ---
 

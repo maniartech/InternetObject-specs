@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: Validation rules for collections — schema-less records, empty records, errors.
 ---
 

@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: The streaming error model — error categories, recoverable-versus-fatal disposition, and stream-absolute positions.
 ---
 

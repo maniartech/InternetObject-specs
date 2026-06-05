@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: Predefined constant values — booleans, null, and special numbers.
 ---
 

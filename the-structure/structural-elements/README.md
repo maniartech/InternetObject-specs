@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: The characters and tokens that structure and delimit an Internet Object document.
 ---
 

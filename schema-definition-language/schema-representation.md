@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: How a schema is written and how data is mapped to it — open/closed, positional/keyed, and the default schema.
 ---
 

@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: A short, language-agnostic tour of Internet Object in pure IO.
 ---
 

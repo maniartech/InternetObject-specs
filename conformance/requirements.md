@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: MUST/SHOULD/MAY duties of parsers, validators, and serializers.
 ---
 

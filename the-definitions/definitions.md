@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: The header's definition section — metadata, variables, and references.
 ---
 

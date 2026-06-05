@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: Overview of the parsing pipeline and the two error classes.
 ---
 

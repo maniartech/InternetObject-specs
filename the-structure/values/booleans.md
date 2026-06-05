@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: Boolean values — true and false, in compact and verbose forms.
 ---
 

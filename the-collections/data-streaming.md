@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: How collections enable streaming of records.
 ---
 

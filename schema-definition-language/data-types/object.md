@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: The object type — structured key/value data described by a SchemaDef.
 ---
 

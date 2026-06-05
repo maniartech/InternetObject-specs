@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: The decimal type — fixed-precision decimal numbers.
 ---
 

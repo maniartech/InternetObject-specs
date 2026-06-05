@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: Hexadecimal, octal, binary, and scientific numeric literals.
 ---
 

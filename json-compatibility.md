@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: JSON compatibility in Internet Object.
 ---
 

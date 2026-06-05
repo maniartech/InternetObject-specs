@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: Open strings — the unquoted string form.
 ---
 

@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: The on-the-wire framing of a streamed document — the mandatory terminator, control frames, and encoding.
 ---
 

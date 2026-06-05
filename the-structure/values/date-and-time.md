@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: Temporal values — dates, times, and date-times as annotated strings.
 ---
 

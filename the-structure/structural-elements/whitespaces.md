@@ -1,4 +1,5 @@
 ---
+status: candidate
 description: Recognized whitespace characters and how the parser treats them.
 ---
 
