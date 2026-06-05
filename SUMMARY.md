@@ -5,6 +5,7 @@
 ## Internet Object
 
 * [Abstract](internet-object/abstract.md)
+* [Manifesto](internet-object/manifesto.md)
 * [The Poetic Principles](internet-object/the-zen-of-internet-object.md)
 * [Objectives](internet-object/objectives.md)
 * [Introducing Internet Object](internet-object/introduction.md)
