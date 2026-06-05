@@ -88,12 +88,12 @@
 
 ## Streaming
 
-* [Streaming](streaming/README.md)
-  * [Wire Format & Framing](streaming/wire-format.md)
-  * [Stream Items](streaming/stream-items.md)
-  * [Schema & State](streaming/schema-and-state.md)
-  * [Streaming Error Model](streaming/error-model.md)
-  * [Readers & Writers](streaming/readers-and-writers.md)
+* [Overview](streaming/README.md)
+* [Wire Format & Framing](streaming/wire-format.md)
+* [Stream Items](streaming/stream-items.md)
+* [Schema & State](streaming/schema-and-state.md)
+* [Streaming Error Model](streaming/error-model.md)
+* [Readers & Writers](streaming/readers-and-writers.md)
 
 ## Parsing & Errors
 

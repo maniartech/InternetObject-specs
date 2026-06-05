@@ -2,7 +2,7 @@
 description: Streaming — an incremental, record-oriented transport over the Internet Object data model.
 ---
 
-# Streaming
+# Overview
 
 **Streaming** is Internet Object consumed incrementally. A producer frames records onto a
 byte or text stream, and a consumer reads them back one logical record at a time as the bytes
