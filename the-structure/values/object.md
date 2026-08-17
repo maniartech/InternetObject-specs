@@ -195,6 +195,128 @@ It does **not** enforce:
 - Key-based access without a schema
 - The required presence of any key
 
+## Record enclosure under schema validation
+
+A top-level record (a `~` row or a single-object section) may be written either as an **open
+object** (`x, 4`) or a **closed object** (`{x, 4}`) — the enclosing braces of the record itself
+are optional and equivalent.
+
+**Without a schema there is no ambiguity.** Every enclosure level is simply a value: keyless
+members are accessed positionally, so `{{{key: val}}}` is a valid record whose first member is an
+object whose first member is an object — `{ "0": { "0": { "key": "val" } } }`.
+
+The interpretation question arises only **when a schema validates the record**, because the
+validator must decide whether the row *is* the record or is a **value** for the record's first
+member. The rule depends on the row's first member:
+
+| Row's first member | Reading |
+| ------------------ | ------- |
+| Keyed with a name the schema declares (`{o1: {a: 1}}`) | the row **is the record**; members bind by name |
+| Keyed with a name the schema does not declare (`{key: val}`) | the whole row is the **value of member 0** |
+| Positional / un-keyed (`{x}`, `x, 4`) | the row **is the record**; members bind by position |
+
+So under a schema whose first member expects an object:
+
+```ruby
+~ $schema: { o1: object, o2?: object }
+---
+{key: val}          # → o1 = { key: val }   (undeclared key `key` → value reading)
+{o1: {key: val}}    # → o1 = { key: val }   (declared key `o1`   → record reading)
+{{key: val}}        # → o1 = { key: val }   (explicit enclosure)
+```
+
+All three decode identically here, but only the last two say so *explicitly* — see the
+best-practice guidance below.
+
+Disambiguation rules:
+
+1. **Trailing content removes the ambiguity.** `{key: val}, 5` is a two-member record — the closed
+   object binds to the first member, `5` to the second. No extra enclosure is needed.
+2. **The reading does not depend on how many members the schema declares.** A one-member and a
+   five-member closed schema treat the same row identically.
+3. **Open schemas (`*`) differ:** an undeclared key is a *legal extra member*, so there is nothing
+   to disambiguate and the row binds as the record — except where the schema declares exactly one
+   member, which keeps the value reading.
+
+**Writer guidance (normative for serializers).** When a record serializes to exactly one value and
+that value's text begins with `{`, the writer MUST enclose the record (`{{…}}`). Writers must never
+depend on the arity- or openness-dependent behavior above — always emit the unambiguous form.
+
+## Best practice: preventing ambiguity
+
+> **When a schema's first member is object-typed, do not write the record in the open form.**
+> Close the object, or name the member. The reading above is well-defined, but the open form
+> leaves the author's intent implicit; the closed and keyed forms state it.
+
+This matters whenever a record's **first (position 0) member is object-typed**, because that is
+when "the record's own enclosure" and "an object value for member 0" are both plausible readings of
+the same text. Use one of the following unambiguous forms — each binds identically regardless of
+schema arity or openness.
+
+**1. Enclose the record explicitly (positional).** Outer braces for the record, inner for the value:
+
+```ruby
+~ $schema: { o1: object, o2?: object }
+---
+{{key: val}}          # o1 = { key: val }
+```
+
+**2. Name the target member** (recommended for hand-authored documents). A key removes the guess
+entirely, and reads better:
+
+```ruby
+o1: {key: val}        # open record, keyed member
+{o1: {key: val}}      # closed record, keyed member — same result
+```
+
+**3. Rely on trailing content only when it exists.** A record with more than one member is never
+ambiguous — the closed object binds to member 0:
+
+```ruby
+~ $schema: { o1: object, n: number }
+---
+{key: val}, 5         # o1 = { key: val }, n = 5
+```
+
+### Silent-failure cases to watch for
+
+The ambiguity does not always announce itself with an error. Two cases decode **successfully but
+differently from the author's intent**:
+
+- **Key collision.** If the intended value's keys happen to match schema member names, the record
+  reading succeeds and produces a different shape — with no diagnostic:
+
+  ```ruby
+  ~ $schema: { o1: object, o2?: object }
+  ---
+  {o1: {a: 1}, o2: {b: 2}}     # → o1={a:1}, o2={b:2}     (record reading)
+  {{o1: {a: 1}, o2: {b: 2}}}   # → o1={o1:{a:1},o2:{b:2}} (value reading — intended)
+  ```
+
+- **Open schemas.** When the schema is open (`*`) and declares more than one member, an undeclared
+  key is a *legal extra member*, so the row is read as the record and the object the author meant
+  as a value silently becomes extras:
+
+  ```ruby
+  ~ $schema: { o1?: object, o2?: object, * }
+  ---
+  {key: val}          # → { key: val } as an EXTRA — o1 and o2 are simply absent
+  ```
+
+  If the declared members are required, this surfaces as `value-required` rather than pointing at
+  the real mistake.
+
+**Schema-design note.** Placing a non-object member first does *not* remove the hazard — the row is
+still absorbed as that member's value, it just fails on type instead:
+
+```ruby
+~ $schema: { a: string, b?: string }
+---
+{key: val}            # → not-a-string (the whole row was bound to `a`)
+```
+
+The reliable protections are the explicit forms above, not member ordering or member type.
+
 ## See Also
 
 - [Value Representations](README.md) — all value types

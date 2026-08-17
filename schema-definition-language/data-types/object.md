@@ -68,6 +68,20 @@ those declared, add `*` to the shape — see [Open & Dynamic Schemas](../dynamic
 ~ John, extra1, extra2       # ✓ extra fields accepted
 ```
 
+## Untyped objects
+
+A member declared as bare `object` (or `{}`) accepts **any** object value — any members, keyed or
+positional, at any depth. No structural validation is applied to its contents:
+
+```ruby
+~ $schema: { metadata: object }
+---
+~ {any: thing, nested: {deeply: T}}     # ✓ accepted as-is
+```
+
+Because no schema can recover member names for an untyped object, writers serialize its members
+**keyed** (`key: value`) — positional emission would be unrecoverable on re-parse.
+
 ## Optional, nullable & defaults
 
 ```ruby
@@ -86,6 +100,24 @@ those declared, add `*` to the shape — see [Open & Dynamic Schemas](../dynamic
 | `N`, not nullable | `null-not-allowed` error |
 | omitted, optional (`?`) | absent |
 | omitted, required | `value-required` error |
+
+## Interaction with record enclosure
+
+An `object`-typed member — especially as a schema's **first** member — is what makes the record
+enclosure question visible. For a row written as a single closed object, whether it is read as the
+record itself or as a value for member 0 depends on the row's first key:
+
+```ruby
+~ $schema: { o1: object, o2?: object }
+---
+{o1: {a: 1}}      # key IS declared     → the row is the record → o1 = { a: 1 }
+{key: val}        # key is NOT declared → the row is a VALUE    → o1 = { key: val }
+```
+
+Both readings are well-defined, but the intent is implicit. See
+[Record enclosure under schema validation](../../the-structure/values/object.md) for the full rule
+and the best-practice forms (`{{…}}` or `o1: {…}`) that state it explicitly — writers always emit
+the enclosed form.
 
 ## Implementation status (beta)
 

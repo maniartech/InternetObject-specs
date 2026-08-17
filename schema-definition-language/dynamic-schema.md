@@ -50,6 +50,33 @@ keyed extras keep their names:
 ~ { Mia, id: "12" }       # ✗ invalid-min-length — extra is shorter than 4
 ```
 
+## Map-shaped objects
+
+A wildcard may reference a SchemaDef, which makes `{*: $ref}` the natural schema for
+**dictionary/map-shaped data** — data whose keys are values in their own right (IDs, codes, locale
+tags) rather than field names. The keys stay in the data section; the wildcard types every value:
+
+```ruby
+~ $question: { questionName: string, points: number }
+~ $questions: { *: $question }        # map: ANY key, every value must match $question
+~ $schema: { questions: $questions }
+---
+{ QID1: { Q2, 5 }, QID2: { Q1, 3 } }
+```
+
+The wildcard forms, in full:
+
+| Form | Meaning |
+| ---- | ------- |
+| `{ * }` (or `*` listed last) | open — extra members allowed, any type |
+| `{ *: type }` | every extra member must match `type` |
+| `{ *: { … } }` | every extra member must match the inline SchemaDef |
+| `{ *: [type] }` | every extra member must be an array of `type` |
+| `{ *: $ref }` | every extra member must match the referenced SchemaDef |
+
+Declared members and the wildcard compose — `{ id: string, *: number }` requires `id` and lets any
+other member be a number.
+
 ## Dynamic types with anyOf
 
 When a single field must accept more than one type, use `anyOf` (see [Any](data-types/any.md)):
