@@ -41,6 +41,42 @@ age: { number, minimum: 10 }
 42                       # ✗ unknown-member — number has no option "minimum" (use min)
 ```
 
+## Constraints and presentation
+
+MemberDef options come in two kinds, and the distinction is **normative** — an implementation
+that confuses them will accept or reject documents that others do not.
+
+| Kind | Answers | Examples | Rejects a value? | Changes how it is written? |
+| ---- | ------- | -------- | ---------------- | -------------------------- |
+| **Constraint** | *Is this value allowed?* | `min`, `max`, `choices`, `pattern`, `len`, `multipleOf` | **yes** | no |
+| **Presentation** | *How is this value written?* | `format`, `encloser`, `escapeLines` | **no** | **yes** |
+
+A **presentation** option is **write-only**. It tells a writer which spelling to emit; it
+**MUST NOT** restrict what a reader accepts:
+
+```ruby
+~ $schema: { flags: { uint16, format: hex } }
+---
+~ 255          # ✓ accepted — decimal input is fine
+~ 0xff         # ✓ accepted — the same value
+```
+
+Both records hold `255`, and a writer emits `0xff` for both. This follows from the data model:
+`0xff` and `255` parse to the *same value*, so the notation is not part of the value and cannot
+be validated. It is also not recoverable — a value built in code carries no notation at all, so
+a rule enforcing one would apply when a document is parsed and silently not apply when the same
+value is loaded from a host object.
+
+> **To require a particular written form, constrain the text itself.** Use a `string` with a
+> `pattern` (`{ string, pattern: "^0x[0-9a-fA-F]{6}$" }`) — then the form *is* the value. If the
+> real requirement is a range, say so with the type (`uint8`); if it is a fixed set, use
+> `choices`.
+
+The **type name** carries a third thing: what the value *is*. `email` and `url` are strings with
+extra validation; `date` and `time` are temporal values narrower than `datetime`. Unlike
+`format`, a type name **does** constrain — and for `date` / `time` it also selects the written
+form, because the value kind and its literal are the same decision.
+
 ## Optional, nullable, and default
 
 - **Optional** (`?` on the key) — the member may be omitted: `age?: { number, min: 0 }`.

@@ -23,9 +23,35 @@ A `bigint` MemberDef accepts only the options below. Any other key is invalid.
 | `min` | bigint | Minimum allowed value (inclusive). |
 | `max` | bigint | Maximum allowed value (inclusive). |
 | `multipleOf` | bigint | The value must be an exact multiple of this. |
-| `format` | string | Serialization base: `decimal` (default), `hex`, `octal`, `binary`. |
+| `format` | string | *Presentation, write-only.* Base used when writing: `decimal` (default), `hex`, `octal`, `binary`, `scientific`. |
 | `optional` | bool | If `true`, the member may be omitted. Shorthand: `?` suffix. |
 | `null` | bool | If `true`, the member may be `null`. Shorthand: `*` suffix. |
+
+### format
+
+Selects the base a writer uses. It is [write-only](../../memberdef.md#constraints-and-presentation) —
+any notation is still accepted as input.
+
+The base prefix and the `n` suffix are both part of the written literal, so the output re-parses
+as the same bigint:
+
+```ruby
+mask: { bigint, format: hex }
+---
+~ 255n                  # ✓ accepted — written back as 0xffn
+~ 0xffn                 # ✓ the same value
+```
+
+| `format` | `255n` is written | `1200000n` is written |
+| -------- | ----------------- | --------------------- |
+| `decimal` (default) | `255n` | `1200000n` |
+| `hex` | `0xffn` | `0x124f80n` |
+| `octal` | `0o377n` | `0o4447600n` |
+| `binary` | `0b11111111n` | `0b100100100111110000000n` |
+| `scientific` | `255e0n` | `12e5n` |
+
+> A bigint has no fractional part, so its scientific mantissa is an integer and its exponent is
+> never negative: trailing zeros move into the exponent, and a value with none is written `e0`.
 
 ## Examples
 

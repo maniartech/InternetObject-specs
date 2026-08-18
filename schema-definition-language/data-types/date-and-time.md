@@ -36,6 +36,16 @@ These types share one TypeDef. A MemberDef accepts only the options below.
 | `optional` | bool | If `true`, the member may be omitted. Shorthand: `?` suffix. |
 | `null` | bool | If `true`, the member may be `null`. Shorthand: `*` suffix. |
 
+There is deliberately **no `format` option**. For the numeric and string types a `format` selects
+a spelling for one unchanging value, but a date is not a datetime — the three temporal types are
+genuinely different, so the choice lives in the **type name**, which both constrains the value and
+selects its literal. See
+[Constraints and presentation](../memberdef.md#constraints-and-presentation).
+
+A writer therefore emits the literal matching the declared type: `date` → `d"…"`, `time` →
+`t"…"`, `datetime` → `dt"…"`. Where no schema applies, the kind is inferred from the value
+instead — see [Temporal kind](../../serialization/value-formatting.md#temporal-kind).
+
 ## Constraints
 
 ### min / max
