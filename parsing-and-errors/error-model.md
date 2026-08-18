@@ -23,6 +23,7 @@ Raised while tokenizing or parsing, before any schema is applied. They describe 
 | `string-not-closed` | a quoted string has no closing quote |
 | `value-required` | a value was expected (e.g. a key with no value) but none was found |
 | `invalid-datetime` | a date/time literal is malformed |
+| `duplicate-section-name` | two sections share a name — a **structural** fault, not a lexical one; the duplicate is [renamed](error-accumulation.md#duplicate-section-names) so the document still loads |
 
 > A conformant parser SHOULD report a malformed **numeric** literal (such as `0o89` or `0xGH`)
 > as a coded syntax error. The reference implementation currently raises an uncoded internal
