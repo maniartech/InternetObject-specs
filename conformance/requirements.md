@@ -34,8 +34,17 @@ RFC 2119. This section states the duties of a conformant implementation. Interne
 
 ## A conformant serializer
 
-- MUST produce output that re-parses to equivalent data (round-trip).
+- MUST produce output that re-parses to equivalent data, and MUST produce output that parses
+  without error — see [Round-Trip Guarantees](../serialization/round-trip.md).
+- MUST preserve each value's **type**, not merely its printed form, and MUST quote any string
+  or key that would otherwise read back differently — see
+  [Value Formatting](../serialization/value-formatting.md).
+- MUST write a member's name whenever no schema in scope can recover it, and MUST NOT repeat a
+  name a schema already carries — see [Key Emission](../serialization/key-emission.md).
+- MUST NOT drop a member, and MUST NOT infer a schema the document does not carry.
 - SHOULD honor schema serialization hints (e.g. number `format`, string quote style).
+
+The [Serialization](../serialization/README.md) section is normative for all of the above.
 
 ## Versioning
 

@@ -103,6 +103,14 @@
 * [Parser Behavior & Recovery](parsing-and-errors/parser-behavior.md)
 * [Error Accumulation](parsing-and-errors/error-accumulation.md)
 
+## Serialization
+
+* [Overview](serialization/README.md)
+* [Key Emission](serialization/key-emission.md)
+* [Value Formatting](serialization/value-formatting.md)
+* [Record & Document Output](serialization/document-output.md)
+* [Round-Trip Guarantees](serialization/round-trip.md)
+
 ## Conformance
 
 * [Validation Model](conformance/validation-model.md)

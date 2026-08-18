@@ -14,7 +14,7 @@ review) · `Draft` (still evolving) · `Deprecated` · `Reserved`. Defined in th
 [Versioning Policy](README.md). Non-normative pages are marked `Informative` and are not
 graded here.
 
-**Totals:** 72 Candidate.
+**Totals:** 77 Candidate.
 
 ## Structure and Syntax
 
@@ -112,6 +112,16 @@ graded here.
 | [Error Model](../parsing-and-errors/error-model.md) | Candidate |
 | [Parser Behavior & Recovery](../parsing-and-errors/parser-behavior.md) | Candidate |
 | [Error Accumulation](../parsing-and-errors/error-accumulation.md) | Candidate |
+
+## Serialization
+
+| Page | Status |
+| ---- | ------ |
+| [Overview](../serialization/README.md) | Candidate |
+| [Key Emission](../serialization/key-emission.md) | Candidate |
+| [Value Formatting](../serialization/value-formatting.md) | Candidate |
+| [Record & Document Output](../serialization/document-output.md) | Candidate |
+| [Round-Trip Guarantees](../serialization/round-trip.md) | Candidate |
 
 ## Conformance
 
