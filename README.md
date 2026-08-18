@@ -48,7 +48,7 @@ documentation.
 | Contact               | aamir@internetobject.org |
 | Version               | `1.0 Draft` |
 | Status                | `Work-in-Progress` `Draft` |
-| Last updated          | `2026-08-17` |
+| Last updated          | `2026-08-18` |
 | Website               | [https://internetobject.org](https://internetobject.org) |
 | Docs                  | [https://github.com/maniartech/InternetObject-specs](https://github.com/maniartech/InternetObject-specs) |
 | License               | Spec: [CC BY-ND 4.0](license.md) · Examples: CC0 · Libraries: Apache-2.0 |
