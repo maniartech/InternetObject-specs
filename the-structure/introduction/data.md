@@ -110,6 +110,27 @@ object in a collection is written the same way as a standalone object but belong
 broader collection. See [Collection](../../the-collections/collection.md) for record syntax,
 type promotion, and validation rules.
 
+#### Root values that are not objects
+
+Unlike JSON, a data section may hold a value that is not an object — an array, or a bare scalar.
+Because a record binds values to *names*, such a value is **promoted** into a record under its
+positional key:
+
+```ruby
+---
+[1, 2, 3]                # the record { "0": [1, 2, 3] }
+```
+
+```ruby
+---
+42                       # the record { "0": 42 }
+```
+
+The same promotion applies per row in a collection, so `~ [1, 2]` is the record `{ "0": [1, 2] }`.
+A writer converting foreign data **MUST** use this binding rather than invent a member name, or its
+output would decode differently from the identical document written by hand — see
+[Record & Document Output](../../serialization/document-output.md).
+
 ### Examples of data
 
 #### Single object

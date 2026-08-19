@@ -32,6 +32,28 @@ keyed extras keep their names:
 ~ { Mia, 28, role: dev }         # ✓ extra keyed field "role"
 ```
 
+### `*` bare is grammar; `"*"` quoted is a name
+
+The `*` above is **bare**, and that is what makes it the wildcard. Quoted, it is an ordinary
+member name — the same rule that governs the `?` and `*`
+[name suffixes](memberdef.md#quoted-names-take-the-long-form): quoting says *this name, exactly*.
+
+```ruby
+~ $schema: { name: string, * }         # open — accepts any extra field
+~ $schema: { name: string, "*": int }  # CLOSED — declares a member called *
+```
+
+Data is free to use `*` as a key; JSON-sourced configuration routinely does:
+
+```ruby
+~ $schema: { "*": string, admin: string }
+---
+~ allow, deny            # the member named * holds "allow"
+```
+
+A member named `*` does **not** open its schema, and a wildcard is **not** a member: it never
+appears among the schema's member names, and a schema may carry both at once.
+
 ## Typing the extra fields
 
 `*: <type>` constrains every extra field; `*: { <type>, …constraints }` adds constraints:
