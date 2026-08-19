@@ -92,8 +92,35 @@ form, because the value kind and its literal are the same decision.
 ~ Mary, admin, N             # role "admin"; nickname null
 ```
 
-> **Use the `*` suffix for nullability.** The keyed `null:` option is part of each TypeDef but is
-> not yet honored by the reference implementation — see *Implementation status*.
+The suffixes are shorthand: `optional` and `null` are ordinary MemberDef options, so
+`score?*: number` and `score: { number, optional: T, "null": T }` declare the same member.
+
+> **The `null` option key is written quoted.** A bare `null:` is the null *keyword*, so
+> `{ number, null: T }` is rejected with `invalid-key`; write `"null": T` (or `r'null': T`).
+> `optional:` needs no quoting.
+
+### Quoted names take the long form
+
+The suffixes are part of the **name token**, not separate syntax, so they can follow only a bare
+name. A name that has to be quoted — because it holds a comma, a colon, a space, or begins with a
+digit — cannot carry them, and writes the options instead:
+
+```ruby
+"a,b"?*: number                              # ✗ invalid-definition
+"a,b": { number, optional: T, "null": T }    # ✓ the same member, spelled out
+```
+
+In a schema that mixes both, only the quoted name is affected:
+
+```ruby
+~ $schema: { name: string, "a,b": { number, optional: T } }
+---
+~ John, 1
+~ Jane
+```
+
+Because the suffix belongs to the name token, a quoted name is **literal**: `"a?"` is a member
+named `a?`, not an optional member named `a`. Quoting says *this name, exactly*.
 
 ## MemberDef vs. SchemaDef
 
@@ -128,10 +155,6 @@ form is equivalent and documented on [Object (SchemaDef)](data-types/object.md):
 ---
 ~ John, { Jane, 2 }
 ```
-
-## Implementation status (beta)
-
-- Keyed `optional:` works; keyed `null:` is not yet honored — use the `*` suffix for nullability.
 
 ## See Also
 

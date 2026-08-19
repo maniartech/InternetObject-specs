@@ -146,8 +146,9 @@ b*: number           # nullable  →  N yields null
 c?*: number          # optional and nullable
 ```
 
-> **Use the `*` suffix for nullability.** The keyed `null: T` option is part of the TypeDef
-> but is **not currently honored** — only the `*` suffix enables null. (See below.)
+The suffixes are shorthand for the keyed options — `c?*: number` and
+`c: { number, optional: T, "null": T }` declare the same member. A member name that has to be
+quoted can only use the keyed form; see [MemberDef](../../memberdef.md#quoted-names-take-the-long-form).
 
 ## Implementation status (beta)
 
@@ -159,7 +160,6 @@ catching up:
 - **`byte`** alias is being added (currently only `uint8` is recognized).
 - **Explicit `min`/`max`** can widen a shortcut's range (under review).
 - **`NaN`/`Inf`** under a bound resolve to `null` (under review).
-- **Keyed `null:`** is not honored; use the `*` suffix.
 
 ## Examples
 

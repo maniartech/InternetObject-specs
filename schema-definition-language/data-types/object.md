@@ -34,6 +34,22 @@ name: string, location: { x: int, y: int }
 > (`~ John, { 1, 2 }`). A record written wholly as `{ … }` maps its values to the *record's*
 > fields, not to one field's object.
 
+### Field names
+
+A field name is written bare when it is identifier-like, and quoted otherwise — when it contains
+a comma, a colon, a space, or begins with a digit, as names carried over from JSON routinely do:
+
+```ruby
+~ $schema: { name: string, "code:en": string, "a,b": number }
+---
+~ John, hello, 1
+```
+
+A quoted name is taken literally, so the `?` and `*` suffixes cannot follow it. *Optional,
+nullable & defaults* below shows what a quoted field writes instead. The same literalness makes
+`"*"` an ordinary field name rather than the wildcard — see
+[Open & Dynamic Schemas](../dynamic-schema.md).
+
 ## TypeDef
 
 An `object` MemberDef accepts only the options below.
@@ -42,9 +58,9 @@ An `object` MemberDef accepts only the options below.
 | ------ | ---- | ----------- |
 | `type` | string | The type name `object`. |
 | `default` | object | Value used when the member is omitted. |
-| `schema` | SchemaDef | The object's shape. Usually written inline (`{ … }`) instead. |
-| `optional` | bool | If `true`, the member may be omitted. Shorthand: `?` suffix. |
-| `null` | bool | If `true`, the member may be `null`. Shorthand: `*` suffix. |
+| `schema` | SchemaDef or `$ref` | The object's shape, inline or referenced. Usually written as a bare `{ … }` or `$ref` instead. |
+| `optional` | bool | If `true`, the member may be omitted. Shorthand: `?` suffix on a bare name. |
+| `null` | bool | If `true`, the member may be `null`. Shorthand: `*` suffix on a bare name. |
 
 ## Nesting
 
@@ -101,6 +117,21 @@ Because no schema can recover member names for an untyped object, writers serial
 | omitted, optional (`?`) | absent |
 | omitted, required | `value-required` error |
 
+Because the suffixes are part of the bare-name token, a quoted field name states the same two
+properties as keyed options — where `schema:` takes the reference that `home?*: $address` wrote
+after the colon:
+
+```ruby
+~ $address: { street: string, city: string }
+~ $schema: { name: string, "home,work": { object, schema: $address, optional: T } }
+---
+~ John, { Main St, NYC }     # ✓
+~ Jane                       # ✓ omitted
+```
+
+The two forms are equivalent. [MemberDef](../memberdef.md#optional-nullable-and-default) gives the
+rule in full.
+
 ## Interaction with record enclosure
 
 An `object`-typed member — especially as a schema's **first** member — is what makes the record
@@ -118,10 +149,6 @@ Both readings are well-defined, but the intent is implicit. See
 [Record enclosure under schema validation](../../the-structure/values/object.md) for the full rule
 and the best-practice forms (`{{…}}` or `o1: {…}`) that state it explicitly — writers always emit
 the enclosed form.
-
-## Implementation status (beta)
-
-- Keyed `null:` is not yet honored — use the `*` suffix.
 
 ## See Also
 

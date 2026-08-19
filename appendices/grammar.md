@@ -73,7 +73,12 @@ scalar          = string | number | bigint | decimal
 schema          = schemaDef | memberDef | refKey ;
 schemaDef       = "{" memberDefList "}" | memberDefList ;   (* object shape *)
 memberDefList   = schemaMember { "," schemaMember } [ "," "*" [ ":" memberDef ] ] ;
-schemaMember    = name [ "?" ] [ "*" ] [ ":" ( type | memberDef | array | schemaRef ) ] ;
+                                                    (* the wildcard `*` is BARE; a quoted "*"
+                                                       is an ordinary memberName *)
+schemaMember    = memberName [ ":" ( type | memberDef | array | schemaRef ) ] ;
+memberName      = name [ "?" ] [ "*" ]              (* suffixes belong to the bare-name token *)
+                | regularString | rawString ;       (* quoted: literal, no suffixes -- use
+                                                       optional: / "null": in the memberDef *)
 memberDef       = "{" type { "," option } "}" ;            (* type + constraints *)
 option          = positionalValue | ( name ":" value ) ;   (* e.g. min: 0 *)
 type            = "string" | "int" | "uint8" | "bool" | "datetime" | "decimal" | … ;

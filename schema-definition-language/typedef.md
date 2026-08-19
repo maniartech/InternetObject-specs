@@ -53,7 +53,10 @@ null?       : { bool, F }
 ```
 
 Each type page lists its own TypeDef in full; that table is the authoritative source of the
-options a type accepts.
+options a type accepts. `optional` and `null` are the two every type defines — usually written
+with the `?` / `*` shorthand on the member name, and as keyed options when the name is quoted
+(see [MemberDef](memberdef.md#optional-nullable-and-default)). The `null` key is written quoted,
+since a bare `null` is the null keyword.
 
 ## Validation against the TypeDef
 

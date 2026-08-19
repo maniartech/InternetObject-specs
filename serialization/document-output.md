@@ -84,6 +84,47 @@ a: 1
 The data then follows the no-schema rules in [Key Emission](key-emission.md) — every name is
 unrecoverable, so every name is written.
 
+### A root value that is not a record
+
+A data section may hold a value that is not an object, and IO promotes it into a record under its
+positional key: `---` followed by `[1, 2, 3]` decodes as `{ "0": [1, 2, 3] }`
+([Data Sections](../the-structure/introduction/data.md)).
+
+A writer converting foreign data **MUST** bind such a value to that same positional member. Naming
+it anything else produces a document that decodes differently from the identical text written by
+hand:
+
+```ruby
+# input [1, 2, 3] — REQUIRED: decodes as { "0": [1, 2, 3] }, as hand-written IO would
+"0": [number]
+---
+[1, 2, 3]
+```
+
+Both forms below parse; the second is wrong because it *decodes* differently. An invented member
+name (`value: [number]` … `[1, 2, 3]`) yields `{ value: [1, 2, 3] }`, so the same data written by
+the library and by hand would disagree.
+
+An array whose items are **records** is a collection and needs no promotion: each record becomes a
+row. Promotion applies only where there are no names to bind to — an array of scalars, an array of
+arrays, or a bare scalar.
+
+### Member names in the header
+
+A member name is quoted by the same rules as a data key
+([Value Formatting](value-formatting.md#keys)). Since the `?` and `*` suffixes belong to the
+bare-name token, a writer that quotes a name **MUST** expand that member to the long MemberDef
+form:
+
+```ruby
+# member "a,b": an optional, nullable number
+"a,b"?*: number                              # ✗ not valid syntax
+"a,b": { number, optional: T, "null": T }    # ✓ what a writer emits
+```
+
+Bare names are unaffected — `age?*: number` is written as it stands. Appending a suffix to a
+quoted name produces a header the writer's own reader rejects with `invalid-definition`.
+
 ### Header and data are separately addressable
 
 Because the two parts are independent, a writer **SHOULD** expose them separately as well as

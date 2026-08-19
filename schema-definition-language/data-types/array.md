@@ -118,6 +118,10 @@ tags*: [string]    # nullable (value may be N)
 tags?*: [string]   # optional and nullable
 ```
 
+The suffixes attach to a bare member name. A name that has to be quoted uses the equivalent
+options — `"a,b": { array, of: string, optional: T }` — as described in
+[MemberDef](../memberdef.md#optional-nullable-and-default).
+
 | Input | Result |
 | ----- | ------ |
 | value present, valid | the array |
@@ -129,8 +133,6 @@ tags?*: [string]   # optional and nullable
 
 ## Implementation status (beta)
 
-- **Keyed `optional:`** works; **keyed `null:`** is not yet honored — use the `*` suffix for
-  nullability.
 - The `{ [type], …constraints }` combined form is not supported (use `{ array, of: type, … }`).
 
 ## Examples

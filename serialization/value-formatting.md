@@ -115,10 +115,11 @@ it:
 - is **numeric** — `"5"`, `"3.14"`;
 - is a **keyword** — `"null"`, `"true"`, `"false"`, `"N"`, `"T"`, `"F"`;
 - contains a **colon**, comma, brace, bracket, or quote — `"a:b"`;
+- contains a **section separator** (`---`) — `"a---b"`;
 - has **leading or trailing whitespace**.
 
 ```ruby
-"5": a, "null": b, "a:b": c, "true": d, plain: e
+"5": a, "null": b, "a:b": c, "true": d, "a---b": e, plain: f
 ```
 
 > Keys drawn from foreign data — imported JSON, locale tags such as `code:en` — routinely

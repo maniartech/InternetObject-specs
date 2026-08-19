@@ -15,8 +15,8 @@ behavior of schemas, values, or parsing.
 |--------|------|---------|---------|-------------|
 | `@` | At sign | `U+0040` | Variable | Prefixed to a name, declares or references a variable |
 | `$` | Dollar sign | `U+0024` | Schema | Prefixed to a name, declares or references a schema |
-| `?` | Question mark | `U+003F` | Schema | Suffixed to a member name, marks the member optional |
-| `*` | Asterisk | `U+002A` | Schema | Suffixed to a member name, marks the member nullable; also makes a schema accept undeclared members |
+| `?` | Question mark | `U+003F` | Schema | Suffixed to a **bare** member name, marks the member optional |
+| `*` | Asterisk | `U+002A` | Schema | Suffixed to a **bare** member name, marks the member nullable; **bare** on its own, makes a schema accept undeclared members. Quoted (`"*"`) it is an ordinary name, in a schema or in data |
 | `-` | Hyphen / minus | `U+002D` | Numeric | Marks a negative value |
 | `+` | Plus | `U+002B` | Numeric | Marks a positive value |
 
@@ -49,7 +49,10 @@ behavior of schemas, values, or parsing.
     name: string,          # Required member
     email?: string,        # Optional member (may be omitted)
     avatar*: string,       # Nullable member (may be null)
-    metadata*?: object     # Optional and nullable member
+    metadata*?: object,    # Optional and nullable member
+
+    # The suffixes attach to a bare name. A quoted name says the same with options.
+    "code:en": { string, optional: T }
 }
 
 # A schema that accepts undeclared members
@@ -75,7 +78,10 @@ debt: -5000                # Negative integer
 - **Context sensitive** — a character's meaning depends on its position and context.
 - **Variable prefix** — `@` prefixes variable declarations and references.
 - **Schema prefix** — `$` prefixes schema definitions and references.
-- **Schema suffixes** — `?` and `*` are suffixed to member names in a schema.
+- **Schema suffixes** — `?` and `*` are suffixed to bare member names in a schema; a quoted name
+  uses the keyed `optional:` and `"null":` options instead.
+- **Bare versus quoted** — a special character is only special when written bare. `"*"` is a member
+  name, not the wildcard; `"a?"` is a name ending in `?`, not an optional `a`.
 - **Numeric prefixes** — `+` and `-` prefix numeric values to indicate sign.
 - **Case sensitive** — all special characters are case-sensitive.
 - **Reserved usage** — these characters are reserved for their specific functions.
