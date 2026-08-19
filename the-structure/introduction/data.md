@@ -42,7 +42,10 @@ The separator can take several forms, from least to most detailed, each ending w
 * **Default section name and schema** — if both the name and schema are omitted, the section
   name defaults to `data` and the document's default schema is used.
 * **Unique section names** — each section must have a unique name; duplicate names are not
-  allowed.
+  allowed. A document that repeats one is **invalid**, but a parser still recovers from it: the
+  duplicate is renamed (`data` → `data_2`, `users` → `users_2`) and the error is reported, so no
+  section is lost. See
+  [Duplicate section names](../../parsing-and-errors/error-accumulation.md#duplicate-section-names).
 
 ### Examples of section separators
 

@@ -38,7 +38,14 @@ example, editor markers at each error's position).
 ## Duplicate section names
 
 When two sections share a name, the duplicate is **automatically renamed**
-(`users` → `users_2` → `users_3`), so the rest of the document still loads.
+(`users` → `users_2` → `users_3`), so the rest of the document still loads. This applies to every
+duplicate, including sections that carry no name of their own and take the default name `data` — a
+recovering parser **MUST NOT** drop a section or let one overwrite another.
+
+The document is still invalid: [section names must be
+unique](../the-structure/introduction/data.md#rules-for-section-names-and-schemas), and the error is
+reported alongside the recovered data. The error is `duplicate-section-name` — a **structural**
+fault, not a lexical one, since every character in the document is valid.
 
 ## See Also
 

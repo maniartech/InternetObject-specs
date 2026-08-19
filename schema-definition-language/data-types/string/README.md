@@ -47,9 +47,9 @@ A `string` MemberDef accepts only the options below. Any other key is invalid.
 | `len` | int ≥ 0 | Exact length in characters. |
 | `minLen` | int ≥ 0 | Minimum length. |
 | `maxLen` | int ≥ 0 | Maximum length. |
-| `format` | string | Serialization form: `auto` (default), `regular`, `raw`. |
-| `encloser` | string | Quote character used when serializing: `"` (default) or `'`. |
-| `escapeLines` | bool | Whether to escape line breaks on serialization. |
+| `format` | string | *Presentation, write-only.* Form used when writing: `auto` (default), `regular`, `raw`. |
+| `encloser` | string | *Presentation, write-only.* Quote character used when writing: `"` (default) or `'`. |
+| `escapeLines` | bool | *Presentation, write-only.* Whether to escape line breaks when writing. |
 | `optional` | bool | If `true`, the member may be omitted. Shorthand: `?` suffix. |
 | `null` | bool | If `true`, the member may be `null`. Shorthand: `*` suffix. |
 

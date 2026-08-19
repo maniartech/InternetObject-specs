@@ -61,7 +61,7 @@ A `number` MemberDef accepts only the options below. Any other key is invalid.
 | `min` | number | Minimum allowed value (inclusive). |
 | `max` | number | Maximum allowed value (inclusive). |
 | `multipleOf` | number | The value must be an exact multiple of this. |
-| `format` | string | Serialization format: `decimal` (default), `hex`, `octal`, `binary`, `scientific`. |
+| `format` | string | *Presentation, write-only.* Notation used when writing: `decimal` (default), `hex`, `octal`, `binary`, `scientific`. |
 | `optional` | bool | If `true`, the member may be omitted. Shorthand: `?` suffix on the key. |
 | `null` | bool | If `true`, the member may be `null`. Shorthand: `*` suffix on the key. |
 
@@ -107,13 +107,18 @@ code: { number, choices: [234, 245, 456] }
 
 ### format
 
-Controls how the number is **written** on serialization; it does not restrict which input
+Controls how the number is **written** on serialization. It is
+[write-only](../../memberdef.md#constraints-and-presentation): it does not restrict which input
 notations are accepted (any [notation](../../../the-structure/values/number/README.md) is read).
 
 ```ruby
-flags: { uint16, format: hex }      # serialized as 0x…
-mask:  { uint8,  format: binary }   # serialized as 0b…
+flags: { uint16, format: hex }      # written as 0xff
+mask:  { uint8,  format: binary }   # written as 0b11111111
 ```
+
+The base prefix is part of the written literal, and a sign precedes it (`-0xff`). A value with a
+fractional part has no radix literal, so a radix `format` does not apply to it and the decimal
+notation is written instead.
 
 ## Special values
 

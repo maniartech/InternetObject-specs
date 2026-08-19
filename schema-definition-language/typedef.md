@@ -69,6 +69,11 @@ age: { number, minimum: 10 }
 This is what makes options portable: because the contract is fixed, the same MemberDef validates
 identically in every conformant implementation.
 
+An option is either a **constraint** (it can reject a value) or a **presentation** option (it
+only selects how a value is written, and never rejects anything). Which is which is fixed per
+option, not per implementation — see
+[Constraints and presentation](memberdef.md#constraints-and-presentation).
+
 ## TypeDefs are fixed
 
 A schema author cannot change or extend a built-in type's TypeDef — the option set is defined by

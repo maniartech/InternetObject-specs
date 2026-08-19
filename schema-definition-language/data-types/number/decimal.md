@@ -28,6 +28,16 @@ A `decimal` MemberDef accepts only the options below. Any other key is invalid.
 | `optional` | bool | If `true`, the member may be omitted. Shorthand: `?` suffix. |
 | `null` | bool | If `true`, the member may be `null`. Shorthand: `*` suffix. |
 
+### No format option
+
+Unlike the other numeric types, `decimal` has **no `format` option** — and this is deliberate,
+not an omission. A `format` selects among the literals that can express a value, and a decimal
+has only one: `<digits>.<digits>m`. Radix notations cannot express a fractional value, and
+[scientific notation is not part of the decimal literal](../../../the-structure/values/number/decimal.md)
+(`1.23e2m` is invalid). With a single possible spelling there is nothing to select.
+
+The `m` suffix is always written; without it the output would read back as a plain number.
+
 ## Precision & scale
 
 `precision` and `scale` together give SQL-style `DECIMAL(precision, scale)` validation:

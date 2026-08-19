@@ -312,7 +312,7 @@ still absorbed as that member's value, it just fails on type instead:
 ```ruby
 ~ $schema: { a: string, b?: string }
 ---
-{key: val}            # → not-a-string (the whole row was bound to `a`)
+{key: val}            # ✗ not-a-string — the whole row was bound to `a`
 ```
 
 The reliable protections are the explicit forms above, not member ordering or member type.
