@@ -130,9 +130,6 @@ dt'2024-03-20T14:30+25:00'  # ✗ invalid-datetime (timezone offset out of range
 The reference implementation has known gaps in temporal parsing; a conformant parser SHOULD
 behave as specified above, not as the current implementation does:
 
-- **DateTime drops the seconds component:** `dt'2024-03-20T14:30:45Z'` parses to
-  `…T14:30:00.000Z` (the `45` is lost; milliseconds are kept). Time-only values are not
-  affected — `t'14:30:45'` keeps its seconds.
 - **Overflow dates are normalized rather than rejected:** `d'2024-02-30'` becomes
   `2024-03-01` instead of raising `invalid-datetime`.
 - **Over-long fractions are truncated:** a millisecond field with more than three digits is

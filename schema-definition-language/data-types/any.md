@@ -73,10 +73,6 @@ note?*: any
 ~ N         # ✓ null
 ```
 
-## Implementation status (beta)
-
-- Keyed `null:` is not yet honored — use the `*` suffix.
-
 ## See Also
 
 * [Union Types (anyOf)](../union-types.md)

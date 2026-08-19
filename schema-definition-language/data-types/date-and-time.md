@@ -74,12 +74,6 @@ deletedAt?*: datetime   # optional + nullable
 | omitted, optional (`?`) | absent |
 | omitted, required | `value-required` error |
 
-## Implementation status (beta)
-
-- **`datetime` currently drops the seconds component** on parse
-  (`dt'…T14:30:45Z'` is read as `…14:30:00`). Under review.
-- Keyed `null:` is not yet honored — use the `*` suffix.
-
 ## See Also
 
 * [Date and Time (value syntax)](../../the-structure/values/date-and-time.md)

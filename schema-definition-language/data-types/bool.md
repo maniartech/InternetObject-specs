@@ -61,13 +61,6 @@ flag*: bool               # nullable (value may be N)
 | omitted, optional (`?`), no default | absent |
 | omitted, required | `value-required` error |
 
-> **Use the `*` suffix for nullability.** The keyed `null:` option is part of the TypeDef but
-> is not currently honored — see *Implementation status*.
-
-## Implementation status (beta)
-
-- Keyed `optional:` works; keyed `null:` is not yet honored — use the `*` suffix.
-
 ## See Also
 
 * [Booleans (value syntax)](../../the-structure/values/booleans.md)

@@ -81,10 +81,6 @@ id?*: bigint    # optional + nullable
 ~ 7n     # ✓
 ```
 
-## Implementation status (beta)
-
-- Keyed `null:` is not yet honored — use the `*` suffix.
-
 ## See Also
 
 * [BigInt values](../../../the-structure/values/number/bigint.md)

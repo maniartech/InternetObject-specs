@@ -111,12 +111,6 @@ nickname?*: { string, anonymous }   # optional + nullable, default "anonymous"
 | omitted, optional (`?`) | absent |
 | omitted, required | `value-required` error |
 
-> **Use the `*` suffix for nullability** — keyed `null:` is not yet honored (see below).
-
-## Implementation status (beta)
-
-- Keyed `optional:` works; keyed `null:` is not yet honored — use the `*` suffix.
-
 ## See Also
 
 * [Strings (value syntax)](../../../the-structure/values/string/README.md)

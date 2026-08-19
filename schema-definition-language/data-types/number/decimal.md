@@ -71,10 +71,6 @@ amount?*: decimal
 ~ 9.99m   # ✓
 ```
 
-## Implementation status (beta)
-
-- Keyed `null:` is not yet honored — use the `*` suffix.
-
 ## See Also
 
 * [Decimal values](../../../the-structure/values/number/decimal.md)
