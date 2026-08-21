@@ -36,6 +36,10 @@ The separator can take several forms, from least to most detailed, each ending w
 
 ### Rules for section names and schemas
 
+* **What a section name may contain** — a section name is a **bare name**: letters, marks,
+  digits, `-` and `_`. It has **no quoted form**, so unlike a member name it cannot carry a
+  colon, a comma, a space, or any other structural character. See
+  [Section names are bare names](#section-names-are-bare-names) below.
 * **Omitting the section name** — in a multi-section document, the section name may be omitted
   only once. When omitted, the name is derived from the associated schema (e.g. `--- $employee`
   implies the section name `employee`).
@@ -46,6 +50,52 @@ The separator can take several forms, from least to most detailed, each ending w
   duplicate is renamed (`data` → `data_2`, `users` → `users_2`) and the error is reported, so no
   section is lost. See
   [Duplicate section names](../../parsing-and-errors/error-accumulation.md#duplicate-section-names).
+
+### Section names are bare names
+
+The separator line is read to the end of the line, so a section name has no delimiters to mark
+where it stops. It is therefore a **bare name** and the only one in the format that cannot be
+quoted:
+
+```
+sectionName = ( letter | mark | digit | "-" | "_" )+
+```
+
+This is narrower than a member name, which may be quoted and can then contain anything at all.
+The asymmetry is deliberate — a member name sits inside a record, where the quotes bound it,
+whereas a section name sits on a line of its own.
+
+Two obligations follow, one for each side.
+
+**A reader MUST reject a name outside that set** and report `invalid-section-name`. It must not
+accept a prefix and discard the rest: the production is anchored, so `--- a,b: $x` is an error
+rather than a section named `a`, and leading or trailing spaces are not part of the name and are
+not silently absorbed. Accepting a truncated name would change the data with no diagnostic —
+the one outcome the format does not tolerate.
+
+> **Known implementation gap.** The reference implementation currently truncates rather than
+> reporting: `--- a,b: $x` reads the name as `a` and surfaces only a downstream `unexpected-token`,
+> and `---  lead: $x` silently drops the leading space. Tracked as
+> [ISSUE-20](https://github.com/maniartech/io-test-cases/blob/master/ISSUES.md).
+
+**A writer MUST NOT emit a section name it cannot read back.** When converting foreign data whose
+keys fall outside the set — `code:en`, `a,b`, a key with a leading space — the multi-section layout
+is simply unavailable, and the writer **MUST** fall back to a single section, where those keys
+become ordinary member names and may be quoted:
+
+<!-- io:test skip -->
+```ruby
+# data: { "code:en": […], "a,b": […] }
+# WRONG - neither name survives the round trip
+--- code:en: $a
+--- a,b: $b
+
+# RIGHT - one section; the keys are member names, which may be quoted
+--- $schema
+{ "code:en": […], "a,b": […] }
+```
+
+See [Record & Document Output](../../serialization/document-output.md#sections).
 
 ### Examples of section separators
 

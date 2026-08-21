@@ -22,7 +22,7 @@ document        = [ header "---" ] section { sectionBreak section }
 header          = { definition } ;
 section         = [ sectionTag ] ( collection | object ) ;
 sectionBreak    = "---" [ sectionTag ] ;
-sectionTag      = name [ ":" schemaRef ]          (* e.g.  employee : $employee *)
+sectionTag      = sectionName [ ":" schemaRef ]    (* e.g.  employee : $employee *)
                 | schemaRef ;                      (* e.g.  $employee *)
 ```
 
@@ -111,7 +111,15 @@ specialNumber   = "NaN" | "Inf" | "+Inf" | "-Inf" ;
 comment         = "#" { anyCharExceptNewline } ;
 ws              = ? Unicode whitespace ? ;
 name            = nameStart { nameChar } ;
+sectionName     = sectionChar { sectionChar } ;    (* ANCHORED: the whole name must match *)
+sectionChar     = letter | mark | digit | "-" | "_" ;
 ```
+
+> `sectionName` is narrower than `name`, and it is the one name in the format with **no quoted
+> form** — the separator line runs to the end of the line, so nothing bounds the name. The rule is
+> anchored on purpose: a parser must not match a prefix and leave the remainder to fail later, or
+> `--- a,b: $x` would silently become a section named `a`. See
+> [Data Sections](../the-structure/introduction/data.md#section-names-are-bare-names).
 
 > This grammar is a working draft for the 1.0 specification. Edge cases (precise open-string
 > termination, escape sequences, and datetime sub-formats) are described in their respective

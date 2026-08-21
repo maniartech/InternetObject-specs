@@ -156,8 +156,28 @@ reader, so this affects legibility only.
 ~ Sal, 27
 ```
 
-A section name is an identifier: letters, digits, `_` and `-`. It **MUST NOT** contain a dot
-or other separator, and it cannot be quoted.
+A section name is a bare name — letters, marks, digits, `-` and `_` — and it is the one name in
+the format that **cannot be quoted**, because the separator line runs to the end of the line and
+nothing would bound it.
+
+That makes the multi-section layout unavailable for some data. When a key falls outside the set,
+a writer **MUST NOT** emit it as a section name and **MUST** fall back to a single section, where
+the same key is an ordinary member name and may be quoted:
+
+<!-- io:test skip -->
+```ruby
+# data: { "code:en": […], "a,b": […] }
+# WRONG - `--- code:en: $a` reads back as a section named `code`, and the rest fails
+--- code:en: $a
+
+# RIGHT - one section; the keys are member names
+--- $schema
+{ "code:en": […], "a,b": […] }
+```
+
+This is the general rule of [Round-trip](round-trip.md) applied to one construct: **a writer must
+never emit text its own reader cannot read.** A leading space is the case worth remembering — it is
+not part of the name, and a reader that absorbs it changes the data without reporting anything.
 
 ## See Also
 
