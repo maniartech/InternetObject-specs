@@ -31,6 +31,10 @@ RFC 2119. This section states the duties of a conformant implementation. Interne
 - MUST validate each record independently; one invalid record MUST NOT invalidate others.
 - MUST NOT invent new built-in type names; document-local types are declared with `$`
   references.
+- MUST produce the **same outcome for the same logical value, whatever route it arrived by** —
+  the same accept-or-reject decision, the same error codes, in the same order. Validation is
+  defined on the value, not on how it was delivered. See
+  [Entry points](validation-model.md#entry-points).
 
 ## A conformant serializer
 
