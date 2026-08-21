@@ -44,8 +44,8 @@ that is lossless in every case.
 | not declared, schema is **closed** | error | error | error |
 
 The last row is a validation failure, not a formatting choice: a closed schema has no place to
-put the member, so the writer **MUST** raise `additional-values-not-allowed` rather than emit
-something that will not read back.
+put the member, so the writer **MUST** raise `unknown-member` rather than emit something that will
+not read back.
 
 ## Examples
 

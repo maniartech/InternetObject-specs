@@ -16,7 +16,7 @@ Extra values in a record are rejected unless the schema opts in with `*`:
 ~ $schema: { name: string, age: int }
 ---
 ~ John, 30                # ✓
-~ Alex, 25, extra1        # ✗ additional-values-not-allowed
+~ Alex, 25, extra1        # ✗ unknown-member
 ```
 
 ## Allowing extra fields with `*`
