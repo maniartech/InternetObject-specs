@@ -135,9 +135,10 @@ A record (`~`) cannot follow a bare, non-collection object in the same section:
 An unterminated object or array, or stray tokens after a closed object, are also errors. (Each
 is reported against the record it appears in; the surrounding records are unaffected.)
 
+<!-- io:test per-line -->
 ```ruby
 ~ {101, 25, HR} extra               # ✗ unexpected-token — tokens after a closed object
-~ Alice, f, {Third St, NY, [green]  # ✗ expecting-bracket — object/array not closed
+~ Alice, f, {Third St, NY, [green]  # ✗ expected-closing-bracket — object/array not closed
 ```
 
 ### Common mistakes
@@ -160,10 +161,11 @@ Each record is parsed and validated on its own. If a record fails — a syntax e
 validation error — only that record is reported as an error; the records before and after it
 still load:
 
+<!-- io:test per-line -->
 ```ruby
 ~ John, 28, m, {Main St, LA}, [red], T          # loads
 ~ Jane, N/A, f, {Second St, LA}, [blue], F      # loads
-~ Alice, f, {Third St, NY, [green], T           # ✗ expecting-bracket — object not closed
+~ Alice, f, {Third St, NY, [green], T           # ✗ expected-closing-bracket — object not closed
 ~ Bob, 35, m, {Fourth St, NY}, [yellow], T      # loads — unaffected by the error above
 ```
 

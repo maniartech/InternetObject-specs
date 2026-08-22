@@ -18,17 +18,21 @@ streaming references them and does not restate them.
 
 ## Error categories
 
-Every error carries a **category** and a stable string **code**. The category is one of four
-values, and it MUST be derived from the originating error's **class**, not from any
-code-grouping (a code may sit in one core grouping yet be raised as a different class — the
-class is authoritative):
+Every error carries a **category** and a stable string **code**. The category **MUST** be derived
+from the originating error's **class**.
+
+A code has exactly **one** class, and the class a code belongs to is the group it appears under in
+the core [Error Model](../parsing-and-errors/error-model.md). The two never disagree: a code in the
+catalogue's *Syntax errors* section is raised as a syntax error everywhere, and likewise for
+validation. That is a requirement on implementations, not an observation — where the two diverge,
+two conformant readers report different categories for the same input.
 
 | Category | Raised by |
 | -------- | --------- |
-| `syntax` | A tokenization or parsing failure. |
-| `validation` | A schema validation failure. |
-| `general` | Any other core error. |
-| `stream` | A transport or lifecycle failure raised by the streaming layer. |
+| `syntax` | A tokenization or parsing failure — the catalogue's *Syntax errors*. |
+| `validation` | A schema validation failure — the catalogue's *Validation errors*. |
+| `stream` | A transport or lifecycle failure raised by the streaming layer. Not a fact about the document; see the `stream-` namespace below. |
+| `general` | **Reserved.** No core code maps here. It exists so that a reader encountering an error from outside the catalogue has somewhere to put it, rather than mislabelling it as `syntax` or `validation`. |
 
 The `syntax`, `validation`, and `general` categories and their codes are defined by Internet
 Object **core**; streaming preserves them unchanged. The `stream` category and its codes are
@@ -75,7 +79,7 @@ failure, cancellation, or a buffer-limit overflow. A fatal error:
   rejected promise, an error result — but iteration does not continue.
 - MUST NOT be emitted as a record-error item.
 - MAY carry a **core** category (for example, an unknown schema switch is fatal but preserves
-  the core `validation` / `schema-not-defined` identity) **or** the `stream` category.
+  the core `validation` / `undefined-schema` identity) **or** the `stream` category.
 
 ## Streaming fatal codes
 
@@ -90,7 +94,7 @@ The streaming layer defines exactly these fatal codes in v1, all category `strea
 These are the only `stream`-category codes in v1. Every other fatal error preserves a **core**
 category and code:
 
-- an unknown schema switch → `validation` / `schema-not-defined`;
+- an unknown schema switch → `validation` / `undefined-schema`;
 - invalid header definitions → `syntax`;
 - a partial frame at end of stream → `syntax`.
 

@@ -67,8 +67,8 @@ literal.
 
 ## Structural rules
 
-- **Balanced delimiters** — every opening bracket or brace must have a matching closing one.
-- **Proper nesting** — structures may nest but must preserve a well-formed hierarchy.
+- **Balanced delimiters** — every opening bracket or brace **MUST** have a matching closing one.
+- **Proper nesting** — structures may nest but **MUST** preserve a well-formed hierarchy.
 - **Separator consistency** — commas separate elements at the same structural level.
 - **Section division** — triple hyphens (`---`) separate the header and data sections.
 - **Comment scope** — a hash (`#`) comment extends to the end of the line only.

@@ -33,13 +33,14 @@ MUST recognize all of these names.
 | `int32` | yes | −2 147 483 648 … 2 147 483 647 |
 | `uint32` | yes | 0 … 4 294 967 295 |
 
-`byte` is an alias for `uint8`. A value outside a type's range MUST be rejected with an
-`invalid-range` error:
+`byte` is an alias for `uint8`. A value outside a type's own range MUST be rejected with
+`out-of-range-integer` — the limit belongs to the **type**, so the fix is to widen the type. A value
+that breaks a `min`/`max` the schema *declared* is a different error; see [min / max](#min--max).
 
 ```ruby
 age: int8
 ---
-~ 200      # ✗ invalid-range — int8 max is 127
+~ 200      # ✗ out-of-range-integer — int8 max is 127
 ```
 
 > **Whole-number rule.** The `int`/`uint`/`int8…32`/`uint8…32` shortcuts MUST reject values
@@ -69,14 +70,19 @@ A `number` MemberDef accepts only the options below. Any other key is invalid.
 
 ### min / max
 
-Inclusive bounds. A value outside the bounds is rejected with `invalid-range`.
+Inclusive bounds. A value below `min` is rejected with `mismatched-min`, above `max` with
+`mismatched-max` — the code names the keyword that rejected it, so the direction is never in doubt.
+
+These are distinct from `out-of-range-integer`, which means the value does not fit the **type**
+(`int8` given `200`, with no bound declared). One is fixed by changing the data, the other by
+widening the type.
 
 ```ruby
 age: { number, min: 18, max: 25 }
 ---
 ~ 18     # ✓
 ~ 25     # ✓
-~ 35     # ✗ invalid-range
+~ 35     # ✗ mismatched-max
 ```
 
 > An explicit `min`/`max` **replaces** a shortcut's built-in bound rather than narrowing it —
@@ -102,7 +108,7 @@ Restricts the value to a fixed set. As the third positional value it may omit th
 code: { number, choices: [234, 245, 456] }
 ---
 ~ 245    # ✓
-~ 5      # ✗ invalid-choice
+~ 5      # ✗ mismatched-choice
 ```
 
 ### format
@@ -133,12 +139,13 @@ How a member resolves (verified behavior):
 | Input | Result |
 | ----- | ------ |
 | value present, valid | the value |
-| value present, out of range | `invalid-range` error |
+| value present, below `min` / above `max` | `mismatched-min` / `mismatched-max` error |
+| value present, outside the **type's** range | `out-of-range-integer` error |
 | value is `N` (null), key is nullable (`*`) | `null` |
-| value is `N` (null), key is **not** nullable | `null-not-allowed` error |
+| value is `N` (null), key is **not** nullable | `forbidden-null` error |
 | value omitted, `default` set | the default |
 | value omitted, key optional (`?`), no default | absent |
-| value omitted, required, no default | `value-required` error |
+| value omitted, required, no default | `missing-value` error |
 
 ```ruby
 a?: { number, 7 }    # optional with default 7  →  omitted yields 7

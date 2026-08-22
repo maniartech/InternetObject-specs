@@ -52,18 +52,31 @@ recordBody      = object | openObject | value ;    (* a bare value is promoted t
 object          = "{" [ memberList ] "}" ;
 openObject      = memberList ;                      (* unbraced, top-level only *)
 memberList      = member { "," member } [ "," ] ;
-member          = [ key ":" ] value ;              (* keyed or positional *)
+member          = [ key ":" ] [ value ] ;          (* keyed or positional; value may be absent *)
 
 array           = "[" [ valueList ] "]" ;
 valueList       = value { "," value } ;
 ```
+
+> **A member's value may be absent**, which is how an **empty position** is written: `{p, , q}`
+> holds three members, the middle one carrying no value. A writer is
+> [required to emit this form](../serialization/document-output.md#absent-members-hold-their-place) when a
+> positional member is skipped, so a grammar that demanded a value here would reject conformant
+> writer output.
+>
+> An array has no such production: `valueList` requires a value between commas, so `[a,,c]` is
+> **not** an array with a hole — it is an error (`unexpected-token`). Objects bind members by
+> position and therefore need to express a gap; arrays do not.
+>
+> The optional trailing comma in `memberList` closes the list; it does **not** add an empty final
+> position. `{a, b,}` holds **two** members, not three.
 
 ## Values
 
 ```ebnf
 value           = object | array | scalar | variableRef ;
 variableRef     = "@" name | "$" name ;
-scalar          = string | number | bigint | decimal
+scalar          = string | number | specialNumber | bigint | decimal
                 | datetime | binary | boolean | null ;
 ```
 
@@ -106,7 +119,7 @@ binary          = "b" quoted ;                              (* base64 inside quo
 
 boolean         = "T" | "F" | "true" | "false" ;
 null            = "N" | "null" ;
-specialNumber   = "NaN" | "Inf" | "+Inf" | "-Inf" ;
+specialNumber   = "NaN" | "Inf" | "+Inf" | "-Inf" ;   (* reachable via `scalar` *)
 
 comment         = "#" { anyCharExceptNewline } ;
 ws              = ? Unicode whitespace ? ;

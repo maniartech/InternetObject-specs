@@ -1,6 +1,7 @@
 # Table of contents
 
 * [Internet Object 1.0](README.md)
+* [Conventions](conventions.md)
 
 ## Internet Object
 
@@ -99,6 +100,7 @@
 ## Parsing & Errors
 
 * [Overview](parsing-and-errors/README.md)
+* [Error Codes](parsing-and-errors/error-codes.md)
 * [Error Model](parsing-and-errors/error-model.md)
 * [Parser Behavior & Recovery](parsing-and-errors/parser-behavior.md)
 * [Error Accumulation](parsing-and-errors/error-accumulation.md)

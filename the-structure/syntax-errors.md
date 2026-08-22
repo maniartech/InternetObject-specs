@@ -17,25 +17,45 @@ validation. (Errors about *values* — wrong type, out of range — are validati
 ```ruby
 pt: { object, schema: { x: int } }
 ---
-{ 1                      # ✗ expecting-bracket  (the '{' is never closed)
+{ 1                      # ✗ expected-closing-bracket  (the '{' is never closed)
 ```
 
-The unterminated `{` raises `expecting-bracket`.
+The unclosed `{` raises `expected-closing-bracket`. (The predicate `unterminated-` is reserved for
+constructs the *tokenizer* closes, such as a quoted string; a bracket is closed by the parser.)
 
-### Missing comma
+### Missing separators merge values
 
-Values must be comma-separated. Without commas, several tokens merge into one open string:
+Values are comma-separated. Where a comma is omitted between two **values**, the text between them
+is a single [open string](values/string/open-strings.md), and an open string may contain spaces —
+so the result is one well-formed value, and there is nothing for a parser to reject:
 
 ```ruby
-~ 101 Thomas 25      # one value "101 Thomas 25", not three
+---
+~ 101 Thomas 25      # → "101 Thomas 25" — one value, not three
+```
+
+A conformant parser **MUST NOT** report an error here, and **MUST NOT** insert the missing
+separators. This is the one fault the format cannot diagnose for you, and it is the direct cost of
+having open strings at all: the same property that lets `New York` be written without quotes is
+what makes `101 Thomas 25` a single value.
+
+The rule stops at values. A missing separator before a **key** is still an error, because a key
+cannot follow an unseparated value:
+
+<!-- io:test per-line -->
+```ruby
+{John age: 25 gender: M}   # ✗ unexpected-token
 ```
 
 ### Unterminated string
 
-A quoted string with no closing quote raises a tokenizer error:
+A quoted string with no closing quote raises `unterminated-string`. This applies to every quoted
+form, including the annotated ones (`r'...'`, `b'...'`, `dt'...'`):
 
+<!-- io:test per-line -->
 ```ruby
-~ "John Doe          # missing closing quote
+"John Doe            # ✗ unterminated-string
+r'C:\path           # ✗ unterminated-string
 ```
 
 ## Recovery is bounded by structure

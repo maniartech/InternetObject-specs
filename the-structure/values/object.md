@@ -118,14 +118,21 @@ The following Internet Object is also a valid JSON object:
 ```
 
 > Keys are double-quoted strings and all values use standard JSON types.
-> **Child objects must always be enclosed in curly braces `{}`.** Only the top-level object may
-> use the open form; every nested or embedded object must use the closed form.
+> **Child objects MUST always be enclosed in curly braces `{}`.** Only the top-level object may
+> use the open form; every nested or embedded object **MUST** use the closed form.
 
 ## Invalid forms
 
+<!-- io:test per-line -->
 ```ruby
-{name: John Doe 25}        # ✗ missing commas between values
-{John age: 25 gender: M}   # ✗ missing commas between values
+{John age: 25 gender: M}   # ✗ unexpected-token — a key cannot follow an unseparated value
+```
+
+A missing comma between two *values* is not an error, because an open string may contain spaces:
+
+```ruby
+---
+{name: John Doe 25}        # → { name: "John Doe 25" } — one value, not three
 ```
 
 ## Optional behaviors
@@ -221,7 +228,17 @@ So under a schema whose first member expects an object:
 ~ $schema: { o1: object, o2?: object }
 ---
 {key: val}          # → o1 = { key: val }   (undeclared key `key` → value reading)
-{o1: {key: val}}    # → o1 = { key: val }   (declared key `o1`   → record reading)
+```
+
+```ruby
+~ $schema: { o1: object, o2?: object }
+---
+{o1: {key: val}}    # → o1 = { key: val }   (declared key `o1` → record reading)
+```
+
+```ruby
+~ $schema: { o1: object, o2?: object }
+---
 {{key: val}}        # → o1 = { key: val }   (explicit enclosure)
 ```
 
@@ -233,8 +250,8 @@ Disambiguation rules:
 1. **Trailing content removes the ambiguity.** `{key: val}, 5` is a two-member record — the closed
    object binds to the first member, `5` to the second. No extra enclosure is needed.
 2. **The reading does not depend on how many members the schema declares.** A one-member and a
-   five-member closed schema treat the same row identically.
-3. **Open schemas (`*`) differ:** an undeclared key is a *legal extra member*, so there is nothing
+   five-member strict schema treat the same row identically.
+3. **Extensible schemas (`*`) differ:** an undeclared key is a *legal extra member*, so there is nothing
    to disambiguate and the row binds as the record — except where the schema declares exactly one
    member, which keeps the value reading.
 
@@ -293,7 +310,7 @@ differently from the author's intent**:
   {{o1: {a: 1}, o2: {b: 2}}}   # → o1={o1:{a:1},o2:{b:2}} (value reading — intended)
   ```
 
-- **Open schemas.** When the schema is open (`*`) and declares more than one member, an undeclared
+- **Extensible schemas.** When the schema is extensible (`*`) and declares more than one member, an undeclared
   key is a *legal extra member*, so the row is read as the record and the object the author meant
   as a value silently becomes extras:
 
@@ -303,7 +320,7 @@ differently from the author's intent**:
   {key: val}          # → { key: val } as an EXTRA — o1 and o2 are simply absent
   ```
 
-  If the declared members are required, this surfaces as `value-required` rather than pointing at
+  If the declared members are required, this surfaces as `missing-value` rather than pointing at
   the real mistake.
 
 **Schema-design note.** Placing a non-object member first does *not* remove the hazard — the row is
@@ -312,7 +329,7 @@ still absorbed as that member's value, it just fails on type instead:
 ```ruby
 ~ $schema: { a: string, b?: string }
 ---
-{key: val}            # ✗ not-a-string — the whole row was bound to `a`
+{key: val}            # ✗ expected-string — the whole row was bound to `a`
 ```
 
 The reliable protections are the explicit forms above, not member ordering or member type.

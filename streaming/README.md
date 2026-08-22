@@ -46,7 +46,7 @@ subordinate to it and inclusive of it.
 
 - **Subordinate on semantics.** Streaming MUST NOT redefine, reinterpret, or override any
   Internet Object semantics — what a type means, how values coerce, whether a value validates,
-  how `default`, optional, `null`, and `choices` resolve, how open and closed schemas behave,
+  how `default`, optional, `null`, and `choices` resolve, how strict and extensible schemas behave,
   how values serialize, or what an error's identity is.
 - **Inclusive, not bolt-on.** Streaming MUST reuse core. It MUST NOT fork, shadow, or partially
   re-implement core parsing, schema resolution, validation, or serialization.

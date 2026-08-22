@@ -5,7 +5,7 @@ description: Case sensitivity for keys, keywords, and type names.
 
 # Case Sensitivity Rules
 
-Internet Object is **case-sensitive** throughout. Keys, keywords, and type names must be
+Internet Object is **case-sensitive** throughout. Keys, keywords, and type names **MUST** be
 written with exact casing.
 
 ## Keys
@@ -20,7 +20,7 @@ Name: string, name: string
 
 ## Keywords
 
-The literal keywords must be written exactly as defined. Their accepted forms are:
+The literal keywords **MUST** be written exactly as defined. Their accepted forms are:
 
 | Meaning | Accepted | Not accepted |
 | ------- | -------- | ------------ |
@@ -35,7 +35,7 @@ active: bool
 ---
 ~ T        # ✓
 ~ true     # ✓
-~ t        # ✗ not-a-bool
+~ t        # ✗ expected-boolean
 ```
 
 ## Type names

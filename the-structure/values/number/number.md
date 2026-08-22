@@ -120,31 +120,66 @@ The same value can be written in several bases and notations:
 
 All five values above are `42`.
 
+## A number, or a word that begins with a digit?
+
+[Open strings](../string/open-strings.md) may begin with a digit, and people write such values
+constantly: `3pm`, `12mm`, `007th`, part codes like `013ABSD`, version strings like `1.2.3`,
+addresses like `10.0.0.1`. So a reader needs a rule for when a run of characters is a **broken
+number** rather than ordinary text — and it cannot be "it looks numeric", because most of those do.
+
+Two rules decide it.
+
+> ### Rule 1 — all or nothing
+>
+> A run is a number **only if the entire run is a valid number literal.** If anything is left over,
+> the whole run is an [open string](../string/open-strings.md).
+
+> ### Rule 2 — a marker is a claim
+>
+> The base prefixes `0x`, `0o`, `0b` and the type suffixes `m`, `n` can only mean *number*. A run
+> that carries one and is not a valid literal of that type is an **error**, not a string.
+
+| Written | Read as | Which rule |
+| ------- | ------- | ---------- |
+| `0xFF`, `1.2`, `12e5`, `123.45m` | a number | Rule 1 — the whole run is valid |
+| `013ABSD`, `12mm`, `3pm` | open string | Rule 1 — no marker, so nothing is claimed |
+| `1.2.3`, `10.0.0.1`, `2024.01.15` | open string | Rule 1 — likewise; a version is not a number |
+| `1e`, `1.23ee4`, `5em` | open string | Rule 1 — incomplete, so not a number at all |
+| `0x123FG`, `0b`, `0oz` | **`invalid-number`** | Rule 2 — `0x`/`0b`/`0o` claimed a number |
+| `.45m`, `123.m` | **`invalid-decimal`** | Rule 2 — `m` claimed a decimal |
+| `12.3n` | **`invalid-bigint`** | Rule 2 — `n` claimed a bigint |
+
+Rule 1 is what keeps a partial parse from **inventing a value**. `1e` is not a complete number, so
+it is the string `"1e"` — never the number `1`, which is what an implementation produces if it
+keeps the part it managed to read and discards the rest. That is the failure the rule exists to
+prevent, and it needs no error to prevent it: text that stays text loses nothing.
+
+Rule 2 is why `0oz` is rejected while `013ABSD` is not. Nothing in `013ABSD` says *number*; `0o`
+says nothing else. Quoting is the escape hatch and is always available — `"0oz"` is simply a
+string — and a writer is
+[required to quote](../../../serialization/value-formatting.md#strings) any string that would
+otherwise read back as a broken literal, so a value that arrives as text leaves as text.
+
 ## Invalid forms
 
-The following are genuine syntax errors (the parser reports an error):
-
+<!-- io:test per-line -->
 ```ruby
----
-0o89                 # ✗ invalid octal digit
+0x                   # ✗ invalid-number — claimed hex, gave no digits
+0b                   # ✗ invalid-number — claimed binary, gave no digits
+0b 1010              # ✗ invalid-number — the space does not rescue the claim
+0xGH                 # ✗ invalid-number — G and H are not hex digits
+0o89                 # ✗ invalid-number — 8 and 9 are not octal digits
 ```
 
+And the runs that are **not** errors, because nothing in them claims to be a number:
+
+<!-- io:test per-line -->
 ```ruby
-0b                   # ✗ missing binary digits
-0x                   # ✗ missing hex digits
-0xGH                 # ✗ invalid hex digits
-0b 1010              # ✗ space between the prefix and the digits
+1.2.3                # → "1.2.3"      a version string
+10.0.0.1             # → "10.0.0.1"   an address
+1e                   # → "1e"         incomplete, so not a number
+013ABSD              # → "013ABSD"    a part code
 ```
-
-## Implementation status (beta)
-
-The reference implementation is currently lenient with some malformed numeric tokens. These
-are tracked as implementation issues; a conformant parser SHOULD reject them rather than accept
-or coerce them:
-
-- An incomplete exponent is accepted instead of rejected: `1e` and `1e+` both yield `1`.
-- A token that begins like a number but is ill-formed falls back to an open string instead of
-  raising an error: `0b12` → `"0b12"`, `1.2.3` → `"1.2.3"`, `1.23ee4` → `"1.23ee4"`.
 
 ## Preservation of structure
 

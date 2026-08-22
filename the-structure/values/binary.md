@@ -57,18 +57,27 @@ b''                        # empty byte string
 
 ## Invalid forms
 
+<!-- io:test per-line -->
 ```ruby
-bSGVsbG8=                  # ✗ missing quotes
-b'SGVsbG8 gV29ybGQ='       # ✗ space within the Base64 content
-b'SGVsbG8@V29ybGQ='        # ✗ invalid character '@'
-B'SGVsbG8gV29ybGQ='        # ✗ prefix must be lower-case b
+b'SGVsbG8 gV29ybGQ='       # ✗ invalid-binary — space within the Base64 content
+b'SGVsbG8@V29ybGQ='        # ✗ invalid-binary — invalid character '@'
+B'SGVsbG8gV29ybGQ='        # ✗ unknown-annotation — the prefix must be lower-case `b`
+b'SGVsbG8=                 # ✗ unterminated-string — no closing quote
+```
+
+Without quotes there is no annotation at all, so nothing announces a binary literal and the text is
+an ordinary [open string](string/open-strings.md):
+
+```ruby
+---
+bSGVsbG8=                  # → "bSGVsbG8=" — a string, not binary
 ```
 
 ## Behavior
 
 - **Whitespace** — leading and trailing whitespace around the quotes is ignored; whitespace
   inside the Base64 content is not allowed.
-- **Prefix case** — the prefix must be lower-case `b`; the Base64 content is case-sensitive.
+- **Prefix case** — the prefix **MUST** be lower-case `b`; the Base64 content is case-sensitive.
 - **Padding** — standard `=` padding is required for correct decoding.
 - **Decoding** — a parser decodes the content into a byte sequence (commonly a byte array or
   buffer) and preserves the exact bytes; invalid Base64 is a parse error.

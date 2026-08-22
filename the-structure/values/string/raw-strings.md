@@ -70,13 +70,22 @@ format's comment rules.
 
 ## Invalid forms
 
-Examples of invalid raw strings:
+<!-- io:test per-line -->
+```ruby
+r'Jonas D'costa'             # ✗ unexpected-token — unescaped quote
+r"He said, "Hello!""         # ✗ unexpected-token — unescaped quote
+r'Unclosed string            # ✗ unterminated-string — no closing quote
+```
+
+To hold a quote of the same kind, double it: `r'Jonas D''costa'` and
+`r"He said, ""Hello!"""`.
+
+Without quotes there is no annotation, so nothing marks the text as raw. That is not an error;
+it is simply read by the ordinary rules — here as a keyed member, because of the colon:
 
 ```ruby
-rC:\program files\app.exe    # ✗ missing quotes (use r'...' or r"...")
-r'Jonas D'costa'             # ✗ unescaped single quote inside (use r'Jonas D''costa')
-r"He said, "Hello!""         # ✗ unescaped double quote inside (use r"He said, ""Hello!""")
-r'Unclosed string            # ✗ missing closing quote
+---
+rC:\program files\app.exe    # → a member named `rC`, not a raw string
 ```
 
 ## Preservation of structure

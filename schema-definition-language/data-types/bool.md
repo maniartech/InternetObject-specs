@@ -28,7 +28,7 @@ active: bool
 ---
 ~ T        # ✓ true
 ~ false    # ✓
-~ yes      # ✗ not-a-bool
+~ yes      # ✗ expected-boolean
 ```
 
 Optional with a default:
@@ -54,12 +54,12 @@ flag*: bool               # nullable (value may be N)
 | Input | Result |
 | ----- | ------ |
 | `T`/`true`/`F`/`false` | the boolean |
-| any other token | `not-a-bool` error |
+| any other token | `expected-boolean` error |
 | `N`, key nullable (`*`) | `null` |
-| `N`, not nullable | `null-not-allowed` error |
+| `N`, not nullable | `forbidden-null` error |
 | omitted, `default` set | the default |
 | omitted, optional (`?`), no default | absent |
-| omitted, required | `value-required` error |
+| omitted, required | `missing-value` error |
 
 ## See Also
 

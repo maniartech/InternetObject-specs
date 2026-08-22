@@ -104,14 +104,15 @@ Out-of-range or malformed temporals produce the stable error code `invalid-datet
 
 ```ruby
 ---
-d'2024-13-20'           # ✗ invalid-datetime
+d'2024-13-20'           # ✗ invalid-date
 ```
 
+<!-- io:test per-line -->
 ```ruby
-t'25:00:00'             # ✗ invalid-datetime (hour out of range)
-t'12:60:00'             # ✗ invalid-datetime (minute out of range)
-dt'2024-03-20 14:30:00' # ✗ invalid-datetime (missing the T separator)
-dt'2024-03-20T14:30+25:00'  # ✗ invalid-datetime (timezone offset out of range)
+t'25:00:00'             # ✗ invalid-time — hour out of range
+t'12:60:00'             # ✗ invalid-time — minute out of range
+dt'2024-03-20 14:30:00' # ✗ invalid-datetime — missing the T separator
+dt'2024-03-20T14:30+25:00'  # ✗ invalid-datetime — timezone offset out of range
 ```
 
 ## Timezone handling

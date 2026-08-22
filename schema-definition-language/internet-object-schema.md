@@ -51,7 +51,7 @@ A value outside the constraint fails validation with a stable code:
 ```ruby
 score: { int, min: 0, max: 100 }
 ---
-150          # ✗ invalid-range — score is above max
+150          # ✗ mismatched-max — score is above max
 ```
 
 Members nest: a member's type can itself be an object schema or an array:

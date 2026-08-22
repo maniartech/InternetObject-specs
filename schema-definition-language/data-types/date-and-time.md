@@ -68,11 +68,11 @@ deletedAt?*: datetime   # optional + nullable
 | Input | Result |
 | ----- | ------ |
 | valid temporal literal | the value |
-| out of `min`/`max` | `invalid-range` error |
+| below `min` / above `max` | `mismatched-min` / `mismatched-max` error |
 | `N`, nullable (`*`) | `null` |
-| `N`, not nullable | `null-not-allowed` error |
+| `N`, not nullable | `forbidden-null` error |
 | omitted, optional (`?`) | absent |
-| omitted, required | `value-required` error |
+| omitted, required | `missing-value` error |
 
 ## See Also
 

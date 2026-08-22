@@ -26,9 +26,14 @@ The distinction matters because the two classes recover differently:
 - **Validation errors** are bounded by the **object** — each record is validated on its own
   and may report zero, one, or many errors, without affecting other records.
 
+Whichever class it belongs to, every error reports the same three things: a stable **code**, a
+human-readable **message**, and the **position** in the source. Only the code is part of this
+specification — messages may be reworded or translated — so tooling branches on the code.
+
 ## In this section
 
-- [Error Model](error-model.md) — the two classes, categories, and error conditions
+- [Error Codes](error-codes.md) — how every code is named, and the closed vocabulary it draws from
+- [Error Model](error-model.md) — the catalogue of codes, by class
 - [Parser Behavior & Recovery](parser-behavior.md) — how recovery works; processing options
 - [Error Accumulation](error-accumulation.md) — collecting many errors and partial output
 

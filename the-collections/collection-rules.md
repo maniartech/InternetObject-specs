@@ -40,7 +40,7 @@ If any field is required, an empty record fails:
 ~ $schema: { name: string, age?*: { int, max: 25 } }
 ---
 ~ John, 25     # ✓
-~              # ✗ value-required — name is required
+~              # ✗ missing-value — name is required
 ```
 
 ## Independent validation & error handling
@@ -52,7 +52,7 @@ unaffected:
 ~ $schema: { name: string, age: { int, max: 25 } }
 ---
 ~ James, 20    # ✓
-~ Alex, 30     # ✗ invalid-range — age exceeds 25
+~ Alex, 30     # ✗ mismatched-max — age exceeds 25
 ~ Bob, 22      # ✓
 ```
 

@@ -26,7 +26,7 @@ root with `DOCS_ROOT=/abs/path`. Exit code is non-zero if any example fails (CI-
 - A block is **tested only if it is a complete document** (contains a line starting with
   `---`). Illustrative fragments without `---` are skipped automatically.
 - Expectations come from the inline annotations the spec already uses:
-  - `# ✗ <error-code>` → that error MUST occur (e.g. `# ✗ invalid-range`).
+  - `# ✗ <error-code>` → that error MUST occur (e.g. `# ✗ out-of-range-integer`).
   - `# ✗ <prose>` (no code) → at least one error MUST occur.
   - no `✗` in the block → the document MUST parse with **zero** errors.
 

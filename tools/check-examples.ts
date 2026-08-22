@@ -7,11 +7,24 @@
  * Conventions (v1):
  *   - Only fenced blocks tagged ```ruby or ```io are considered.
  *   - A block is TESTED only if it is a complete document (contains a line that
- *     starts with `---`). Illustrative fragments without a `---` are skipped.
+ *     starts with `---`). Illustrative fragments without a `---` are skipped,
+ *     UNLESS the block opts into per-line mode (below).
  *   - Expected errors are read from inline annotations:
  *       `# ✗ <error-code>`  → that validation/syntax error MUST occur
  *       `# ✗ <prose>`       → at least one error MUST occur (no specific code)
  *       (no `✗` in the block) → the document MUST parse with zero errors
+ *     An assertion is EXACT: a block that names its codes must produce those and
+ *     no others. Over-reporting is a failure, not a pass.
+ *   - `<!-- io:test per-line -->` before a fence treats every non-empty, non-comment
+ *     line as its own independent document, checked against that line's own
+ *     annotation. Use it for the common "list of good and bad values" example, where
+ *     testing the fence as one document is meaningless (consecutive bare records are
+ *     not a legal document, so the block fails for a reason the example never meant).
+ *
+ * Errors are collected from BOTH `doc.errors` (where every syntax error outside a
+ * collection lands) and the loaded object graph (where validation errors land, and
+ * where a collection's syntax errors land as JSON-encoded strings). Reading only one
+ * of the two is how a malformed document can be reported green.
  *
  * Usage (run with the reference implementation's tsx):
  *   IO_PARSER=/abs/path/io-js2/src/parser/index.ts \
@@ -57,10 +70,22 @@ function walk(dir: string, acc: string[] = []): string[] {
 
 const FENCE = /```(?:ruby|io)\r?\n([\s\S]*?)```/g
 // `✗` marks an expected error. A hyphenated token after it is read as the error code
-// (all IO error codes are hyphenated, e.g. invalid-range); prose without a hyphen is ignored.
+// (all IO error codes are hyphenated, e.g. out-of-range-integer); prose without a hyphen is ignored.
 const EXPECT = /✗[ \t]*([a-z][a-z0-9]*(?:-[a-z0-9]+)+)?/g
 
 function collectErrorCodes(value: any, acc = new Set<string>()): Set<string> {
+  if (typeof value === 'string') {
+    // A collection serializes its syntax-error nodes as JSON *strings*, while validation
+    // errors in the same collection come through as real objects. Recover the former.
+    if (value.startsWith('{') && value.includes('"__error"')) {
+      try {
+        collectErrorCodes(JSON.parse(value), acc)
+      } catch {
+        /* not an error node after all — ordinary text that happens to look like one */
+      }
+    }
+    return acc
+  }
   if (value && typeof value === 'object') {
     if ((value as any).__error) {
       const c = (value as any).errorCode
@@ -69,6 +94,64 @@ function collectErrorCodes(value: any, acc = new Set<string>()): Set<string> {
     for (const k of Object.keys(value)) collectErrorCodes((value as any)[k], acc)
   }
   return acc
+}
+
+/** Every code the document reports, from both places the implementation puts them. */
+function errorsOf(parse: (t: string) => any, src: string): Set<string> {
+  const acc = new Set<string>()
+  try {
+    const doc: any = parse(src)
+    // `doc.errors` is where a syntax error outside a collection lands — and nowhere else.
+    for (const e of (doc?.errors ?? []) as any[]) {
+      if (e?.errorCode) acc.add(e.errorCode)
+    }
+    collectErrorCodes(doc?.toObject ? doc.toObject() : doc, acc)
+  } catch (e: any) {
+    acc.add(e?.errorCode || e?.constructor?.name || 'error')
+  }
+  return acc
+}
+
+/** Read the `✗ <code>` / `✗ <prose>` assertions out of a chunk of example text. */
+function assertionsIn(src: string): { expected: Set<string>; invalidMarked: boolean } {
+  const expected = new Set<string>()
+  let invalidMarked = false
+  let em: RegExpExecArray | null
+  EXPECT.lastIndex = 0
+  while ((em = EXPECT.exec(src))) {
+    invalidMarked = true
+    if (em[1]) expected.add(em[1])
+  }
+  return { expected, invalidMarked }
+}
+
+/** Compare one document's actual codes against its assertion. */
+function judge(
+  expected: Set<string>,
+  invalidMarked: boolean,
+  actual: Set<string>
+): { ok: boolean; why: string } {
+  if (expected.size > 0) {
+    const missing = [...expected].filter((c) => !actual.has(c))
+    const extra = [...actual].filter((c) => !expected.has(c))
+    if (missing.length)
+      return {
+        ok: false,
+        why: `missing expected error(s): ${missing.join(', ')}; got: ${[...actual].join(', ') || 'none'}`,
+      }
+    // An assertion names what the example produces. Anything else is a claim the page
+    // does not make, and silently tolerating it is how a broken document reads green.
+    if (extra.length) return { ok: false, why: `unexpected extra error(s): ${extra.join(', ')}` }
+    return { ok: true, why: '' }
+  }
+  if (invalidMarked) {
+    return actual.size > 0
+      ? { ok: true, why: '' }
+      : { ok: false, why: 'block marked invalid (✗) but parsed clean' }
+  }
+  return actual.size === 0
+    ? { ok: true, why: '' }
+    : { ok: false, why: `unexpected error(s): ${[...actual].join(', ')}` }
 }
 
 async function main() {
@@ -95,41 +178,37 @@ for (const file of walk(DOCS_ROOT)) {
       skip++
       continue
     }
+    // Per-line mode: a "list of good and bad values" example, where each line is its
+    // own document. Testing such a fence as one document is meaningless — consecutive
+    // bare records are not a legal document, so it would fail for a reason the example
+    // never meant, or (worse) pass while asserting nothing about the lines themselves.
+    if (/<!--\s*io:test\s+per-line\s*-->\s*$/.test(text.slice(0, m.index))) {
+      const lines = src.split(/\r?\n/)
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i]
+        if (!line.trim()) continue
+        if (/^\s*#/.test(line)) continue // a whole-line comment is prose, not a document
+        if (/^\s*---/.test(line)) continue // a bare separator carries no value of its own
+
+        const { expected, invalidMarked } = assertionsIn(line)
+        const { ok, why } = judge(expected, invalidMarked, errorsOf(parse, line))
+        if (ok) pass++
+        else {
+          fail++
+          failures.push(`FAIL  ${rel}  [block ${block}, line ${i + 1}]  ${line.trim()}
+        ${why}`)
+        }
+      }
+      continue
+    }
+
     if (!/^---/m.test(src)) {
       skip++
       continue
     }
 
-    const expected = new Set<string>()
-    let invalidMarked = false
-    let em: RegExpExecArray | null
-    EXPECT.lastIndex = 0
-    while ((em = EXPECT.exec(src))) {
-      invalidMarked = true
-      if (em[1]) expected.add(em[1])
-    }
-
-    const actual = new Set<string>()
-    try {
-      const doc: any = parse(src)
-      collectErrorCodes(doc.toObject ? doc.toObject() : doc, actual)
-    } catch (e: any) {
-      actual.add(e?.errorCode || e?.constructor?.name || 'error')
-    }
-
-    let ok: boolean
-    let why = ''
-    if (expected.size > 0) {
-      const missing = [...expected].filter((c) => !actual.has(c))
-      ok = missing.length === 0
-      if (!ok) why = `missing expected error(s): ${missing.join(', ')}; got: ${[...actual].join(', ') || 'none'}`
-    } else if (invalidMarked) {
-      ok = actual.size > 0
-      if (!ok) why = 'block marked invalid (✗) but parsed clean'
-    } else {
-      ok = actual.size === 0
-      if (!ok) why = `unexpected error(s): ${[...actual].join(', ')}`
-    }
+    const { expected, invalidMarked } = assertionsIn(src)
+    const { ok, why } = judge(expected, invalidMarked, errorsOf(parse, src))
 
     if (ok) pass++
     else {

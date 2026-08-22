@@ -40,7 +40,7 @@ Internet Object supports the following literals:
 
 ## Rules
 
-- **Case sensitive** — literals must use exact case; `True`, `FALSE`, and `NULL` are invalid.
+- **Case sensitive** — literals **MUST** use exact case; `True`, `FALSE`, and `NULL` are invalid.
 - **No quotes** — literals are written without quotes; quoting one makes it an ordinary string.
 - **Short forms** — `T`, `F`, and `N` are single-letter shortcuts for `true`, `false`, and
   `null`.

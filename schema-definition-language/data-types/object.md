@@ -27,7 +27,7 @@ A field may itself be any type, nested object, array, or [reference](../../the-d
 name: string, location: { x: int, y: int }
 ---
 ~ John, { 1, 2 }            # ✓ location = { x: 1, y: 2 }
-~ John, { 1, two }          # ✗ invalid-type (y is not an int)
+~ John, { 1, two }          # ✗ expected-integer (y is not an int)
 ```
 
 > In a record with several fields, write nested objects in the open positional form
@@ -111,11 +111,11 @@ Because no schema can recover member names for an untyped object, writers serial
 | Input | Result |
 | ----- | ------ |
 | valid object | the object |
-| field fails its type | the field's error (e.g. `invalid-type`) |
+| field fails its type | the field's error (e.g. `expected-integer`) |
 | `N`, nullable (`*`) | `null` |
-| `N`, not nullable | `null-not-allowed` error |
+| `N`, not nullable | `forbidden-null` error |
 | omitted, optional (`?`) | absent |
-| omitted, required | `value-required` error |
+| omitted, required | `missing-value` error |
 
 Because the suffixes are part of the bare-name token, a quoted field name states the same two
 properties as keyed options — where `schema:` takes the reference that `home?*: $address` wrote
@@ -138,11 +138,20 @@ An `object`-typed member — especially as a schema's **first** member — is wh
 enclosure question visible. For a row written as a single closed object, whether it is read as the
 record itself or as a value for member 0 depends on the row's first key:
 
+A key the schema **declares** — the row is the record:
+
 ```ruby
 ~ $schema: { o1: object, o2?: object }
 ---
-{o1: {a: 1}}      # key IS declared     → the row is the record → o1 = { a: 1 }
-{key: val}        # key is NOT declared → the row is a VALUE    → o1 = { key: val }
+{o1: {a: 1}}      # → o1 = { a: 1 }
+```
+
+A key it does **not** declare — the whole row is a value:
+
+```ruby
+~ $schema: { o1: object, o2?: object }
+---
+{key: val}        # → o1 = { key: val }
 ```
 
 Both readings are well-defined, but the intent is implicit. See

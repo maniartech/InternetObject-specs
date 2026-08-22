@@ -1,4 +1,5 @@
 ---
+status: informative
 description: Thin, schema-first and robust data-interchange object format for Internet
 cover: >-
   .gitbook/assets/DALL·E 2024-08-28 14.16.53 - A simple, clipart-like

@@ -65,7 +65,7 @@ reports `$Order`. The two `---` control frames are applied but never emitted as 
 A `--- $Name` selector MUST reference an already-defined schema. A switch to an unknown or
 invalid schema is **not** a recoverable per-record error — it is a **fatal** stream error,
 because the section's records can no longer be validated against a known shape. The error
-preserves its core identity (the `schema-not-defined` validation error); see
+preserves its core identity (the `undefined-schema` validation error); see
 [Streaming Error Model](error-model.md).
 
 If no default schema exists, a bare `---` selects the schemaless default context rather than
@@ -95,7 +95,7 @@ Header-defined definitions become shared stream state and apply to later records
 reuse accepted definitions and resolved schema objects across records: an unchanged schema
 context MUST NOT trigger repeated schema compilation. All definition lookup, schema resolution,
 default handling, and member validation MUST be delegated to core — a reader MUST NOT embed its
-own copy of the rules for `default`, optional, `null`, `choices`, or open-schema handling.
+own copy of the rules for `default`, optional, `null`, `choices`, or extensible-schema handling.
 
 ## See Also
 

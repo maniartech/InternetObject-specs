@@ -14,7 +14,19 @@ review) · `Draft` (still evolving) · `Deprecated` · `Reserved`. Defined in th
 [Versioning Policy](README.md). Non-normative pages are marked `Informative` and are not
 graded here.
 
-**Totals:** 77 Candidate.
+**Totals:** 79 Candidate.
+
+> **Nothing is Stable yet, by policy.** Graduation requires a second, independent
+> implementation to agree, and a soak period of at least three months after the
+> reference implementation is publicly released. A specification is a claim about what
+> people will need, and that claim is tested by use rather than by review. See the
+> [Versioning Policy](README.md#core-rules).
+
+## Overview
+
+| Page | Status |
+| ---- | ------ |
+| [Conventions](../conventions.md) | Candidate |
 
 ## Structure and Syntax
 
@@ -109,6 +121,7 @@ graded here.
 | Page | Status |
 | ---- | ------ |
 | [Overview](../parsing-and-errors/README.md) | Candidate |
+| [Error Codes](../parsing-and-errors/error-codes.md) | Candidate |
 | [Error Model](../parsing-and-errors/error-model.md) | Candidate |
 | [Parser Behavior & Recovery](../parsing-and-errors/parser-behavior.md) | Candidate |
 | [Error Accumulation](../parsing-and-errors/error-accumulation.md) | Candidate |

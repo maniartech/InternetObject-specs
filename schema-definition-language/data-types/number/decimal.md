@@ -54,7 +54,7 @@ price: { decimal, precision: 5, scale: 2 }
 ```ruby
 rate: { decimal, scale: 2 }
 ---
-~ 1.5m       # ✗ invalid-scale  (1 fractional digit, scale requires 2)
+~ 1.5m       # ✗ mismatched-scale  (1 fractional digit, scale requires 2)
 ```
 
 > With neither `precision` nor `scale`, a `decimal` is compared by its exact value.

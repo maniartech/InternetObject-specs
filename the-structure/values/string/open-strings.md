@@ -47,6 +47,8 @@ Peter D'mello
 जॉन डो
 Wow Great
 😃
+013ABSD
+12mm
 ```
 
 Multiple open strings in an object:
@@ -65,6 +67,28 @@ Tempor invidunt ut labore et dolore magna aliquyam erat
 sed diam voluptua
 ```
 
+### Beginning with a digit
+
+An open string may begin with a digit, and many everyday values do — measurements like `12mm`,
+times like `3pm`, and part codes and identifiers like `013ABSD`. Digits followed by letters is
+ordinary text, not a malformed number.
+
+The one exception is a **base prefix**. `0x`, `0o` and `0b` announce hexadecimal, octal and binary,
+so a run that begins with one and does not decode is a failed number rather than a string:
+
+```ruby
+---
+013ABSD              # → an open string
+```
+
+<!-- io:test per-line -->
+```ruby
+0x123FG              # ✗ invalid-number — announced hex, and G is not a hex digit
+```
+
+Quoting settles it either way: `"0x123FG"` is a string, unambiguously. See
+[A number, or a word that begins with a digit?](../number/number.md#a-number-or-a-word-that-begins-with-a-digit).
+
 ## Optional behaviors
 
 - **Whitespace** — an open string cannot start or end with whitespace, but preserves all
@@ -81,11 +105,18 @@ format's comment rules.
 
 ## Invalid forms
 
-Examples of invalid open strings:
+Neither of these is an **error**. Each is a perfectly good value — just not an open
+string, which is what makes them worth showing: an open string is defined by what it may not
+begin with.
 
 ```ruby
- John Doe      # ✗ starts with whitespace (use a regular string: " John Doe")
-"John Doe"     # ✗ quoted (this is a regular string, not an open string)
+---
+ John Doe      # leading space is trimmed → "John Doe"; to keep it, write " John Doe"
+```
+
+```ruby
+---
+"John Doe"     # a REGULAR string, not an open string
 ```
 
 ## Preservation of structure

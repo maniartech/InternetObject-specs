@@ -22,7 +22,7 @@ Restrict to a fixed set with `choices`:
 companyEmail: { email, choices: [info@acme.com, sales@acme.com] }
 ---
 ~ info@acme.com       # ✓
-~ other@acme.com      # ✗ invalid-choice
+~ other@acme.com      # ✗ mismatched-choice
 ```
 
 ## See Also

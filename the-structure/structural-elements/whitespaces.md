@@ -67,7 +67,7 @@ The following table lists the valid whitespace characters:
 - **Preserved inside strings** — whitespace within a value or string is kept exactly as written.
 - **Recognized by code point** — whitespace is identified by Unicode code point, per the table
   above.
-- **Reserved** — these whitespace characters must not appear within identifiers or keys.
+- **Reserved** — these whitespace characters **MUST NOT** appear within identifiers or keys.
 
 ## Best practices
 

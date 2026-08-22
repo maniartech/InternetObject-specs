@@ -79,11 +79,18 @@ chooses among three forms:
 | regular | `"John"` | the value would otherwise be ambiguous or malformed |
 | raw | `r"C:\path"` | the value contains characters that would need heavy escaping |
 
-A string **MUST** be quoted when leaving it open would change how it reads back. That is the
-case when the string:
+A string **MUST** be quoted when leaving it open would change how it reads back. There are two
+ways that happens, and both are the writer's responsibility: the text may read back as a
+**different value**, or it may fail to read back **at all**.
+
+That is the case when the string:
 
 - is **empty**;
 - **looks like a number** — `3.14`, `007`, `-5`, `.5`;
+- **looks like a malformed number** — `0x123FG`, `0b`, `1e`, `1.23ee4`. A base prefix
+  [announces a base](../the-structure/values/number/number.md#a-number-or-a-word-that-begins-with-a-digit),
+  so a bare `0x123FG` is read as `invalid-number` rather than as text. Quoting is what tells the
+  reader this is a string, and it is the only thing that can;
 - **is a keyword** — `T`, `F`, `N`, `true`, `false`, `null`;
 - **looks like a date or time** — `2024-03-20`, `14:30:00`;
 - contains a **comma**, or a structural character that would end the value;
@@ -91,8 +98,21 @@ case when the string:
 - has **leading or trailing whitespace**, which an open string loses on re-parse.
 
 ```ruby
-a: "  pad  ", b: "3.14", c: "T", d: "has, comma"
+a: "  pad  ", b: "3.14", c: "T", d: "has, comma", e: "0x123FG"
 ```
+
+Ordinary codes and identifiers need none of this. A writer emits them **bare**, because they read
+back as themselves:
+
+```ruby
+---
+013ABSD, 12mm, 3pm, 1.2.3, 10.0.0.1, 007th
+```
+
+The test is precise on purpose: quote a string when the bare text would read back as a **number**
+(Rule 1) or as an **error** (Rule 2), and not otherwise. Quoting everything that begins with a digit
+is safe but wrong for a format whose output is meant to be lean — and it hides tokenizer defects,
+because a quoted value never exercises the path a bare one takes.
 
 A string containing characters that would need heavy escaping — a literal newline, many
 backslashes — is written as a **raw** string instead: `r"line1

@@ -66,7 +66,7 @@ id: bigint
 ```ruby
 big: { bigint, min: 100n }
 ---
-~ 50n     # ✗ invalid-range
+~ 50n     # ✗ mismatched-min
 ```
 
 ## Optional, nullable & defaults

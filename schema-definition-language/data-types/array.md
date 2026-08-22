@@ -64,7 +64,7 @@ Each element MUST satisfy the element type, or validation fails per item:
 scores: [int]
 ---
 ~ [1, 2, 3]      # ✓
-~ [1, two, 3]    # ✗ invalid-type on the second item
+~ [1, two, 3]    # ✗ expected-integer on the second item
 ```
 
 ### len / minLen / maxLen
@@ -73,13 +73,13 @@ scores: [int]
 top3: { array, of: string, len: 3 }
 ---
 ~ [a, b, c]      # ✓
-~ [a, b]         # ✗ invalid-length — must have exactly 3 items
+~ [a, b]         # ✗ mismatched-len — must have exactly 3 items
 ```
 
 ```ruby
 tags: { array, of: string, minLen: 1 }
 ---
-~ []             # ✗ out-of-range — must have at least 1 item
+~ []             # ✗ mismatched-min-len — must have at least 1 item
 ~ [a]            # ✓
 ```
 
@@ -125,11 +125,14 @@ options — `"a,b": { array, of: string, optional: T }` — as described in
 | Input | Result |
 | ----- | ------ |
 | value present, valid | the array |
+| not an array | `expected-array` error |
+| item count outside `minLen`/`maxLen`/`len` | `mismatched-min-len` / `mismatched-max-len` / `mismatched-len` error |
+| an item fails `of` | the item type's own error, e.g. `expected-string` |
 | value is `N` (null), key is nullable (`*`) | `null` |
-| value is `N` (null), key is **not** nullable | `null-not-allowed` error |
+| value is `N` (null), key is **not** nullable | `forbidden-null` error |
 | value omitted, `default` set | the default |
 | value omitted, key optional (`?`), no default | absent |
-| value omitted, required, no default | `value-required` error |
+| value omitted, required, no default | `missing-value` error |
 
 ## Implementation status (beta)
 

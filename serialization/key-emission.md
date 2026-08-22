@@ -40,10 +40,10 @@ that is lossless in every case.
 | ------ | ------ | -------------------- | ----- |
 | keyless / positional | bare | bare | bare |
 | declared by a schema in scope | bare | bare | `key: value` |
-| **not** declared — open-schema extra, or no schema at all | bare *(lossy)* | `key: value` | `key: value` |
+| **not** declared — an extensible schema's extra, or no schema at all | bare *(lossy)* | `key: value` | `key: value` |
 | not declared, schema is **closed** | error | error | error |
 
-The last row is a validation failure, not a formatting choice: a closed schema has no place to
+The last row is a validation failure, not a formatting choice: a strict schema has no place to
 put the member, so the writer **MUST** raise `unknown-member` rather than emit something that will
 not read back.
 

@@ -66,9 +66,10 @@ following are all equal to `42n`:
 
 These are genuine syntax errors:
 
+<!-- io:test per-line -->
 ```ruby
-0xn                  # ✗ missing hex digits
-0bn                  # ✗ missing binary digits
+0xn                  # ✗ invalid-number — missing hex digits
+0bn                  # ✗ invalid-number — missing binary digits
 ```
 
 A BigInt holds whole numbers only, so a fractional BigInt is an error:

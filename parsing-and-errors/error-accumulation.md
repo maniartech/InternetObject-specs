@@ -18,7 +18,7 @@ failing record is marked as an error; the others are unaffected:
 ~ $schema: { name: string, age: { int, max: 25 } }
 ---
 ~ James, 20    # ✓
-~ Alex, 30     # ✗ invalid-range
+~ Alex, 30     # ✗ mismatched-max
 ~ Bob, 22      # ✓
 ```
 
@@ -37,10 +37,31 @@ example, editor markers at each error's position).
 
 ## Duplicate section names
 
-When two sections share a name, the duplicate is **automatically renamed**
-(`users` → `users_2` → `users_3`), so the rest of the document still loads. This applies to every
-duplicate, including sections that carry no name of their own and take the default name `data` — a
-recovering parser **MUST NOT** drop a section or let one overwrite another.
+When two sections share a name, the duplicate is **automatically renamed** so the rest of the
+document still loads. A recovering parser **MUST NOT** drop a section, and **MUST NOT** let one
+overwrite another: either would lose data with nothing to show for it.
+
+The renaming rule, stated exactly, because two implementations that disagree here produce
+differently-named sections from the same document:
+
+> On encountering a section whose name is already in use, append `_2` to the **original** name. If
+> that name is also in use, try `_3`, then `_4`, and so on, until an unused name is found. The
+> counter is **per name**, not per document, and it counts *names already taken* — including
+> names a later section spelled out for itself.
+
+So a document with three `users` sections yields `users`, `users_2`, `users_3`; and a document with
+sections named `a`, `b`, `a`, `b` yields `a`, `b`, `a_2`, `b_2` — not `a_2`, `b_3`.
+
+Because the rule counts names already taken, an explicit name cannot be silently displaced:
+
+```
+--- users        → users
+--- users_2      → users_2   (written that way by the author)
+--- users        → users_3   (skips users_2, which is taken)
+```
+
+This applies to sections that carry no name of their own, too: they take the default name `data`,
+so three unnamed sections become `data`, `data_2`, `data_3`.
 
 The document is still invalid: [section names must be
 unique](../the-structure/introduction/data.md#rules-for-section-names-and-schemas), and the error is
@@ -49,5 +70,5 @@ fault, not a lexical one, since every character in the document is valid.
 
 ## See Also
 
-- [Error Model](error-model.md) · [Parser Behavior & Recovery](parser-behavior.md)
+- [Error Codes](error-codes.md) · [Error Model](error-model.md) · [Parser Behavior & Recovery](parser-behavior.md)
 - [Collection Rules](../the-collections/collection-rules.md)

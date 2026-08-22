@@ -60,7 +60,19 @@ As analogues: Draft is close to TC39 Stage 1–2 or Kubernetes alpha; Candidate 
 
 - **Draft → Candidate:** the design is complete and reviewed.
 - **Candidate → Stable:** behavior is final and consistent across implementations; graduation is
-  announced in the changelog.
+  announced in the changelog. Two further conditions apply, and both are deliberate:
+
+  1. **More than one implementation.** "Consistent across implementations" cannot be established by
+     the implementation the specification was written alongside. Until a second, independent
+     implementation has been built from these pages and agrees, a promotion would be
+     self-certification.
+  2. **A soak period of at least three months** after the reference implementation is publicly
+     released. A specification is a claim about what people will need; that claim is tested by use,
+     not by review. Three months of real documents finds the assumptions no reviewer thought to
+     question.
+
+  Consequently **no page is Stable today, and none is expected to be for some time.** That is the
+  policy working, not a backlog.
 - **Stable → Deprecated → Removed:** with a replacement and a target major.
 
 ## Relationship to implementations

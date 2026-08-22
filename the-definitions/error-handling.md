@@ -10,8 +10,8 @@ again as data is validated. Two errors are specific to definitions:
 
 | Condition | Error code | Cause |
 | --------- | ---------- | ----- |
-| Reference to an undefined schema or type | `schema-not-defined` | `$name` is used but no `$name` is defined anywhere in the header |
-| Reference to an undefined variable | `variable-not-defined` | `@name` is used but no `@name` is defined anywhere in the header |
+| Reference to an undefined schema or type | `undefined-schema` | `$name` is used but no `$name` is defined anywhere in the header |
+| Reference to an undefined variable | `undefined-variable` | `@name` is used but no `@name` is defined anywhere in the header |
 
 > Error codes are stable; messages and positions may vary between implementations. Branch on
 > the code, not the message.
@@ -19,23 +19,23 @@ again as data is validated. Two errors are specific to definitions:
 ## Undefined schema reference
 
 A `$` reference must name a schema or type defined in the header. An undefined name fails with
-`schema-not-defined`:
+`undefined-schema`:
 
 ```ruby
 ~ $schema: { name: string, home: $address }
 ---
-~ John, { Main St, NYC }    # ✗ schema-not-defined — $address is never defined
+~ John, { Main St, NYC }    # ✗ undefined-schema — $address is never defined
 ```
 
 ## Undefined variable reference
 
 A `@` reference must name a variable defined in the header. An undefined name fails with
-`variable-not-defined`:
+`undefined-variable`:
 
 ```ruby
 ~ $schema: { name: string, isActive: bool }
 ---
-~ John, @active             # ✗ variable-not-defined — @active is never defined
+~ John, @active             # ✗ undefined-variable — @active is never defined
 ```
 
 ## Reference order

@@ -61,7 +61,7 @@ An `any` MemberDef accepts only the options below.
 pick: { any, choices: [1, One, T] }
 ---
 ~ One       # ✓
-~ Two       # ✗ invalid-choice
+~ Two       # ✗ mismatched-choice
 ```
 
 ## Optional, nullable & defaults

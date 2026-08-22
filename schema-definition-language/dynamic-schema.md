@@ -1,14 +1,20 @@
 ---
 status: candidate
-description: Open and dynamic schemas — accepting extra fields with the * marker.
+description: Strict and extensible schemas — accepting extra fields with the * marker.
 ---
 
-# Open & Dynamic Schemas
+# Extensible & Dynamic Schemas
 
-By default a schema is **closed**: a record may contain only the declared fields. Adding a
-`*` marker makes the schema **open**, allowing extra fields beyond those declared.
+A schema is **strict** by default: a record **MUST** contain only the declared fields. Adding a `*`
+marker makes it **extensible**, and an extensible schema accepts fields beyond those declared.
 
-## Closed by default
+> **A note on the words.** This specification says *strict* and *extensible* for schemas, and keeps
+> *open* and *closed* for the [object syntax](../the-structure/values/object.md) — an open object is
+> written without braces, a closed one with them. The two axes are unrelated, and one document can
+> hold all four combinations, so a single pair of words for both would make sentences that cannot be
+> read. Readers arriving from JSON Schema should map *strict* to `additionalProperties: false`.
+
+## Strict by default
 
 Extra values in a record are rejected unless the schema opts in with `*`:
 
@@ -39,7 +45,7 @@ member name — the same rule that governs the `?` and `*`
 [name suffixes](memberdef.md#quoted-names-take-the-long-form): quoting says *this name, exactly*.
 
 ```ruby
-~ $schema: { name: string, * }         # open — accepts any extra field
+~ $schema: { name: string, * }         # extensible — accepts any extra field
 ~ $schema: { name: string, "*": int }  # CLOSED — declares a member called *
 ```
 
@@ -51,7 +57,7 @@ Data is free to use `*` as a key; JSON-sourced configuration routinely does:
 ~ allow, deny            # the member named * holds "allow"
 ```
 
-A member named `*` does **not** open its schema, and a wildcard is **not** a member: it never
+A member named `*` does **not** make its schema extensible, and a wildcard is **not** a member: it never
 appears among the schema's member names, and a schema may carry both at once.
 
 ## Typing the extra fields
@@ -62,14 +68,14 @@ appears among the schema's member names, and a schema may carry both at once.
 ~ $schema: { name: string, *: string }
 ---
 ~ { John, role: dev }     # ✓
-~ { Alex, code: 123 }     # ✗ not-a-string — extra value must be a string
+~ { Alex, code: 123 }     # ✗ expected-string — extra value must be a string
 ```
 
 ```ruby
 ~ $schema: { name: string, *: { string, minLen: 4 } }
 ---
 ~ { John, dept: Sales }   # ✓
-~ { Mia, id: "12" }       # ✗ invalid-min-length — extra is shorter than 4
+~ { Mia, id: "12" }       # ✗ mismatched-min-len — extra is shorter than 4
 ```
 
 ## Map-shaped objects

@@ -49,7 +49,7 @@ True                 # open string "True", not true
 0                    # the number 0, not false
 ```
 
-> Under a `bool` schema, a non-boolean value fails validation with `not-a-bool`. Without a
+> Under a `bool` schema, a non-boolean value fails validation with `expected-boolean`. Without a
 > schema, the values above are simply kept as their parsed type (string or number).
 
 ## See Also

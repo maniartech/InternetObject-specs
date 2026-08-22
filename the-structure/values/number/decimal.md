@@ -67,10 +67,20 @@ notation is rejected:
 1.23e2m              # ✗ scientific notation is not supported for Decimal
 ```
 
+<!-- io:test per-line -->
 ```ruby
-.45m                 # ✗ missing leading digit (use 0.45m)
-123.m                # ✗ missing trailing digit (use 123.0m or 123m)
-123.45mm             # ✗ duplicated suffix
+.45m                 # ✗ invalid-decimal — missing leading digit (use 0.45m)
+123.m                # ✗ invalid-decimal — missing trailing digit (use 123.0m or 123m)
+```
+
+A **doubled** suffix is not an error. `123.45mm` is an [open string](../string/open-strings.md),
+by the same rule that makes `12mm` one: nothing in it announced a decimal, because the `m` that
+would have done so is followed by more text. See
+[A number, or a word that begins with a digit?](number.md#a-number-or-a-word-that-begins-with-a-digit).
+
+```ruby
+---
+123.45mm             # → "123.45mm" — a string; write "123.45m" for the decimal
 ```
 
 > A plain `123.45` (no `m`) is a valid **Number**, not a Decimal — the `m` suffix is what

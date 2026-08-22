@@ -43,7 +43,7 @@ Fields can carry constraints. Invalid data is reported, not silently accepted:
 ~ $schema: { name: string, age: { int, min: 0, max: 120 } }
 ---
 ~ John, 30      # ✓
-~ Mary, 200     # ✗ invalid-range
+~ Mary, 200     # ✗ mismatched-max
 ```
 
 ## 4. Nesting and reuse

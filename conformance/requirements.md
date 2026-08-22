@@ -5,20 +5,27 @@ description: MUST/SHOULD/MAY duties of parsers, validators, and serializers.
 
 # Conformance Requirements
 
-The key words **MUST**, **MUST NOT**, **SHOULD**, **SHOULD NOT**, and **MAY** are used as in
-RFC 2119. This section states the duties of a conformant implementation. Internet Object is
+This section states the duties of a conformant implementation. Internet Object is
 **language-independent**; these requirements describe behavior, not any particular API.
+
+Requirement keywords are defined once, for the whole specification, in [Conventions](../conventions.md)
+— they are not local to this page, and a rule stated in ordinary prose elsewhere is no weaker for it.
 
 ## All implementations
 
 - MUST accept input encoded as UTF-8.
 - MUST treat the format as case-sensitive (keys, keywords, type names).
 - MUST recognize the structural characters and keywords exactly as defined.
+- MUST report every error with a **code from the registry** in [Error Model](../parsing-and-errors/error-model.md),
+  named by the rule in [Error Codes](../parsing-and-errors/error-codes.md), together with the
+  **position** in the source. An implementation MUST NOT invent a code, assemble one at runtime, or
+  report an error without one.
+- MUST NOT accept a prefix of a malformed construct and discard the remainder — a truncated value
+  that parses is worse than a rejected one, because nothing reports it.
 
 ## A conformant parser
 
 - MUST build a document tree according to the [grammar](../appendices/grammar.md).
-- MUST report syntax errors with a stable error **code** and a source **position**.
 - SHOULD recover from a syntax error by skipping to the next boundary (`~` or `---`) and
   continuing, rather than aborting the whole document.
 
@@ -27,7 +34,8 @@ RFC 2119. This section states the duties of a conformant implementation. Interne
 - MUST validate data against the schema: types, constraints, optionality, nullability.
 - MUST recognize the closed set of built-in types and their allowed options
   (each type's [TypeDef](../schema-definition-language/typedef.md)).
-- MUST reject a value that violates its type or constraints, with the appropriate error code.
+- MUST reject a value that violates its type or constraints, distinguishing a **type** failure
+  from a **constraint** failure as [Error Codes](../parsing-and-errors/error-codes.md) defines.
 - MUST validate each record independently; one invalid record MUST NOT invalidate others.
 - MUST NOT invent new built-in type names; document-local types are declared with `$`
   references.
@@ -66,4 +74,6 @@ intended source of truth as it stabilizes.
 
 ## See Also
 
+- [Conventions](../conventions.md) — requirement keywords, and how examples are marked
+- [Error Codes](../parsing-and-errors/error-codes.md) · [Error Model](../parsing-and-errors/error-model.md)
 - [Validation Model](validation-model.md) · [Formal Grammar](../appendices/grammar.md)

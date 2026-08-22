@@ -12,6 +12,11 @@ how a document's data is mapped to it. For the building blocks of a schema, see 
 
 ## Open and closed schema objects
 
+"Open" and "closed" here describe **braces**, not behaviour: an open object is written without them,
+a closed one with them. Whether a schema accepts undeclared fields is a separate question, and this
+specification calls that *strict* or *extensible* — see
+[Extensible & Dynamic Schemas](dynamic-schema.md).
+
 A **top-level** schema may be written in open form, without surrounding braces:
 
 ```ruby

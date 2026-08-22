@@ -80,12 +80,18 @@ the format's comment rules.
 
 ## Invalid forms
 
-Examples of invalid regular strings:
+<!-- io:test per-line -->
+```ruby
+"John Doe                 # ✗ unterminated-string — missing closing quote
+"She said, "I Love it""   # ✗ unexpected-token — unescaped inner quote
+```
+
+Unquoted text is not an error at all — it is an [open string](open-strings.md), which is
+exactly why quoting is optional:
 
 ```ruby
-John Doe                  # ✗ not quoted (use "John Doe" or 'John Doe')
-"John Doe                 # ✗ missing closing quote
-"She said, "I Love it""   # ✗ unescaped inner quote (use \"I Love it\")
+---
+John Doe                  # → "John Doe", an open string
 ```
 
 > **Lenient escapes.** An unrecognized escape such as `\q` is *not* an error — the backslash is

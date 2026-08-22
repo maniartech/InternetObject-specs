@@ -62,11 +62,15 @@ header travels with the data is a writer choice:
 | omitted | data only, **no separator** — the schema is assumed known at the endpoint |
 | included | header, `---`, then the data |
 
-```ruby
-# header omitted
-John, 30
+Header omitted — data only, and no separator:
 
-# header included
+```
+John, 30
+```
+
+Header included:
+
+```ruby
 name: string, age: int
 ---
 John, 30
@@ -116,10 +120,20 @@ A member name is quoted by the same rules as a data key
 bare-name token, a writer that quotes a name **MUST** expand that member to the long MemberDef
 form:
 
+The member `"a,b"` is an optional, nullable number. The suffix form is not available to it:
+
 ```ruby
-# member "a,b": an optional, nullable number
-"a,b"?*: number                              # ✗ not valid syntax
-"a,b": { number, optional: T, "null": T }    # ✓ what a writer emits
+~ $schema: { "a,b"?*: number }               # ✗ invalid-definition
+---
+~ 1
+```
+
+so a writer emits the long form instead:
+
+```ruby
+~ $schema: { "a,b": { number, optional: T, "null": T } }   # ✓ what a writer emits
+---
+~ 1
 ```
 
 Bare names are unaffected — `age?*: number` is written as it stands. Appending a suffix to a

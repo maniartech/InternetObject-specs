@@ -56,7 +56,21 @@ set; some are shortcuts (e.g. `uint8`, `email`) over a base type plus constraint
 **Open string / Regular string / Raw string** — The three ways to write text: unquoted,
 quoted with escapes, and `r'…'` literal.
 
-**Open schema** — A schema marked with `*` that accepts fields beyond those declared.
+**Extensible schema** — A schema marked with `*` that accepts fields beyond those declared.
+Contrast **strict schema**, the default, which accepts only the fields it declares and reports
+`unknown-member` for anything else. Both are properties of a *schema*; they are unrelated to whether
+an **object** is written open (unbraced) or closed (braced) — see **Open object**. A reader coming
+from JSON Schema will know a strict schema as `additionalProperties: false`.
+
+**Strict schema** — See **Extensible schema**.
+
+**Open object** — An object written *without* braces, so its members are delimited by the enclosing
+record rather than by `{` and `}`. A **closed object** is written with braces. This is a question of
+syntax, and says nothing about whether the governing schema is strict or extensible.
+
+**Positional member** — A member written as a value with no key, bound to a schema member by its
+**position** in the record rather than by name. Its key, where one is needed, is its index as a
+string: the first positional member is `"0"`.
 
 **Optional / Nullable** — A field marked `?` may be omitted; a field marked `*` may be `null`.
 

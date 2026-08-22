@@ -106,8 +106,15 @@ name. A name that has to be quoted — because it holds a comma, a colon, a spac
 digit — cannot carry them, and writes the options instead:
 
 ```ruby
-"a,b"?*: number                              # ✗ invalid-definition
-"a,b": { number, optional: T, "null": T }    # ✓ the same member, spelled out
+~ $schema: { "a,b"?*: number }               # ✗ invalid-definition
+---
+~ 1
+```
+
+```ruby
+~ $schema: { "a,b": { number, optional: T, "null": T } }   # ✓ the same member, spelled out
+---
+~ 1
 ```
 
 In a schema that mixes both, only the quoted name is affected:

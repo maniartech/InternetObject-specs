@@ -93,13 +93,26 @@ Comments are allowed around and within arrays, following the format's general co
 
 ## Invalid forms
 
+A comma **separates** values, so every comma needs a value on each side of it:
+
+<!-- io:test per-line -->
 ```ruby
-[a, b, ]     # ✗ trailing comma
-[a,,c]       # ✗ elided value
-[ , ]        # ✗ missing value
-[,a]         # ✗ starts with a comma
-[a b c]      # ✗ missing separators
+[a, b, ]     # ✗ unexpected-token — trailing comma
+[a,,c]       # ✗ unexpected-token — elided value
+[ , ]        # ✗ unexpected-token — no value at all
+[,a]         # ✗ unexpected-token — nothing before the comma
 ```
+
+Missing separators are a different matter, and **not** an error:
+
+```ruby
+---
+[a b c]      # → ["a b c"] — one open string, not three values
+```
+
+An open string may contain spaces, so `a b c` is a single well-formed value and there is nothing
+for the parser to object to. See [Syntax Errors](../syntax-errors.md#missing-separators-merge-values)
+for why this is the one place the format cannot help you.
 
 ### Corrected versions
 

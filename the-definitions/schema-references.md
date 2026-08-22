@@ -35,7 +35,7 @@ Define an object shape once, reuse it across fields and schemas:
 - Refs are resolved after the **entire header** has been read, so order within the header is
   not significant — a ref MAY appear before the definition it targets. For readability, you
   SHOULD still define a ref before you use it.
-- A ref to a name that is never defined is an error (`schema-not-defined`).
+- A ref to a name that is never defined is an error (`undefined-schema`).
 - Reusing a ref many times keeps a document small and consistent.
 
 See [Error Handling in Definitions](error-handling.md) for the resolution errors.

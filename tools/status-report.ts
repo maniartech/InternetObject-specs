@@ -51,7 +51,11 @@ type Entry = { section: string; title: string; path: string }
 function parseSummary(): Entry[] {
   const lines = readFileSync(SUMMARY, 'utf8').split(/\r?\n/)
   const entries: Entry[] = []
-  let section = ''
+  // Pages listed BEFORE the first `##` heading still belong on the dashboard. Skipping them
+  // (`!section` below used to `continue`) silently dropped any normative page at the root —
+  // `conventions.md` defines the requirement keywords for the whole document and was invisible
+  // here. A maturity dashboard that can omit a normative page is worse than none.
+  let section = 'Overview'
   const linkRe = /^\s*[*-]\s+\[([^\]]+)\]\(([^)]+)\)/
   for (const line of lines) {
     const sec = line.match(/^##\s+(.+?)\s*$/)
@@ -60,7 +64,7 @@ function parseSummary(): Entry[] {
       continue
     }
     const link = line.match(linkRe)
-    if (!link || !section) continue
+    if (!link) continue
     const title = link[1].trim()
     let path = link[2].trim()
     if (!path.endsWith('.md')) continue
@@ -125,6 +129,14 @@ function generate(entries: Entry[], statusOf: (e: Entry) => string): string {
   out.push('graded here.')
   out.push('')
   out.push(`**Totals:** ${summary}.`)
+  out.push('')
+  // Without this note the dashboard reads as an oversight — 79 Candidate, 0 Stable looks like a
+  // promotion pass nobody ran. It is a deliberate hold, and the reason belongs beside the number.
+  out.push('> **Nothing is Stable yet, by policy.** Graduation requires a second, independent')
+  out.push('> implementation to agree, and a soak period of at least three months after the')
+  out.push('> reference implementation is publicly released. A specification is a claim about what')
+  out.push('> people will need, and that claim is tested by use rather than by review. See the')
+  out.push('> [Versioning Policy](README.md#core-rules).')
   out.push('')
 
   let currentSection = ''

@@ -44,9 +44,9 @@ A `string` MemberDef accepts only the options below. Any other key is invalid.
 | `choices` | array of string | Restricts the value to a fixed set. Third positional value. |
 | `pattern` | string | A regular expression the value must match. |
 | `flags` | string | Regex flags for `pattern` (e.g. `i`). |
-| `len` | int ≥ 0 | Exact length in characters. |
-| `minLen` | int ≥ 0 | Minimum length. |
-| `maxLen` | int ≥ 0 | Maximum length. |
+| `len` | int ≥ 0 | Exact length, in **Unicode code points**. |
+| `minLen` | int ≥ 0 | Minimum length, in **Unicode code points**. |
+| `maxLen` | int ≥ 0 | Maximum length, in **Unicode code points**. |
 | `format` | string | *Presentation, write-only.* Form used when writing: `auto` (default), `regular`, `raw`. |
 | `encloser` | string | *Presentation, write-only.* Quote character used when writing: `"` (default) or `'`. |
 | `escapeLines` | bool | *Presentation, write-only.* Whether to escape line breaks when writing. |
@@ -54,6 +54,30 @@ A `string` MemberDef accepts only the options below. Any other key is invalid.
 | `null` | bool | If `true`, the member may be `null`. Shorthand: `*` suffix. |
 
 > **`len` precedence.** When `len` is set, `minLen` and `maxLen` are ignored.
+
+> **Length is measured in Unicode code points** — **NOT** bytes, and **NOT** UTF-16 code units.
+> `"café"` is 4 and `"🙂"` is **1**, even though the first is 5 bytes in UTF-8 and the second is 2
+> UTF-16 units.
+>
+> This has to be stated because every language's *default* string length means something different,
+> and three of the common answers are wrong here:
+>
+> | Language | Idiom | `"🙂"` | |
+> |---|---|---|---|
+> | Python | `len(s)` | 1 | ✅ |
+> | Go | `utf8.RuneCountInString(s)` | 1 | ✅ |
+> | Rust | `s.chars().count()` | 1 | ✅ |
+> | Go | `len(s)` | 4 | ✗ bytes |
+> | Rust | `s.len()` | 4 | ✗ bytes |
+> | JavaScript | `s.length` | 2 | ✗ UTF-16 units |
+>
+> Code points are the only unit that is a property of the **text** rather than of an encoding or a
+> runtime, and Internet Object is UTF-8 on the wire, where UTF-16 units have no meaning at all.
+>
+> The failure is invisible in ordinary testing: `"café"` measures 4 under all three interpretations,
+> so a wrong implementation passes every ASCII and Latin-1 test and only diverges on characters
+> outside the Basic Multilingual Plane. The conformance corpus probes it directly
+> (`validation/strings-constraints.io`).
 
 ## Constraints
 
@@ -64,7 +88,7 @@ name: { string, minLen: 5, maxLen: 20 }
 ---
 ~ Ethan              # ✓
 ~ Alexandra Daddario # ✓
-~ Leo                # ✗ invalid-min-length
+~ Leo                # ✗ mismatched-min-len
 ```
 
 ### pattern
@@ -76,7 +100,7 @@ A regular expression. Use a [raw string](../../../the-structure/values/string/ra
 ssn: { string, pattern: r'^[0-9]{3}-[0-9]{2}-[0-9]{4}$' }
 ---
 ~ '123-45-6789'   # ✓
-~ '12345678'      # ✗ invalid-pattern
+~ '12345678'      # ✗ mismatched-pattern
 ```
 
 ### choices
@@ -85,7 +109,7 @@ ssn: { string, pattern: r'^[0-9]{3}-[0-9]{2}-[0-9]{4}$' }
 dept: { string, choices: [cs, mech, civil] }
 ---
 ~ cs     # ✓
-~ art    # ✗ invalid-choice
+~ art    # ✗ mismatched-choice
 ```
 
 > Quote choices that look like numbers or contain commas, e.g. `["19.02, 72.85"]`, so they
@@ -104,12 +128,13 @@ nickname?*: { string, anonymous }   # optional + nullable, default "anonymous"
 | Input | Result |
 | ----- | ------ |
 | valid text | the string |
-| fails a constraint | `invalid-*` error (`invalid-min-length`, `invalid-pattern`, …) |
+| fails a declared constraint | `mismatched-*` error, named after the keyword — `mismatched-min-len`, `mismatched-pattern`, `mismatched-choice`, … |
+| malformed for a sub-format | `invalid-email` / `invalid-url` — `email` and `url` are types, so a non-conforming value is malformed rather than out of bounds |
 | `N`, nullable (`*`) | `null` |
-| `N`, not nullable | `null-not-allowed` error |
+| `N`, not nullable | `forbidden-null` error |
 | omitted, `default` set | the default |
 | omitted, optional (`?`) | absent |
-| omitted, required | `value-required` error |
+| omitted, required | `missing-value` error |
 
 ## See Also
 

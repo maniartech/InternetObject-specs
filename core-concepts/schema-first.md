@@ -91,7 +91,7 @@ agreement. Best for storage, archival, logs, and APIs where the shape can vary.
 ~ $schema: { name: string, age: { int, min: 0, max: 120 } }
 ---
 ~ John, 30      # ✓
-~ Mary, 200     # ✗ invalid-range
+~ Mary, 200     # ✗ mismatched-max
 ```
 
 **Shared (out-of-band).** A publisher and a subscriber can agree on the schema once, at their
