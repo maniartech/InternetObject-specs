@@ -107,6 +107,12 @@ Members are written in **schema order** when a schema is in scope: each declared
 order the schema declares it, followed by any extras in the order they appear in the value.
 Without a schema, members are written in the order the value holds them.
 
+This is the writer's half of one rule. The reader's half — that a declared member OCCUPIES that
+position in the loaded value, however the document wrote it — is
+[Member position](../the-structure/values/object.md#member-position). A writer that emits schema
+order from a value model that did not enforce it would produce correct text from an object whose
+own `getAt(1)` disagreed with it.
+
 A declared member that is absent, optional, and has no default **MUST** still hold its
 position — see [Record & Document Output](document-output.md#absent-members-hold-their-place).
 

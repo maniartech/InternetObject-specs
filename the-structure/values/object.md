@@ -222,22 +222,60 @@ Comments are allowed between entries or alongside values:
 
 - All values are accessed by **position** (0-based).
 - A keyed value **may also be accessed by key**, especially when a schema is applied.
-- Keys do not affect a value's index position.
 - Keys are optional but must be **well-formed strings**.
+
+## Member position
+
+**With no schema in force**, a member's position is the position it was written at. Nothing else
+could be meant: there is no other order to appeal to.
+
+**With a schema in force**, position is decided by the SCHEMA, not by the document:
+
+> A member the schema declares **MUST** occupy the position the schema declares it at, whatever
+> order the document wrote it in. A member the schema does not declare — an extra permitted by an
+> [open schema](../../schema-definition-language/dynamic-schema.md) — **MUST** follow every
+> declared member, and extras keep the order they were written in relative to each other.
+
+So these two records load to the same value, indistinguishable after reading:
+
+<!-- io:test -->
+```ruby
+~ $schema: { name: string, age: int, city?: string }
+---
+~ Alice, 30, NYC              # positional
+~ city: NYC, age: 30, name: Alice   # keyed, in no particular order
+```
+
+In both, `name` is at index 0, `age` at 1, `city` at 2.
+
+> **Why this binds the reader, not just the writer.** Keyed values exist so a document does not
+> have to know the schema's field order — that is the whole point of writing `age: 30` instead of
+> counting commas. If the reader then preserved the document's order, position would silently mean
+> two different things for the same data depending on how it was written, and code that reads by
+> index would break on a document that is entirely valid. The schema is the single answer to
+> "what is at index 1", and it must be the answer on every path into the value — parsed from
+> text, loaded from a host language, or built up a member at a time.
+
+This is the same order a writer emits (see
+[Key Emission](../../serialization/key-emission.md#ordering)); one rule, stated once for reading
+and once for writing, so a document round-trips through the value model unchanged.
 
 ## Preservation of structure
 
 Internet Object preserves:
 
-- Value order and keyed/unkeyed structure
+- Value order and keyed/unkeyed structure, subject to [Member position](#member-position) above
 - Whitespace (non-significant)
 - Optional comments
 
 It does **not** enforce:
 
-- Key uniqueness
 - Key-based access without a schema
 - The required presence of any key
+
+Note that member names ARE required to be unique — see
+[Member names are unique](#member-names-are-unique). That is a rule about the document, not a
+structure the format preserves.
 
 ## Record enclosure under schema validation
 
