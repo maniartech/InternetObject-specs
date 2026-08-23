@@ -154,7 +154,7 @@ type — `invalid-`, like `invalid-datetime`.
 | `missing-value` | a required member is absent — a *presence* problem, not a type problem |
 | `forbidden-null` | `null` given where the member is not nullable |
 | `unknown-member` | a **strict** schema was given a member it does not declare: a surplus positional value, a surplus named member, or a MemberDef option the type does not define. A MemberDef is itself validated against the type's own member schema, so that last case is the same rule one level up |
-| `duplicate-member` | a member name appears more than once |
+| `duplicate-member` | a member name appears more than once in one object — **with or without a schema in force**, since a schema governs what a member may contain and not whether its name may be repeated. See [Objects](../the-structure/values/object.md#member-names-are-unique) |
 | `invalid-object` | a structural fault in a value that *is* an object — a wrong-*type* value is `expected-object` |
 
 ### Type names

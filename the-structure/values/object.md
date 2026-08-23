@@ -135,6 +135,43 @@ A missing comma between two *values* is not an error, because an open string may
 {name: John Doe 25}        # → { name: "John Doe 25" } — one value, not three
 ```
 
+## Member names are unique
+
+A member name **MUST NOT** appear more than once in the same object. A document that repeats one
+is invalid, and the error is [`duplicate-member`](../../parsing-and-errors/error-model.md).
+
+<!-- io:test per-line -->
+```ruby
+{a: 1, a: 2}               # ✗ duplicate-member
+{a: 1, "a": 2}             # ✗ duplicate-member — quoting is a spelling, not a different name
+```
+
+The rule holds **whether or not a schema is in force.** A schema decides what a member may
+CONTAIN; it does not decide whether a name may be written twice. Nothing about an object changes
+when a schema is absent, so nothing about this rule does either.
+
+> **Why this is stated so plainly.** The obvious implementation loads members into a map, and a map
+> silently keeps the last write. An implementation that does the natural thing therefore accepts
+> `{a: 1, a: 2}` as `{a: 2}`, discarding the first value with no diagnostic: the document says one
+> thing and the loaded value is another. That is the failure this rule exists to prevent, and it is
+> the reason the requirement is on the READER rather than only on the writer.
+
+Uniqueness is per object, not per document. The same name at a different depth, in a different
+record, or in a different array element is a different member:
+
+```ruby
+---
+~ a: 1, o: {a: 2}          # ✓ two members named `a`, in two objects
+~ x: [{a: 1}, {a: 2}]      # ✓ one per element
+```
+
+Positional members have no name and so can never collide:
+
+```ruby
+---
+~ 1, 1, 1                  # ✓ three keyless members
+```
+
 ## Optional behaviors
 
 ### Whitespace and formatting
