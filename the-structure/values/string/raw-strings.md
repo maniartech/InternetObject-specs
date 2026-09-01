@@ -5,7 +5,7 @@ description: Raw strings — literal strings where backslashes are not escapes.
 
 # Raw Strings
 
-A **raw string** is a sequence of Unicode code points prefixed with `r` (or `R`) and enclosed
+A **raw string** is a sequence of Unicode code points prefixed with a lower-case `r` and enclosed
 in single quotes (`'`, `U+0027`) or double quotes (`"`, `U+0022`). Raw strings suit text with
 many backslashes, quotes, or structural characters — file paths or regular expressions, for
 example. They process no escape sequences except the enclosing quote, which is written by
@@ -16,7 +16,10 @@ newlines, and Unicode characters.
 
 ## Syntax
 
-A raw string is prefixed with `r` or `R` and enclosed in single or double quotes. The only
+A raw string is prefixed with a lower-case `r` and enclosed in single or double quotes. The
+prefix is **case-sensitive**, like everything else in Internet Object: `R'...'` is not a raw
+string, and reports `unknown-annotation`. The same holds for every annotation prefix — `b`,
+`d`, `t`, `dt`. The only
 special rule is that the enclosing quote, when it appears inside the string, must be written as
 two consecutive enclosing quotes.
 
@@ -46,6 +49,7 @@ doubleDoubleQuote = '""' (a double quote inside a double-quoted raw string)
 
 Examples of valid raw strings:
 
+<!-- io:test per-line -->
 ```ruby
 r'C:\program files\example\app.exe'
 r"C:\program files\example\app.exe"

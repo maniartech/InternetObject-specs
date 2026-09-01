@@ -119,18 +119,26 @@ test: { any, anyOf: [string, number] }
 
 ## When to use curly braces
 
-A top-level schema needs braces only when wrapping a nested object. A nested field with more
-than one member MUST be enclosed in `{ … }`:
+**Only a root object may be written open.** The header of a schema, and a record in the data, may
+both omit their braces — that is the ordinary form. **Every child object MUST be braced.**
 
 ```ruby
-# 'address' captures only 'street'; city/state become separate fields — usually not intended
-name, age, address: street, city, state, isActive
-```
-
-```ruby
-# 'address' is a nested object with three members
 name, age, address: { street, city, state }, isActive
+---
+~ Alice, 30, { Main St, NYC, NY }, T
 ```
+
+There is no braceless nested object to get wrong, because dropping the braces does not produce a
+*partial* object — it produces a different declaration entirely:
+
+```ruby
+address: { street, city }    # `address` is an object with two members
+address: string              # `address` is a string; there is no nested object
+address: street              # ✗ unknown-type — `street` is read as a TYPE name, not a member
+```
+
+The same holds in the data. A child object without braces is not a short object, it is extra
+members in the parent, and a strict schema rejects them as `unknown-member`.
 
 ## See Also
 

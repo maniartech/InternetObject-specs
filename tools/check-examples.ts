@@ -249,7 +249,7 @@ for (const f of failures) console.log(f)
 // A ratchet, not a target. Every skipped block is a claim the spec makes and nothing checks, so
 // the number may FALL freely and may not rise: a new unverified example has to be a deliberate
 // act, with this line edited and a reason in the commit. Run with --list-skipped to see them.
-const SKIP_BUDGET = 87
+const SKIP_BUDGET = 85
 if (skip > SKIP_BUDGET) {
   console.error('Unverified example blocks rose from ' + SKIP_BUDGET + ' to ' + skip + '.')
   console.error("Make it executable (add a '---', or '<!-- io:test per-line -->' for a list of")

@@ -182,7 +182,6 @@ listed here rather than inside the tables so that the catalogue reads as one spe
 
 | Code | Status |
 | ---- | ------ |
-| `invalid-section-name` | **Not emitted.** The reader truncates the name at the first illegal character instead — the more dangerous of the two behaviours, since a truncated name that parses is reported by nothing |
 | `expected-binary` | Reserved, not declared — `binary` is not yet registered as a schema type |
 
 ## See Also
