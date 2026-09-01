@@ -158,10 +158,16 @@ async function main() {
 const mod = (await import(pathToFileURL(PARSER).href)) as { default: (t: string) => any }
 const parse = mod.default
 
+/** First line of a block, for identifying it in the skipped listing. */
+const firstLine = (src: string): string => (src.trim().split(String.fromCharCode(10))[0] ?? '')
+
 let pass = 0
 let fail = 0
 let skip = 0
 const failures: string[] = []
+/** Every block that is NOT executed, with where it is and why — see --list-skipped. */
+const skipped: Array<{ rel: string; block: number; why: string; head: string }> = []
+const LIST_SKIPPED = process.argv.includes('--list-skipped')
 
 for (const file of walk(DOCS_ROOT)) {
   const text = readFileSync(file, 'utf8')
@@ -176,6 +182,7 @@ for (const file of walk(DOCS_ROOT)) {
     //   <!-- io:test skip -->  (e.g. continuation examples that reuse $defs from another block)
     if (/<!--\s*io:test\s+skip\s*-->\s*$/.test(text.slice(0, m.index))) {
       skip++
+      skipped.push({ rel, block, why: 'opted out (io:test skip)', head: firstLine(src) })
       continue
     }
     // Per-line mode: a "list of good and bad values" example, where each line is its
@@ -204,6 +211,7 @@ for (const file of walk(DOCS_ROOT)) {
 
     if (!/^---/m.test(src)) {
       skip++
+      skipped.push({ rel, block, why: 'fragment (no --- , so not a document)', head: firstLine(src) })
       continue
     }
 
@@ -218,8 +226,37 @@ for (const file of walk(DOCS_ROOT)) {
   }
 }
 
+if (LIST_SKIPPED) {
+  // A skipped block is an UNVERIFIED CLAIM: it looks as authoritative as the 240 that run, and
+  // nothing checks it. Each wants a decision -- make it executable, mark it deliberately
+  // illustrative, or delete it.
+  console.log('')
+  console.log('Skipped blocks -- unverified claims:')
+  console.log('')
+  let last = ''
+  for (const s of skipped) {
+    if (s.rel !== last) { console.log('  ' + s.rel); last = s.rel }
+    console.log('     [block ' + String(s.block).padStart(2) + '] ' + s.why.padEnd(38) + ' ' + s.head.slice(0, 46))
+  }
+  const byFile = new Set(skipped.map((s) => s.rel))
+  console.log('')
+  console.log('  ' + skipped.length + ' skipped across ' + byFile.size + ' files')
+}
+
 console.log(`\nSpec examples: ${pass} passed, ${fail} failed, ${skip} skipped (fragments)\n`)
 for (const f of failures) console.log(f)
+
+// A ratchet, not a target. Every skipped block is a claim the spec makes and nothing checks, so
+// the number may FALL freely and may not rise: a new unverified example has to be a deliberate
+// act, with this line edited and a reason in the commit. Run with --list-skipped to see them.
+const SKIP_BUDGET = 87
+if (skip > SKIP_BUDGET) {
+  console.error('Unverified example blocks rose from ' + SKIP_BUDGET + ' to ' + skip + '.')
+  console.error("Make it executable (add a '---', or '<!-- io:test per-line -->' for a list of")
+  console.error("values), mark it illustrative with '<!-- io:test skip -->', or lower the budget.")
+  process.exit(1)
+}
+
 process.exit(fail > 0 ? 1 : 0)
 }
 

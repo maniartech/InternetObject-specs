@@ -34,16 +34,37 @@ codepoint     = any Unicode code point except a structural character or document
 | `}` | Close curly bracket | `U+007D` | Structural character (terminates the string) |
 | `[` | Open square bracket | `U+005B` | Structural character (terminates the string) |
 | `]` | Close square bracket | `U+005D` | Structural character (terminates the string) |
-| `"` | Double quote | `U+0022` | Allowed; does not terminate or need escaping |
-| `'` | Single quote | `U+0027` | Allowed; does not terminate or need escaping |
+| `"` | Double quote | `U+0022` | **Not permitted anywhere in an open string** — see below |
+| `'` | Single quote | `U+0027` | **Not permitted anywhere in an open string** — see below |
 
 ## Valid forms
 
+### A quote ends the run, and starts an annotation
+
+A quote character may **not** appear in an open string — not at the start, not in the middle, not
+at the end. The run before a quote is read as an **annotation name**, because that is exactly the
+shape of an [annotated string](raw-strings.md): `r'…'`, `b"…"`, `dt'…'`, `d'…'`, `t'…'`. The two
+cannot both be true, and the annotation wins.
+
+So an apostrophe in ordinary text is not writable open, however natural it looks:
+
+| Written | Read as |
+| ------- | ------- |
+| `don't stop` | `unknown-annotation` — `don` is not an annotation |
+| `o'clock` | `unknown-annotation` |
+| `5'9` | `unexpected-token` |
+| `r'raw'` | a raw string — the annotation this rule exists for |
+
+**Quoting is the escape**, and the only one: `"don't stop"` is a regular string and carries the
+apostrophe with no escaping, because a single quote needs none inside double quotes. A writer
+quotes such a value automatically; see
+[Value formatting](../../../serialization/value-formatting.md).
+
 Examples of valid open strings:
 
+<!-- io:test per-line -->
 ```ruby
 John Doe
-Peter D'mello
 जॉन डो
 Wow Great
 😃
