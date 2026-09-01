@@ -87,10 +87,12 @@ That is the case when the string:
 
 - is **empty**;
 - **looks like a number** — `3.14`, `007`, `-5`, `.5`;
-- **looks like a malformed number** — `0x123FG`, `0b`, `1e`, `1.23ee4`. A base prefix
+- **carries a base prefix and does not decode** — `0x123FG`, `0b`. A base prefix
   [announces a base](../the-structure/values/number/number.md#a-number-or-a-word-that-begins-with-a-digit),
   so a bare `0x123FG` is read as `invalid-number` rather than as text. Quoting is what tells the
-  reader this is a string, and it is the only thing that can;
+  reader this is a string, and it is the only thing that can. A run carrying **no** marker is not
+  in this class however numeric it looks — `1e` and `1.23ee4` read back as themselves and are
+  written bare;
 - **is a keyword** — `T`, `F`, `N`, `true`, `false`, `null`;
 - **looks like a date or time** — `2024-03-20`, `14:30:00`;
 - contains a **comma**, or a structural character that would end the value;
@@ -106,7 +108,7 @@ back as themselves:
 
 ```ruby
 ---
-013ABSD, 12mm, 3pm, 1.2.3, 10.0.0.1, 007th
+013ABSD, 12mm, 3pm, 1.2.3, 10.0.0.1, 007th, 1e, 1.23ee4
 ```
 
 The test is precise on purpose: quote a string when the bare text would read back as a **number**
