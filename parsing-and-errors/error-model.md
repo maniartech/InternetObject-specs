@@ -79,7 +79,7 @@ however numeric it looks — `1.2.3` and `10.0.0.1` are values, not broken numbe
 | `invalid-bigint` | a bigint literal is malformed, e.g. `12.3n` |
 | `invalid-binary` | a binary literal's content is not valid base64. The subject is the **type** the marker claims, as everywhere else in this table; `base64` is an encoding, not a type |
 | `unknown-annotation` | an annotation outside the closed set `r`, `b`, `dt`, `d`, `t` |
-| `invalid-number` | a numeric literal of recognizable shape that does not decode: a base prefix with no digits (`0x`, `0b`), digits outside the radix (`0o89`, `0xGH`), more than one decimal point (`1.2.3`), or an exponent with no digits (`1e`) |
+| `invalid-number` | a **marked** numeric literal that does not decode: a base prefix with no digits (`0x`, `0b`), or digits outside the radix (`0o89`, `0xGH`). A run carrying no marker is an open string, not a broken number — `1.2.3` and `1e` are values, per the rule above |
 
 > A base prefix **announces** a base, which is what separates a failed number from ordinary text:
 > `0xGH` is a broken hex literal, while `12mm` and `013ABSD` are perfectly good [open
